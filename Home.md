@@ -8,6 +8,6 @@ Ce projet vise à étudier l'évolution des conceptions en astronomie concernant
 
 ## Phase exploratoire
 
-[[Listes d'astronomes|listes-astronomes]]
+[[Listes d'astronomes|Listes d'astronomes]]
 
 
