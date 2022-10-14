@@ -12,7 +12,6 @@ L'ensemble des individus: extension
 Les propriétés qu'ils/elles partagent: intension
 
 Questions:
-
-    Propriétés stables? Vraiment communes à l'ensemble de la population?
-    Évolution dans le temps et dans l'expace?
-    Élements structurants dans la population, sous-groupes?
+*  Propriétés stables? Vraiment communes à l'ensemble de la population?
+*  Évolution dans le temps et dans l'expace?
+*  Élements structurants dans la population, sous-groupes?
