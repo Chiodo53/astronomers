@@ -14,5 +14,6 @@ Ce projet vise à étudier l'évolution des conceptions en astronomie concernant
 
 
 
-*  [[Explorer DBPedia|explorer-dbpedia]]
+* [[Explorer DBPedia|explorer-dbpedia]]
+* [[Importer les données de DBPaedia|Importer_DBPaedia.md]]
 
