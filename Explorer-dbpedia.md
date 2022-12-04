@@ -133,30 +133,28 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
 
 Leur effectif (3 décembre 2022): 23
 
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX db: <http://dbpedia.org/>
-    SELECT (COUNT(*) as ?effectif)
-    WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
-         ?thing_1 dbo:birthYear ?birthYear .
-         BIND(xsd:integer(str(?birthYear)) AS ?intYear)
-    FILTER ( (?intYear >= 1451
-                  && ?intYear < 1771 ) ) }
-    ORDER BY ?intYear
+La requête ci-dessous ne change rien, en espace de nboms dbr seulement 13 astronomes
 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX db: <http://dbpedia.org/>
     SELECT (COUNT(*) as ?effectif)
-    WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
-         ?thing_1 dbo:birthDate ?birthDate .
-         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?intYear)
+    WHERE {
+      {SELECT DISTINCT ?thing_1
+           WHERE {
+        { ?thing_1 dbo:occupation dbr:Astronomer }
+        UNION
+        {?thing_1 dbr:occupation dbr:Astronomer}
+              }
+        }
+     ?thing_1 dbo:birthYear ?birthYear .
+     BIND(xsd:integer(str(?birthYear)) AS ?intYear)
     FILTER ( (?intYear >= 1451
-                  && ?intYear < 1771 ) ) }
+              && ?intYear < 1771 ) ) }
     ORDER BY ?intYear
 
+&nbsp;
 
 ### Liste: dbr:List_of_astronomers
 
@@ -181,7 +179,7 @@ Effectifs au 3 décembre 2022 : 762
     ?o1 a dbo:Person.
       }
 
-###  Properiétés sortantes et effectifs
+###  Propriétés sortantes et effectifs
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -239,7 +237,7 @@ Effectif: 56
 
 &nbsp;
 
-Astonomes et _astrologues_:
+Astonomes et _astrologues_ et _mathématiciens_:
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
@@ -250,6 +248,13 @@ Astonomes et _astrologues_:
       {dbr:List_of_astronomers ?p ?o1.}
       UNION
       {dbr:List_of_astrologers ?p ?o1.}
+      UNION
+            {?o1 ?p dbr:Astrologer.}
+      UNION
+            {?o1 ?p dbr:Astronomer.}
+      UNION
+            {?o1 ?p dbr:Mathematician.}
+
     }
     ?o1 a dbo:Person;
       dbr:birthDate | dbo:birthDate ?birthDate.
@@ -261,7 +266,9 @@ Astonomes et _astrologues_:
 
 &nbsp;
 
-Effectif : 72 avec astrologues, 52 sans astrologues
+Effectif : 292 mathématiciens, astrologues, astronomes
+
+__Définition de la population__: cette requêtes définit la population
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
@@ -271,9 +278,16 @@ Effectif : 72 avec astrologues, 52 sans astrologues
       SELECT DISTINCT ?o1 ?birthDate ?birthYear
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
+
         }
         ?o1 a dbo:Person;
           dbr:birthDate | dbo:birthDate ?birthDate.
@@ -286,7 +300,7 @@ Effectif : 72 avec astrologues, 52 sans astrologues
         
 
 &nbsp;
-Avec les labels des noms:
+Avec les labels des noms, même effectif:
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
@@ -297,9 +311,15 @@ Avec les labels des noms:
       SELECT DISTINCT ?o1 ?birthDate ?birthYear
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
           dbr:birthDate | dbo:birthDate ?birthDate;
@@ -311,22 +331,37 @@ Avec les labels des noms:
 
 
 
-### Liste des astronomes à exporter
+### Liste des astronomes—astrologues à exporter
 
-Noter le n° de classe (Person) de la base de données SQLite déjà ajouté. Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table instance
+Noter la propriété < 	http://dbpedia.org/ontology/birthYear> ajoutée en vue de l'import dans la base de données SQLite. Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
+
+ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
+
+* ?o1 dans le champs subject_uri
+* ?bY dans property_uri
+* ?birthYear dans numeric_value
+* ?import_metadata dans import_metadata
+
+Ce dernier champs est important pour tracer les import et garder souvenir de la source.
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT (str(?label) as ?label) ?o1 (1 as ?class)
+    SELECT ?o1 (dbo:birthYear as ?bY) ?birthYear ('20221204_1' as ?import_metadata)
     WHERE {
-      SELECT DISTINCT ?o1 ?label
+      SELECT DISTINCT ?o1 ?birthYear
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
           dbr:birthDate | dbo:birthDate ?birthDate;
@@ -337,11 +372,108 @@ Noter le n° de classe (Person) de la base de données SQLite déjà ajouté. Sa
       ORDER BY ?birthYear
       }
 
-72 lignes exportées le 3 décembre 2022
+292 lignes exportées le 3 décembre 2022
 
 &nbsp;
 
 ## Les propriétés
+
+### Liste des propriétés sortantes
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    SELECT ?p1 (COUNT(*) as ?eff)
+    WHERE { 
+        {
+              {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
+        }
+    ?o1 a dbo:Person;
+    dbr:birthDate | dbo:birthDate ?birthDate;
+        ?p1 ?o2.
+    BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+    FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
+      }
+    GROUP BY ?p1
+    ORDER BY DESC(?eff)
+
+### Liste des propriétés entrantes
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    SELECT ?p1 (COUNT(*) as ?eff)
+    WHERE { 
+        {
+              {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
+        }
+    ?o1 a dbo:Person;
+    dbr:birthDate | dbo:birthDate ?birthDate.
+    ?o2 ?p1 ?o1.
+    BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+    FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
+      }
+    GROUP BY ?p1
+    ORDER BY DESC(?eff)
+
+&nbsp;
+
+### Le nom
+
+Cette requête prépare les données pour importation. Enregistrer dans un fichier CSV puis importer dans la table statements
+ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
+
+* ?o1 dans le champs subject_uri
+* ?property dans property_uri
+* ?str_label dans text_value
+* ?import_metadata dans import_metadata
+
+&nbsp;
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?o1 (rdfs:label as ?property) ?str_label ('20221204_3' as ?import_metadata)
+    WHERE {
+      SELECT DISTINCT ?o1 (STR(?label) as ?str_label)
+      WHERE { 
+        {
+              {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
+        }
+        ?o1 a dbo:Person;
+          dbr:birthDate | dbo:birthDate ?birthDate;
+      rdfs:label ?label.
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
+              }
+      ORDER BY ?birthYear
+      }
+
+### Année de naissance
+
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
@@ -353,9 +485,15 @@ Noter le n° de classe (Person) de la base de données SQLite déjà ajouté. Sa
       SELECT DISTINCT ?o1 ?birthYear
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
           dbr:birthDate | dbo:birthDate ?birthDate;
@@ -367,3 +505,121 @@ Noter le n° de classe (Person) de la base de données SQLite déjà ajouté. Sa
       }
 
 72 lignes exportées le 3 décembre 2022
+
+### Occupation
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?o1 ?target ?name
+    # (COUNT(*) AS ?effectif) 
+    WHERE {
+      SELECT DISTINCT ?o1 ?target (str(?label) as ?name)
+      WHERE { 
+        {
+          {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+          {dbr:List_of_astrologers ?p ?o1.}
+        }
+        ?o1 a dbo:Person;
+          dbr:birthDate | dbo:birthDate ?birthDate;
+          dbr:occupation | dbo:occupation ?target.
+      ?target rdfs:label ?label.
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
+              }
+      ORDER BY ?birthYear
+      }
+
+72 lignes exportées le 3 décembre 2022
+
+
+### Trouver les URI correspondantes à dbpedia francophone
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX owl:	<http://www.w3.org/2002/07/owl#>
+    SELECT ?o1 ?target
+    # (COUNT(*) AS ?effectif) 
+    WHERE {
+      {
+      SELECT DISTINCT ?o1 ?target 
+      WHERE { 
+        {
+          {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+          {dbr:List_of_astrologers ?p ?o1.}
+        }
+        ?o1 a dbo:Person;
+          dbp:birthDate | dbo:birthDate ?birthDate;
+          owl:sameAs ?target.
+    
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1401   && ?birthYear < 1771 )  ) 
+        FILTER (CONTAINS( STR(?target), 'fr.dbp'))
+              }
+    }
+    
+      }
+
+
+### Tests
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?o1 ?target
+    # (COUNT(*) AS ?effectif) 
+    WHERE {
+      {
+      SELECT DISTINCT ?o1 ?target 
+      WHERE { 
+        {
+          {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+          {dbr:List_of_astrologers ?p ?o1.}
+        }
+        ?o1 a dbo:Person;
+          dbp:birthDate | dbo:birthDate ?birthDate;
+          dbp:occupation | dbo:occupation | dbo:academicDiscipline ?target.
+    
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1401   && ?birthYear < 1771 )  ) 
+              }
+    }
+    
+        }
+
+
+
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT ?o1 ?target MAX((str(?label) as ?name))
+    # (COUNT(*) AS ?effectif) 
+    WHERE {
+      {
+      SELECT DISTINCT ?o1 ?target 
+      WHERE { 
+        {
+          {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+          {dbr:List_of_astrologers ?p ?o1.}
+        }
+        ?o1 a dbo:Person;
+          dbr:birthDate | dbo:birthDate ?birthDate;
+          dbr:occupation | dbo:occupation ?target.
+    
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  ) 
+              }
+    }
+    ?target rdfs:label ?label.
+      FILTER (LANG(?label) IN ('en', 'fr'))
+      }

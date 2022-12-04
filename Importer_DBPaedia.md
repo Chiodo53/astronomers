@@ -1,8 +1,61 @@
+# Importer et structurer les données issues de DBPedia
+
+Ces instructions concernent la base de données générique
+
+## Instructions générales
+
+Pour vider complètement les tables, utiliser l'instruction suivante. Mais attention: cette instruction est irréversible !
+
+    /*
+    La ligne est commentée afin d'éviter toute erreur de manipulation 
+    */
+    --DELETE FROM "statement" ;
+    /* 
+    après avoir vidé la table exécuter une instruction vacuum afin de vider la mémoire
+    */
+    VACUUM;
+
+Normalement cette instruction remet à zéro les valeurs des clés primaires auto
+&nbsp;
+
+## Importation des données depuis les CSV
+
+Importer les donnnées depuis le CSV dans la table 'statement', cf. les instructions dans la page Explorer DBPedia.
+
+
+### Vérification après import des données
 
     -- compter les instances
-
     SELECT COUNT(*)
-    FROM "instance" i ;
+    FROM "statement" ;
+
+### Créer les personnes
+
+On effectue une requête sur la table _statement_, on sélection les entités qu'on vient d'importer et on ajoute dans la clause SELECT la valeur de la classe _Person_ et les métadonnées d'importation, pour garder trace explicite
+
+    INSERT INTO "instance" (external_uri, fk_class, import_metadata)
+    SELECT subject_uri, 1, '20221204_2' FROM "statement" s
+    WHERE import_metadata LIKE '%20221204_1%' ;
+
+#### Vérification
+
+Regrouper les instances par classe. Noter la jointure avec la table _class_  
+
+
+    SELECT c.label, COUNT(*) eff
+    FROM "instance" i, class c 
+    WHERE i.fk_class = c.pk_class 
+    GROUP BY c.label 
+    ORDER BY eff DESC ;
+
+
+
+### Chercher les noms, ajouter les noms
+
+ajouter les labesl ,puis ajouter ref à dbpedia francophohen
+
+### 
+
 
 
     -- regrouper les instances par classe  
@@ -50,7 +103,3 @@
     WHERE s.fk_subject_instance  = i.pk_instance
     AND s.property_uri LIKE '%birthDat%'
     AND CAST(SUBSTRING(s.text_value, 1, 4) AS INT) < 1770;
-
-
-
-
