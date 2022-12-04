@@ -48,25 +48,7 @@ Regrouper les instances par classe. Noter la jointure avec la table _class_
     GROUP BY c.label 
     ORDER BY eff DESC ;
 
-
-
-### Chercher les noms, ajouter les noms
-
-ajouter les labesl ,puis ajouter ref à dbpedia francophohen
-
-### 
-
-
-
-    -- regrouper les instances par classe  
-
-    SELECT c.label, COUNT(*) eff
-    FROM "instance" i, class c 
-    WHERE i.fk_class = c.pk_class 
-    GROUP BY c.label 
-    ORDER BY eff DESC ;
-
-
+### Ajouter un lien en clé étrangère entre les instances et les assertions
 
     -- inspecter les instances avec les propriétés
 
@@ -74,32 +56,70 @@ ajouter les labesl ,puis ajouter ref à dbpedia francophohen
     FROM "instance" i , "statement" s 
     WHERE s.subject_uri = i.external_uri ;
 
-
     -- ajouter les valeurs de clé étrangère entre les assertions et les instances
 
-    UPDATE "statement"  set fk_subject_instance = i.pk_instance 
+    UPDATE "statement" set fk_subject_instance = i.pk_instance 
     FROM "instance" i 
     WHERE "statement".subject_uri = i.external_uri ;
 
-    -- lister les dates de naissance
 
-    SELECT i.label, SUBSTRING(s.text_value, 1, 4)
-    FROM "instance" i , "statement" s 
-    WHERE s.fk_subject_instance  = i.pk_instance
-    AND s.property_uri LIKE '%birthDat%';
+### Ajouter les noms des personnes
 
-    -- effectif des dates de naissance inférieures à 1771
+Importer le CSV qui contient les labels selon les instructions de la page dédiée à DBPedia.
 
-    SELECT COUNT(*) 
-    FROM "instance" i , "statement" s 
-    WHERE s.fk_subject_instance  = i.pk_instance
-    AND s.property_uri LIKE '%birthDat%'
-    AND SUBSTRING(s.text_value, 1, 4) < '1771';
+Pour vérifier l'import exécuter la requête suivante:
 
-    -- même requêtes que la précédente avec transformation de type de valeur
+    SELECT property_uri, COUNT(*) as effectif 
+    FROM "statement" s   
+    GROUP BY s.property_uri 
+    ORDER BY effectif DESC ;
 
-    SELECT COUNT(*) 
-    FROM "instance" i , "statement" s 
-    WHERE s.fk_subject_instance  = i.pk_instance
-    AND s.property_uri LIKE '%birthDat%'
-    AND CAST(SUBSTRING(s.text_value, 1, 4) AS INT) < 1770;
+#### Ajouter les noms des personnes dans les instances
+
+    UPDATE "instance" set label = s.text_value  
+    FROM "statement" s 
+    WHERE s.subject_uri = "instance".external_uri ;	
+
+
+
+
+### Vérifier l'import des liens vers DBPedia francophone
+
+    SELECT property_uri, COUNT(*) as effectif 
+    FROM "statement" s   
+    GROUP BY s.property_uri 
+    ORDER BY effectif DESC ;
+
+### Lien des deux population à travers l'URI dbpedia francophone
+
+127 personnes de DBPedia et BNF data sont liées, après importation des données de BNF data. Reste la question de comment traiter celles qui manquent pour éviter de créer des doublons dans la table instance.
+
+
+    SELECT s1.subject_uri, s2.subject_uri  
+    FROM "statement" s1, "statement" s2
+    WHERE s1.object_uri = s2.object_uri 
+    AND s1.import_metadata = '20221204_4'
+    AND s2.import_metadata = '20221204_6';    
+
+### Visualiser les générations de mathématiciens
+
+Regroupement par périodes de 20 ans.
+Exporter en CSV et visualiser dans un tableur
+
+    WITH RECURSIVE
+    cnt(x,y) AS (
+        SELECT 1441,1460
+        UNION ALL
+        SELECT x+20, y+20 FROM cnt
+        WHERE x < 1750
+    ),
+    tw1 AS (SELECT numeric_value, COUNT(*) as effectif
+    FROM "statement" s 
+    WHERE import_metadata LIKE '%20221204_1%'
+    GROUP BY numeric_value )
+    SELECT x,y, SUM(tw1.effectif) effectif_total 
+    FROM cnt, tw1
+    WHERE tw1.numeric_value >= cnt.x 
+    AND tw1.numeric_value < cnt.y
+    GROUP BY x,y;
+

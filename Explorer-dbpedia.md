@@ -268,7 +268,7 @@ Astonomes et _astrologues_ et _mathématiciens_:
 
 Effectif : 292 mathématiciens, astrologues, astronomes
 
-__Définition de la population__: cette requêtes définit la population
+__Définition de la population__: cette requêtes définit la population — cette requête sera la base de toutes les autres
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
@@ -333,7 +333,7 @@ Avec les labels des noms, même effectif:
 
 ### Liste des astronomes—astrologues à exporter
 
-Noter la propriété < 	http://dbpedia.org/ontology/birthYear> ajoutée en vue de l'import dans la base de données SQLite. Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
+Noter la propriété <http://dbpedia.org/ontology/birthYear> ajoutée en vue de l'import dans la base de données SQLite. Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
 
 ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
 
@@ -472,17 +472,28 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
       ORDER BY ?birthYear
       }
 
-### Année de naissance
+### Trouver les URI correspondantes à DBPedia francophone
 
+Cette requête prépare les données pour importation. Enregistrer dans un fichier CSV puis importer dans la table statements
+ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
+
+* ?o1 dans le champs subject_uri
+* ?property dans property_uri
+* ?target dans object_uri
+* ?import_metadata dans import_metadata
+
+&nbsp;
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/ontology/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?o1 (dbo:birthYear as ?property) ?birthYear
+    PREFIX owl:	<http://www.w3.org/2002/07/owl#>
+    SELECT ?o1 (owl:sameAs as ?property) ?target ('20221204_4' as ?import_metadata)
     # (COUNT(*) AS ?effectif) 
     WHERE {
-      SELECT DISTINCT ?o1 ?birthYear
+      {
+      SELECT DISTINCT ?o1 ?target 
       WHERE { 
         {
               {dbr:List_of_astronomers ?p ?o1.}
@@ -496,15 +507,19 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
               {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
-      rdfs:label ?label.
+          dbp:birthDate | dbo:birthDate ?birthDate;
+          owl:sameAs ?target.
+    
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
+        FILTER ( (?birthYear >= 1401   && ?birthYear < 1771 )  ) 
+        ### Erreur sur Maldonado
+        FILTER (CONTAINS( STR(?target), 'fr.dbp') && !CONTAINS( STR(?o1), 'Pedro_Vicente_Maldonado'))
               }
-      ORDER BY ?birthYear
+    }
+    
       }
 
-72 lignes exportées le 3 décembre 2022
+Seulement 257 renseignés
 
 ### Occupation
 
@@ -535,35 +550,7 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
 72 lignes exportées le 3 décembre 2022
 
 
-### Trouver les URI correspondantes à dbpedia francophone
 
-    PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX owl:	<http://www.w3.org/2002/07/owl#>
-    SELECT ?o1 ?target
-    # (COUNT(*) AS ?effectif) 
-    WHERE {
-      {
-      SELECT DISTINCT ?o1 ?target 
-      WHERE { 
-        {
-          {dbr:List_of_astronomers ?p ?o1.}
-          UNION
-          {dbr:List_of_astrologers ?p ?o1.}
-        }
-        ?o1 a dbo:Person;
-          dbp:birthDate | dbo:birthDate ?birthDate;
-          owl:sameAs ?target.
-    
-        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1401   && ?birthYear < 1771 )  ) 
-        FILTER (CONTAINS( STR(?target), 'fr.dbp'))
-              }
-    }
-    
-      }
 
 
 ### Tests
