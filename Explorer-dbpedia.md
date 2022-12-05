@@ -98,7 +98,6 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX db: <http://dbpedia.org/>
     SELECT DISTINCT ?thing_1 ?birthDate
     WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
         OPTIONAL { 
@@ -107,12 +106,12 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
           }
 
 
-* Noter que changer les espaces de noms dbr et dbo donne des résultats différents
+* Noter que changer les espaces de noms dbp et dbo donne des résultats différents
 * Cette requête liste 160 astronomes (3 décembre 2022), le maximum des effectifs avec cette approche
 
       PREFIX dbr: <http://dbpedia.org/resource/>
       PREFIX dbo: <http://dbpedia.org/ontology/>
-      PREFIX db: <http://dbpedia.org/>
+      PREFIX dbp: <http://dbpedia.org/property/>
       SELECT (COUNT(*) as ?effectif)
       WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
             }
@@ -122,7 +121,7 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX db: <http://dbpedia.org/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     SELECT DISTINCT ?thing_1 ?intYear
     WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
          ?thing_1 dbo:birthYear ?birthYear .
@@ -138,14 +137,14 @@ La requête ci-dessous ne change rien, en espace de nboms dbr seulement 13 astro
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX db: <http://dbpedia.org/>
+     PREFIX dbp: <http://dbpedia.org/property/>
     SELECT (COUNT(*) as ?effectif)
     WHERE {
       {SELECT DISTINCT ?thing_1
            WHERE {
         { ?thing_1 dbo:occupation dbr:Astronomer }
         UNION
-        {?thing_1 dbr:occupation dbr:Astronomer}
+        {?thing_1 dbp:occupation dbr:Astronomer}
               }
         }
      ?thing_1 dbo:birthYear ?birthYear .
