@@ -529,7 +529,7 @@ Seulement 257 renseignés
 
 ### Occupation
 
-Si on ajoute le _label_ on n'a que les URI des _occupations_, si on enlève la condition de jointure sur le _label_ on a aussi les textes, les litérals.
+Si on ajoute le _label_ on n'a que les URI des _occupations_, si on enlève la condition de jointure sur le _label_ on a aussi les textes, les litérals (cf. requête ci-dessous).
 
 Car la propriété pointe à la fois sur des literals et des URI. 
 
@@ -537,7 +537,7 @@ Car la propriété pointe à la fois sur des literals et des URI.
     PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?object_uri) (?name as ?label)
+    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?object_uri) (?name as ?label) ('20221211_1' as ?import_metadata)
     # (COUNT(*) AS ?effectif) 
     WHERE {
       SELECT DISTINCT ?o1 ?target (str(?label) as ?name)
@@ -567,13 +567,13 @@ Car la propriété pointe à la fois sur des literals et des URI.
 
 Une partie des individus n'a pas d'occupation explicite.
 
-### Récupérer les occupations sous forme de literal
+### Récupérer les occupations sous forme de literal
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?text_value)
+    SELECT DISTINCT (?o1 AS ?subject_uri) (dbp:occupation as ?property_uri) (STR(?target) AS ?text_value) ('20221211_2' as ?import_metadata)
     # (COUNT(*) AS ?effectif) 
     WHERE {
       SELECT DISTINCT ?o1 ?target 
@@ -591,7 +591,7 @@ Une partie des individus n'a pas d'occupation explicite.
         }
         ?o1 a dbo:Person;
           dbp:birthDate | dbo:birthDate ?birthDate;
-          dbp:occupation ?target.
+          dbp:occupation | dbo:occupation ?target.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && !isIRI(?target) && strlen(STR(?target)) > 0)
               }

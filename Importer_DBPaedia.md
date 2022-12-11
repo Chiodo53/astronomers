@@ -10,7 +10,7 @@ La base de données de ce projet se trouve dans le dossier [_astronomers/data/ge
 Pour vider complètement les tables, utiliser l'instruction suivante. Mais attention: cette instruction est irréversible !
 
     /*
-    La ligne est commentée afin d'éviter toute erreur de manipulation 
+    La ligne est commentée afin d'éviter toute erreur de manipulation — décommenter la ligne afin de l'exécuter, puis recommenter
     */
     --DELETE FROM "statement" ;
     /* 
@@ -18,7 +18,7 @@ Pour vider complètement les tables, utiliser l'instruction suivante. Mais atten
     */
     VACUUM;
 
-Normalement cette instruction remet à zéro les valeurs des clés primaires auto
+Normalement cette instruction remet à zéro les valeurs des clés primaires autoincrémentées
 &nbsp;
 
 ## Importation des données depuis les CSV
@@ -33,6 +33,8 @@ Importer les donnnées depuis le CSV dans la table 'statement', cf. les instruct
     FROM "statement" ;
 
 ### Créer les personnes
+
+On a préalablement créé la classe _Person_ dans la table _Class_.
 
 On effectue une requête sur la table _statement_, on sélection les entités qu'on vient d'importer et on ajoute dans la clause SELECT la valeur de la classe _Person_ et les métadonnées d'importation, pour garder trace explicite
 
@@ -83,8 +85,135 @@ Pour vérifier l'import exécuter la requête suivante:
     FROM "statement" s 
     WHERE s.subject_uri = "instance".external_uri ;	
 
+# Traitement des _occupations_
+
+Exporter les deux CSV contenant les _occupations_ sous forme de ressources et de _literals_
+
+## Exploration
+
+### Regroupement par URI de 'occupation'
+
+On constate des inconsistances. Je corrice à la main les labels sur la base de cette liste et j'utiliserai les labels pour créer les 'occupations' dans la table Instances
+
+    SELECT object_uri, count(*) as effectif  
+    FROM "statement" s 
+    WHERE import_metadata  = '20221211_1' 
+    GROUP BY object_uri ;
 
 
+J'efface deux lignes visiblement erronées:
+* <http://dbpedia.org/resource/Riobamba>
+* <http://dbpedia.org/resource/Mughal_Empire>
+
+&nbsp;
+
+
+### Liste des occupations qui seront créées
+
+    SELECT label, count(*) as effectif  
+    FROM "statement" s 
+    WHERE import_metadata  = '20221211_1' 
+    GROUP BY label
+    ORDER BY effectif DESC ;
+
+
+### Créer les occupations
+
+    INSERT INTO "instance" (label, fk_class, import_metadata)
+    SELECT label, 2, '20221211_3' 
+    FROM "statement" s 
+    WHERE import_metadata  = '20221211_1' 
+    GROUP BY label;
+
+#### Vérification
+    SELECT c.label, COUNT(*) eff
+    FROM "instance" i, class c 
+    WHERE i.fk_class = c.pk_class 
+    GROUP BY c.label 
+    ORDER BY eff DESC ;
+
+### Reporter la clé des occupations vers les statements
+
+    UPDATE "statement" set fk_object_instance  = i.pk_instance 
+    FROM "instance" i 
+    WHERE i.fk_class = 2
+    AND "statement".label = i.label 
+    AND metadata_import = '20221211_1' ;
+
+### Reporter la clé des personnes vers les statements
+    UPDATE "statement" set fk_subject_instance = i.pk_instance 
+    FROM "instance" i 
+    WHERE "statement".subject_uri = i.external_uri
+    AND "statement".import_metadata = '20221211_1'  ;
+
+### Chercher puis supprimer les doublons
+
+NB : il y a aussi des personnes non renseignées. Vérifier
+
+    SELECT fk_subject_instance, fk_object_instance, COUNT(*) as eff 
+    FROM "statement" s  
+    WHERE s.import_metadata  = '20221211_1'  
+    AND fk_subject_instance IS NOT NULL 
+    GROUP BY fk_subject_instance, fk_object_instance
+    HAVING COUNT(*) > 1 ;
+
+#### Requête pour le nettoyage dans DBeaver
+
+    SELECT * 
+    FROM "statement" s2 
+    WHERE fk_subject_instance IN (
+        SELECT fk_subject_instance 
+        FROM "statement" s  
+        WHERE s.import_metadata  = '20221211_1'  
+        AND fk_subject_instance IS NOT NULL 
+        GROUP BY fk_subject_instance, fk_object_instance
+        HAVING COUNT(*) > 1 )
+    AND property_uri LIKE '%occupation%';
+
+
+## Créer les pursuits
+
+    INSERT INTO "instance" (import_metadata, notes, fk_class)
+    SELECT pk_statement || '_20221211_4' , pk_statement, 3
+    FROM "statement" s 
+    WHERE import_metadata = '20221211_1'
+    AND fk_subject_instance IS NOT NULL;
+
+
+### Créer l'association à la personne
+
+    INSERT INTO "statement" (fk_subject_instance, fk_property, fk_object_instance, import_metadata)
+    SELECT  i.pk_instance, 1, s.fk_subject_instance, '20221211_6_'|| i.pk_instance 
+    FROM "instance" i, "statement" s 
+    WHERE i.notes = s.pk_statement ;
+
+### Créer l'association à la profession
+    INSERT INTO "statement" (fk_subject_instance, fk_property, fk_object_instance, import_metadata)
+    SELECT  i.pk_instance, 2, s.fk_object_instance, '20221211_5_'|| i.pk_instance 
+    FROM "instance" i, "statement" s 
+    WHERE i.notes = s.pk_statement ;
+
+## Créer la vue qui liste les professions
+
+    --DROP VIEW v_pursuits;
+    CREATE VIEW v_pursuits AS
+    SELECT i.pk_instance, s1.pk_statement, i1.pk_instance, i1.label, i2.label label_occupation, s2.pk_statement pk_statement_occupation
+    FROM "instance" i
+    LEFT JOIN "statement" s1 ON s1.fk_subject_instance = i.pk_instance AND s1.fk_property = 1 
+    LEFT JOIN "instance" i1 ON s1.fk_object_instance = i1.pk_instance
+    LEFT JOIN "statement" s2 ON s2.fk_subject_instance = i.pk_instance AND s2.fk_property = 2  
+    LEFT JOIN "instance" i2 ON s2.fk_object_instance = i2.pk_instance
+    WHERE i.fk_class = 3;
+
+
+### Interroger la vue
+
+SELECT *
+FROM v_pursuits;
+
+
+
+# Association à des données issues d'une autre source
 
 ### Vérifier l'import des liens vers DBPedia francophone
 
@@ -93,7 +222,9 @@ Pour vérifier l'import exécuter la requête suivante:
     GROUP BY s.property_uri 
     ORDER BY effectif DESC ;
 
-### Lien des deux population à travers l'URI dbpedia francophone
+&nbsp;
+
+## Lien des deux population à travers l'URI dbpedia francophone
 
 127 personnes de DBPedia et BNF data sont liées, après importation des données de BNF data. Reste la question de comment traiter celles qui manquent pour éviter de créer des doublons dans la table instance.
 
@@ -102,27 +233,7 @@ Pour vérifier l'import exécuter la requête suivante:
     FROM "statement" s1, "statement" s2
     WHERE s1.object_uri = s2.object_uri 
     AND s1.import_metadata = '20221204_4'
-    AND s2.import_metadata = '20221204_6';    
+    AND s2.import_metadata = '20221204_6';  
 
-### Visualiser les générations de mathématiciens
 
-Regroupement par périodes de 20 ans.
-Exporter en CSV et visualiser dans un tableur
-
-    WITH RECURSIVE
-    cnt(x,y) AS (
-        SELECT 1441,1460
-        UNION ALL
-        SELECT x+20, y+20 FROM cnt
-        WHERE x < 1750
-    ),
-    tw1 AS (SELECT numeric_value, COUNT(*) as effectif
-    FROM "statement" s 
-    WHERE import_metadata LIKE '%20221204_1%'
-    GROUP BY numeric_value )
-    SELECT x,y, SUM(tw1.effectif) effectif_total 
-    FROM cnt, tw1
-    WHERE tw1.numeric_value >= cnt.x 
-    AND tw1.numeric_value < cnt.y
-    GROUP BY x,y;
 
