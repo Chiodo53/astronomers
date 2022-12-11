@@ -1,6 +1,9 @@
 # Importer et structurer les données issues de DBPedia
 
-Ces instructions concernent la base de données générique
+Ces instructions concernent l'importation des données issues de DBPedia base de données générique.
+
+La base de données de ce projet se trouve dans le dossier [_astronomers/data/generic_database.sqlite_](https://github.com/Sciences-historiques-numeriques/astronomers/tree/main/data)
+
 
 ## Instructions générales
 

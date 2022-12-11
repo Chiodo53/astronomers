@@ -92,12 +92,19 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
 
 ## Requêtes d'exploration
 
-* Interface pour requêtes: <https://dbpedia.org/sparql>
+* Interface pour requêtes: __<https://dbpedia.org/sparql>__
+* La syntaxe des requêtes: <https://www.w3.org/TR/sparql11-query>
+* Tutoriels:
+  * [Le tutoriel SPARQL](https://web-semantique.developpez.com/tutoriels/jena/arq/introduction-sparql/) 
+  * Tutoriel vidéo: [Partie I](https://www.youtube.com/watch?v=Z8_rTxy67-8) , [Partie II](https://www.youtube.com/watch?v=HlOJSsu3_to)
+
+&nbsp;
 
 ### Occupation: astronomer
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
+    
     SELECT DISTINCT ?thing_1 ?birthDate
     WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
         OPTIONAL { 
@@ -132,12 +139,12 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
 
 Leur effectif (3 décembre 2022): 23
 
-La requête ci-dessous ne change rien, en espace de nboms dbr seulement 13 astronomes
+La requête ci-dessous ne change rien, en espace de noms dbr seulement 13 astronomes
 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
-     PREFIX dbp: <http://dbpedia.org/property/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     SELECT (COUNT(*) as ?effectif)
     WHERE {
       {SELECT DISTINCT ?thing_1
@@ -149,7 +156,7 @@ La requête ci-dessous ne change rien, en espace de nboms dbr seulement 13 astro
         }
      ?thing_1 dbo:birthYear ?birthYear .
      BIND(xsd:integer(str(?birthYear)) AS ?intYear)
-    FILTER ( (?intYear >= 1451
+    FILTER ( (?intYear >= 1451 -- mieux: 1371
               && ?intYear < 1771 ) ) }
     ORDER BY ?intYear
 
@@ -199,13 +206,13 @@ Noter ces propriétés:
 &nbsp;
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     SELECT (COUNT(*) as ?eff)
     WHERE { 
     dbr:List_of_astronomers ?p ?o1.
     ?o1 a dbo:Person;
-      dbr:birthDate ?birthDate.
+      dbp:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
     FILTER ( (?birthYear >= 1451
                 && ?birthYear < 1771 ) ) 
@@ -221,13 +228,13 @@ Effectif: 56
 
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     SELECT DISTINCT ?o1 ?birthDate ?birthYear
     WHERE { 
     dbr:List_of_astronomers ?p ?o1.
     ?o1 a dbo:Person;
-      dbr:birthDate | dbo:birthDate ?birthDate.
+      dbp:birthDate | dbo:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
     FILTER ( (?birthYear >= 1451
                 && ?birthYear < 1771 ) ) 
@@ -239,7 +246,7 @@ Effectif: 56
 Astonomes et _astrologues_ et _mathématiciens_:
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     SELECT DISTINCT ?o1 ?birthDate ?birthYear
     WHERE { 
@@ -256,7 +263,7 @@ Astonomes et _astrologues_ et _mathématiciens_:
 
     }
     ?o1 a dbo:Person;
-      dbr:birthDate | dbo:birthDate ?birthDate.
+      dbp:birthDate | dbo:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
     FILTER ( (?birthYear >= 1451
                 && ?birthYear < 1771 ) ) 
@@ -270,7 +277,7 @@ Effectif : 292 mathématiciens, astrologues, astronomes
 __Définition de la population__: cette requêtes définit la population — cette requête sera la base de toutes les autres
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     SELECT (COUNT(*) as ?effectif)
     WHERE {
@@ -289,7 +296,7 @@ __Définition de la population__: cette requêtes définit la population — cet
 
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate.
+          dbp:birthDate | dbo:birthDate ?birthDate.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451
                     && ?birthYear < 1771 ) ) 
@@ -302,7 +309,7 @@ __Définition de la population__: cette requêtes définit la population — cet
 Avec les labels des noms, même effectif:
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
     SELECT (COUNT(*) as ?effectif)
@@ -321,7 +328,7 @@ Avec les labels des noms, même effectif:
               {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
+          dbp:birthDate | dbo:birthDate ?birthDate;
       rdfs:label ?label.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
@@ -344,7 +351,7 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
 Ce dernier champs est important pour tracer les import et garder souvenir de la source.
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
     SELECT ?o1 (dbo:birthYear as ?bY) ?birthYear ('20221204_1' as ?import_metadata)
@@ -363,7 +370,7 @@ Ce dernier champs est important pour tracer les import et garder souvenir de la 
               {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
+          dbp:birthDate | dbo:birthDate ?birthDate;
       rdfs:label ?label.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
@@ -395,7 +402,7 @@ Ce dernier champs est important pour tracer les import et garder souvenir de la 
               {?o1 ?p dbr:Mathematician.}
         }
     ?o1 a dbo:Person;
-    dbr:birthDate | dbo:birthDate ?birthDate;
+    dbp:birthDate | dbo:birthDate ?birthDate;
         ?p1 ?o2.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
     FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
@@ -421,7 +428,7 @@ Ce dernier champs est important pour tracer les import et garder souvenir de la 
               {?o1 ?p dbr:Mathematician.}
         }
     ?o1 a dbo:Person;
-    dbr:birthDate | dbo:birthDate ?birthDate.
+    dbp:birthDate | dbo:birthDate ?birthDate.
     ?o2 ?p1 ?o1.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
     FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
@@ -444,7 +451,7 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
 &nbsp;
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
     SELECT ?o1 (rdfs:label as ?property) ?str_label ('20221204_3' as ?import_metadata)
@@ -463,7 +470,7 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
               {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
+          dbp:birthDate | dbo:birthDate ?birthDate;
       rdfs:label ?label.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
@@ -484,7 +491,7 @@ ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
 &nbsp;
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
     PREFIX owl:	<http://www.w3.org/2002/07/owl#>
@@ -522,23 +529,33 @@ Seulement 257 renseignés
 
 ### Occupation
 
+Si on ajoute le _label_ on n'a que les URI des _occupations_, si on enlève la condition de jointure sur le _label_ on a aussi les textes, les litérals.
+
+Car la propriété pointe à la fois sur des literals et des URI. 
+
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?o1 ?target ?name
+    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?object_uri) (?name as ?label)
     # (COUNT(*) AS ?effectif) 
     WHERE {
       SELECT DISTINCT ?o1 ?target (str(?label) as ?name)
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
-          dbr:occupation | dbo:occupation ?target.
+          dbp:birthDate | dbo:birthDate ?birthDate;
+          dbp:occupation | dbo:occupation ?target.
       ?target rdfs:label ?label.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
         FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
@@ -546,66 +563,40 @@ Seulement 257 renseignés
       ORDER BY ?birthYear
       }
 
-72 lignes exportées le 3 décembre 2022
+170 lignes exportées le 3 décembre 2022
 
+Une partie des individus n'a pas d'occupation explicite.
 
-
-
-
-### Tests
+### Récupérer les occupations sous forme de literal
 
     PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?o1 ?target
+    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?text_value)
     # (COUNT(*) AS ?effectif) 
     WHERE {
-      {
       SELECT DISTINCT ?o1 ?target 
       WHERE { 
         {
-          {dbr:List_of_astronomers ?p ?o1.}
+              {dbr:List_of_astronomers ?p ?o1.}
           UNION
-          {dbr:List_of_astrologers ?p ?o1.}
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
         }
         ?o1 a dbo:Person;
           dbp:birthDate | dbo:birthDate ?birthDate;
-          dbp:occupation | dbo:occupation | dbo:academicDiscipline ?target.
-    
+          dbp:occupation ?target.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1401   && ?birthYear < 1771 )  ) 
+        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && !isIRI(?target) && strlen(STR(?target)) > 0)
               }
-    }
-    
-        }
-
-
-
-
-    PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/ontology/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?o1 ?target MAX((str(?label) as ?name))
-    # (COUNT(*) AS ?effectif) 
-    WHERE {
-      {
-      SELECT DISTINCT ?o1 ?target 
-      WHERE { 
-        {
-          {dbr:List_of_astronomers ?p ?o1.}
-          UNION
-          {dbr:List_of_astrologers ?p ?o1.}
-        }
-        ?o1 a dbo:Person;
-          dbr:birthDate | dbo:birthDate ?birthDate;
-          dbr:occupation | dbo:occupation ?target.
-    
-        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  ) 
-              }
-    }
-    ?target rdfs:label ?label.
-      FILTER (LANG(?label) IN ('en', 'fr'))
+      ORDER BY ?birthYear
       }
+
+
+67 lignes en décembre 2022. La propriété _dbo:occupation_ ne pointe pas vers des litérals
