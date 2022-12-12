@@ -212,6 +212,27 @@ SELECT *
 FROM v_pursuits;
 
 
+## Ajouter le temps et l'espace
+
+* Paul Guldin was a professor of mathematics in Graz and Vienna, <http://dbpedia.org/resource/Paul_Guldin>
+* Noter que Johannes Kepler n'a pas d'_occupation_ mais qu'il a des _fields_ d'acitvité: <http://dbpedia.org/resource/Johannes_Kepler>
+
+
+        DROP VIEW v_pursuits;
+        CREATE VIEW v_pursuits AS
+        SELECT i1.label, i2.label label_occupation, i3.label label_place,
+            ts.begin_of_begin, ts.end_of_begin, ts.ongoing_throughout, ts.begin_of_end, ts.end_of_end, 
+            i.pk_instance, s1.pk_statement pk_statemen_person, s2.pk_statement pk_statement_occupation, s3.pk_statement pk_statement_place
+        FROM "instance" i
+        LEFT JOIN time_span ts ON ts.pk_time_span = i.fk_time_span
+        LEFT JOIN "statement" s1 ON s1.fk_subject_instance = i.pk_instance AND s1.fk_property = 1 
+        LEFT JOIN "instance" i1 ON s1.fk_object_instance = i1.pk_instance
+        LEFT JOIN "statement" s2 ON s2.fk_subject_instance = i.pk_instance AND s2.fk_property = 2  
+        LEFT JOIN "instance" i2 ON s2.fk_object_instance = i2.pk_instance
+        LEFT JOIN "statement" s3 ON s3.fk_subject_instance = i.pk_instance AND s3.fk_property = 3  
+        LEFT JOIN "instance" i3 ON s3.fk_object_instance = i3.pk_instance
+        WHERE i.fk_class = 3;
+
 
 # Association à des données issues d'une autre source
 
