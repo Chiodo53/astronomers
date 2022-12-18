@@ -87,13 +87,13 @@ Pour vérifier l'import exécuter la requête suivante:
 
 # Traitement des _occupations_
 
-Exporter les deux CSV contenant les _occupations_ sous forme de ressources et de _literals_
+Importer les deux CSV contenant les _occupations_ sous forme de ressources et de _literals_
 
 ## Exploration
 
 ### Regroupement par URI de 'occupation'
 
-On constate des inconsistances. Je corrice à la main les labels sur la base de cette liste et j'utiliserai les labels pour créer les 'occupations' dans la table Instances
+On constate des inconsistences et des ortographes ou appellation différentes pour le même concept. Je corrige à la main les labels sur la base de cette liste et j'utiliserai les labels pour créer les 'occupations' dans la table Instances
 
     SELECT object_uri, count(*) as effectif  
     FROM "statement" s 
@@ -212,11 +212,179 @@ SELECT *
 FROM v_pursuits;
 
 
-## Ajouter le temps et l'espace
+## Traitement des _fields_
+
+### Vérifier s'il y a des doublons entre _occupations_ et _fields_
+
+352 fields, pas de superpositions
+
+    WITH tw1 as (
+    SELECT subject_uri, label 
+    FROM "statement" s WHERE property_uri = 'http://dbpedia.org/property/field'
+    EXCEPT 
+    SELECT subject_uri, label
+    FROM "statement" s WHERE property_uri = 'http://dbpedia.org/ontology/occupation'
+    )
+    SELECT s.subject_uri, s.label, s.property_uri 
+    FROM tw1, "statement" s 
+    WHERE s.subject_uri = tw1.subject_uri and s.label = tw1.label 
+    ORDER by s.subject_uri ;
+
+### Corrections des labels de 'field'
+
+On constate les mêmes problèmes que pour occupation. Je corrige à la main les labels à partir des 'occupations' existantes
+
+
+J'efface deux lignes visiblement erronées:
+* <http://dbpedia.org/resource/Conic_section>
+
+&nbsp;
+
+
+### Liste des occupations qui seront créées
+
+    WITH tw1 AS (
+    SELECT label 
+    FROM "statement" s 
+    WHERE s.property_uri = 'http://dbpedia.org/property/field'
+    EXCEPT
+    SELECT label
+    FROM "instance" i 
+    WHERE fk_class = 2)
+    SELECT s.label, count(*) as effectif   
+    FROM "tw1" JOIN "statement" s ON s.label = "tw1".label 
+    AND s.property_uri = 'http://dbpedia.org/property/field'
+    GROUP BY s.label
+    ORDER BY effectif DESC;
+
+
+
+### Créer les occupations qui manquent
+
+    WITH tw1 AS (
+    SELECT label 
+    FROM "statement" s 
+    WHERE s.property_uri = 'http://dbpedia.org/property/field'
+    EXCEPT
+    SELECT label
+    FROM "instance" i 
+    WHERE fk_class = 2)
+    INSERT INTO "instance" (label, fk_class, import_metadata)
+    SELECT s.label, 2, '20221217_1' 
+    FROM "tw1" JOIN "statement" s ON s.label = "tw1".label 
+    AND s.property_uri = 'http://dbpedia.org/property/field'
+    GROUP BY s.label;
+
+#### Vérification
+    SELECT c.label, COUNT(*) eff
+    FROM "instance" i, class c 
+    WHERE i.fk_class = c.pk_class 
+    GROUP BY c.label 
+    ORDER BY eff DESC ;
+
+### Reporter la clé des occupations vers les statements
+
+    UPDATE "statement" set fk_object_instance  = i.pk_instance 
+    FROM "instance" i 
+    WHERE i.fk_class = 2
+    AND "statement".label = i.label 
+    AND i.fk_class = 2;
+
+### Reporter la clé des personnes vers les statements
+
+    UPDATE "statement" set fk_subject_instance = i.pk_instance 
+    FROM "instance" i 
+    WHERE "statement".subject_uri = i.external_uri
+    AND "statement".import_metadata = '20221213_1'
+    AND i.fk_class = 1  ;
+
+
+### Ajouter les personnes qui manquent
+
+Étonnamment manquent un certain nombre de personnes. Je les ajoute
+
+    INSERT INTO "instance" (external_uri, fk_class, import_metadata)
+    SELECT DISTINCT  s.subject_uri, 1, '20221217_2'
+    FROM "statement" s 
+    WHERE fk_subject_instance  is null
+    AND s.import_metadata = '20221213_1'  ;
+
+Et je leur met rapidement un 'label':
+
+    UPDATE "instance"
+    SET label = TRIM(SUBSTRING(external_uri, LENGTH('http://dbpedia.org/resource/')+1))
+    WHERE import_metadata = '20221217_2'
+
+NB: il leur manque toutefois l'année de naissance !
+
+
+
+### Chercher puis supprimer les doublons
+
+NB : il y a aussi des personnes non renseignées. Vérifier
+
+    SELECT fk_subject_instance, fk_object_instance, COUNT(*) as eff 
+    FROM "statement" s  
+    WHERE s.import_metadata  = '20221213_1'  
+    AND fk_subject_instance IS NOT NULL 
+    GROUP BY fk_subject_instance, fk_object_instance
+    HAVING COUNT(*) > 1 ;
+
+Remettre à jour les statements avec la personne:
+
+    UPDATE "statement" set fk_subject_instance = i.pk_instance 
+    FROM "instance" i 
+    WHERE "statement".subject_uri = i.external_uri
+    AND "statement".import_metadata = '20221213_1'
+    AND i.fk_class = 1  ;
+
+## Créer les _pursuits_
+
+    INSERT INTO "instance" (import_metadata, notes, fk_class)
+    SELECT pk_statement || '_20221217_3' , pk_statement, 3
+    FROM "statement" s 
+    WHERE import_metadata = '20221213_1'
+    AND fk_subject_instance IS NOT NULL;
+
+
+### Créer l'association à la personne
+
+    IINSERT INTO "statement" (fk_subject_instance, fk_property, fk_object_instance, import_metadata)
+    SELECT  i.pk_instance, 1, s.fk_subject_instance, '20221217_4_'|| i.pk_instance 
+    FROM "instance" i, "statement" s 
+    WHERE i.notes = s.pk_statement
+    AND i.import_metadata like '%_20221217_3%';	
+
+### Créer l'association à la profession
+
+    SELECT  i.pk_instance, 2, s.fk_object_instance, '20221217_5_'|| i.pk_instance 
+    FROM "instance" i, "statement" s 
+    WHERE i.notes = s.pk_statement 
+    AND i.import_metadata like '%_20221217_3%';	
+
+## Créer la vue qui liste les professions
+
+    --DROP VIEW v_pursuits;
+    CREATE VIEW v_pursuits AS
+    SELECT i.pk_instance, s1.pk_statement, i1.pk_instance, i1.label, i2.label label_occupation, s2.pk_statement pk_statement_occupation
+    FROM "instance" i
+    LEFT JOIN "statement" s1 ON s1.fk_subject_instance = i.pk_instance AND s1.fk_property = 1 
+    LEFT JOIN "instance" i1 ON s1.fk_object_instance = i1.pk_instance
+    LEFT JOIN "statement" s2 ON s2.fk_subject_instance = i.pk_instance AND s2.fk_property = 2  
+    LEFT JOIN "instance" i2 ON s2.fk_object_instance = i2.pk_instance
+    WHERE i.fk_class = 3;
+
+
+### Interroger la vue
+
+SELECT *
+FROM v_pursuits;
+
+
+## Ajouter le temps et l'espace à la vue
 
 * Paul Guldin was a professor of mathematics in Graz and Vienna, <http://dbpedia.org/resource/Paul_Guldin>
 * Noter que Johannes Kepler n'a pas d'_occupation_ mais qu'il a des _fields_ d'acitvité: <http://dbpedia.org/resource/Johannes_Kepler>
-
 
         DROP VIEW v_pursuits;
         CREATE VIEW v_pursuits AS

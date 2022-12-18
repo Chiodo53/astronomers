@@ -600,3 +600,38 @@ Une partie des individus n'a pas d'occupation explicite.
 
 
 67 lignes en décembre 2022. La propriété _dbo:occupation_ ne pointe pas vers des litérals
+
+
+### Field(s) and Academic Discipline
+
+    PREFIX dbr: <http://dbpedia.org/resource/>
+    PREFIX dbp: <http://dbpedia.org/property/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT DISTINCT (?o1 AS ?subject_uri) (dbp:field as ?property_uri) (?target AS ?object_uri) (?name as ?label) ('20221213_1' as ?import_metadata)
+    (COUNT(*) AS ?effectif) 
+    WHERE {
+      SELECT DISTINCT ?o1 ?target (str(?label) as ?name)
+      WHERE { 
+        {
+              {dbr:List_of_astronomers ?p ?o1.}
+          UNION
+              {dbr:List_of_astrologers ?p ?o1.}
+          UNION
+              {?o1 ?p dbr:Astrologer.}
+          UNION
+              {?o1 ?p dbr:Astronomer.}
+          UNION
+              {?o1 ?p dbr:Mathematician.}
+        }
+        ?o1 a dbo:Person;
+          dbp:birthDate | dbo:birthDate ?birthDate;
+          dbp:field | dbp:fields | dbo:academicDiscipline ?target.
+      ?target rdfs:label ?label.
+        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
+              }
+      ORDER BY ?birthYear
+      }
+
+352 lignes 13 décembre 2022 : exporté sous forme de CSV et importé dans table _statement_
