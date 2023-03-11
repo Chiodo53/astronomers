@@ -1,8 +1,8 @@
-<head>
+
   <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.2"></script>
-</head>
+
 <body>
   <div id="vis"/>
   <script>
