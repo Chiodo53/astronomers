@@ -4,26 +4,29 @@
 ##  Objets (avec propriétés)
 <br/>
 
-### Personnes
-- date et lieu de naissance
-- famille
+### Personne
+- date de naissance
+- lieu de naissance
+- origine
 - formation
 - occupation
 - publications
 
 
-### Organisations
-- typlogie
+### Organisation
+- type
 - siège
 - fondation
 
 
-### Lieux
-- typologie
+### Lieu
+- type
 - coordonnées géographiques
 
-### Oeuvres
+### Oeuvre
 - référence bibliographique
+- année de publication
+- lieu de publication
 
 
 <br/>
