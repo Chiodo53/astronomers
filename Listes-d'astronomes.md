@@ -5,17 +5,3 @@
     * https://fr.wikipedia.org/wiki/Liste_d'astronomes
     * https://en.wikipedia.org/wiki/List_of_astronomers
 
-
-Le concept, la classe -> classification d'individus partageant les mêmes propriétés
-
-Définitions:
-*  L'ensemble des individus: _extension_ de la classe
-*  Les propriétés qu'ils/elles partagent: _intension_ de la classe
-
-
-
-Questions:
-
-*  Propriétés stables? Vraiment communes à l'ensemble de la population?
-*  Évolution dans le temps et dans l'expace?
-*  Élements structurants dans la population, sous-groupes?
