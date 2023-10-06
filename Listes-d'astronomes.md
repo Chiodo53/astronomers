@@ -6,12 +6,13 @@
     * https://en.wikipedia.org/wiki/List_of_astronomers
 
 
-Le concept -> classification d'individus partageant les mêmes propriétés
+Le concept, la classe -> classification d'individus partageant les mêmes propriétés
 
-L'ensemble des individus: extension
-Les propriétés qu'ils/elles partagent: intension
+* L'ensemble des individus: extension de la classe
+* Les propriétés qu'ils/elles partagent: intension de la classe
 
 Questions:
+
 *  Propriétés stables? Vraiment communes à l'ensemble de la population?
 *  Évolution dans le temps et dans l'expace?
 *  Élements structurants dans la population, sous-groupes?
