@@ -16,6 +16,21 @@ Dans ce fichier:
 
 Les noms des classes d'objets sont à indiquer au singulier et commencent avec une lettre majuscule.
 
+
+Le concept, la classe -> classification d'individus partageant les mêmes propriétés
+
+Définitions:
+*  L'ensemble des individus: _extension_ de la classe
+*  Les propriétés qu'ils/elles partagent: _intension_ de la classe
+
+
+
+Questions:
+
+*  Propriétés stables? Vraiment communes à l'ensemble de la population?
+*  Évolution dans le temps et dans l'expace?
+*  Élements structurants dans la population, sous-groupes?
+
 <br/>
 
 ### Personne
