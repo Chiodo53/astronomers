@@ -9,8 +9,8 @@
 Le concept, la classe -> classification d'individus partageant les mêmes propriétés
 
 Définitions:
-*  L'ensemble des individus: extension de la classe
-*  Les propriétés qu'ils/elles partagent: intension de la classe
+*  L'ensemble des individus: _extension_ de la classe
+*  Les propriétés qu'ils/elles partagent: _intension_ de la classe
 
 
 
