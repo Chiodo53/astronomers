@@ -28,6 +28,7 @@ En adoptant une démarche exploratoire, il s'agira de proposer un modèle du cha
 
 *  [[Listes d'astronomes|Listes d'astronomes]]
 *  [[Catalogue des informations|Catalogue-des-informations]]
+*  [[Modèle logique ou relationnel|Modèle-logique-ou-relationnel]]
 
 
 
