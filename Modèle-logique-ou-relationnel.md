@@ -1,5 +1,7 @@
 Ce modèle est issu de la transcription sour forme relationnelle du modèle conceptuel
 
+Cf. [cette page](http://phn-wiki.ish-lyon.cnrs.fr/doku.php?id=intro_histoire_numerique:modele_logique&#le_modele_logique_ou_relationnel) et celle-ci: [[How to Convert ER Diagram to Relational Database|https://www.learndb.com/databases/how-to-convert-er-diagram-to-relational-database]]
+
 
 person(pk_person, name, definition, gender, death_date, fk_birth, notes)
 
