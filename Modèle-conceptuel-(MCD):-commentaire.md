@@ -27,4 +27,10 @@ Par exemple 'épicier' spécialise le terme de 'négociant'.
 Le fait d'avoir telle occupation ou activité durant telle période 
 Il s'agit d'une classe temporalité (temporal entity)
 
-Exemple: "Kepler was a mathematics teacher at a [seminary](https://en.wikipedia.org/wiki/Seminary) school in [Graz](https://en.wikipedia.org/wiki/Graz)" (Wikipedia)
+Exemple: "Kepler was a mathematics teacher at a seminary school in Graz" (Wikipedia)
+
+### Relations
+
+Une _Pursuit_ peut comprend une et une seule personne, une et une seule occupation (ces deux relations sont nécessaires) et éventuellement on peut associer une (et une seule) organisation auprès de laquelle l'activité est exercée.
+
+Si plusieurs organisation sont concernées par une activité, plusieurs individus de la classe _Pursuit_ seront créées
