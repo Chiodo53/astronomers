@@ -4,7 +4,7 @@ Ce document contient le commentaire, avec exemples, du modèle conceptuel
 
 Tout être humain. 
 
-### Propriétés
+### Propriétés
 Nom standard, notice, le genre, éventuellement la date de mort.
 Il s'agit d'une classe objet (persistent item)
 
@@ -14,8 +14,8 @@ Il s'agit d'une classe objet (persistent item)
 Un métier ou tout autre type d'occupation
 Il s'agit d'une classe objet (persistent item)
 
-### Propriétés
+### Propriétés
 Nom standard, notice
 
-### Relations
+### Relations
 Une relation réfléxive de spécialisation, termes plus génériques associés à des termes plus précis
