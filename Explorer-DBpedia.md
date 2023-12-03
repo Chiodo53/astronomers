@@ -339,13 +339,17 @@ Avec les labels des noms, même effectif:
 
 ### Liste des astronomes—astrologues à exporter
 
-Noter la propriété <http://dbpedia.org/ontology/birthYear> ajoutée en vue de l'import dans la base de données SQLite. Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
+Noter la propriété <http://dbpedia.org/ontology/birthYear> ajoutée en vue de l'import dans la base de données SQLite. 
 
-ATTENTION: ne pas créer de nouveaux champs mais mettre ainsi
+Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
 
-* ?o1 dans le champs subject_uri
-* ?bY dans property_uri
-* ?birthYear dans numeric_value
+Si nécessaire, vider préalablement la table _statement_ en suivant [ces instructions](Importer_DBPaedia#instructions-g%C3%A9n%C3%A9rales)
+
+ATTENTION: dans l'interface graphique DBeaver, ne pas créer de nouveaux champs mais mettre ainsi:
+
+* ?subject dans le champs subject_uri
+* ?predicate dans property_uri
+* ?object dans numeric_value
 * ?import_metadata dans import_metadata
 
 Ce dernier champs est important pour tracer les import et garder souvenir de la source.
@@ -354,7 +358,7 @@ Ce dernier champs est important pour tracer les import et garder souvenir de la 
     PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT ?o1 (dbo:birthYear as ?bY) ?birthYear ('20221204_1' as ?import_metadata)
+    SELECT (?o1 as ?subject) (dbo:birthYear as ?predicate) (?birthYear AS ?object) ('20231204_1' as ?import_metadata)
     WHERE {
       SELECT DISTINCT ?o1 ?birthYear
       WHERE { 
