@@ -343,7 +343,7 @@ Noter la propriété <http://dbpedia.org/ontology/birthYear> ajoutée en vue de 
 
 Sauvegarder au format CSV, puis ouvrir dans DBeaver et importer dans la table 'statement' en mettant les valeurs dans les champs.
 
-Si nécessaire, vider préalablement la table _statement_ en suivant [ces instructions](Importer_DBPaedia#instructions-g%C3%A9n%C3%A9rales)
+Si nécessaire, vider préalablement la table _statement_ en suivant [ces instructions](Importer_DBpedia#instructions-générales)
 
 ATTENTION: dans l'interface graphique DBeaver, ne pas créer de nouveaux champs mais mettre ainsi:
 
