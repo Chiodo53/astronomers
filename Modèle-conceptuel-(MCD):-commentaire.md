@@ -33,4 +33,14 @@ Exemple: "Kepler was a mathematics teacher at a seminary school in Graz" (Wikipe
 
 Une _Pursuit_ peut comprend une et une seule personne, une et une seule occupation (ces deux relations sont nécessaires) et éventuellement on peut associer une (et une seule) organisation auprès de laquelle l'activité est exercée.
 
-Si plusieurs organisation sont concernées par une activité, plusieurs individus de la classe _Pursuit_ seront créées
+Si plusieurs organisation sont concernées par une activité, plusieurs individus de la classe _Pursuit_ seront créées.
+
+
+
+## Tag
+
+Un mot clé qui introduit un classement de recherche, généralement lié au questionnement.
+
+### Relations
+
+Relation reflexive (d'un classe vers elle même) qui créer une taxonomie (i.e. une hiérarchie) de mots clés, les plus généraux étant les parents ou ancêtres des plus spécifiques.

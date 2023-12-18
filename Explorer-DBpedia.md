@@ -404,7 +404,6 @@ Cette requête produit une liste de personnes.
 
 Si on veut importer les données dans une base de données SQLite, suivre les instructions indiquées sur ces pages:
 
-* 
 
 
     PREFIX dbr: <http://dbpedia.org/resource/>
