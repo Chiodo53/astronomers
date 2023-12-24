@@ -30,7 +30,7 @@ Point d'accès SPARQL: https://data.bnf.fr/sparql/
         
             }
         }
-        ?s egr:dateOfBirth ?bd
+        ?s egr:dateOfBirth ?bd.
         ?s foaf:familyName ?fName.
         OPTIONAL{?s foaf:name ?name}
         OPTIONAL { ?s owl:sameAs ?sameAs

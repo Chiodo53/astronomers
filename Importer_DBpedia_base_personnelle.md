@@ -1,29 +1,39 @@
-# Importer et structurer les données issues de DBPedia dans la base personnelle
+# Importer et structurer les données issues de DBPedia dans la base personnelle SQLite
 
-Ces instructions concernent l'importation de données issues de DBpedia dans une base de données qui a la structure de celle du projet personnel.
+Cette documentation concerne l'importation de données issues de DBpedia dans une base de données SQLite qui a la structure de celle du projet personnel.
 
-Dans le contexte de ce projet elle s'appelle _astronomers_import.db_ et se trouve dans le dossier [_astronomers/data/astronomers_import.db_](https://github.com/Sciences-historiques-numeriques/astronomers/tree/main/data)
+Dans le contexte du présent projet elle s'appelle _astronomers_import.db_ et se trouve dans le dossier [_astronomers/data/astronomers_import.db_](https://github.com/Sciences-historiques-numeriques/astronomers/tree/main/data)
 
 
 ## Préparation de la base de données
 
-Créer une copie (par simple copier-coller dans le dossier de travail) de la base de données de son propre projet, en renommant ensuite la copie, par exemple, en ajoutant à la fin du nom '_import' ou semblable.
+Créer une copie de la base de données du projet personnel (par simple copier-coller du fichier contenant la base de données SQLite dans le dossier de travail), puir renommer la copie en ajoutant à la fin du nom, par exemple, '_import' ou semblable.
+
+N.B.: au fur et à mesure de l'avancement de la recherche faire une sauvegarde de la base de données sur un ou plusieurs disques externes (et également de toutes les données de l'ordinateur).
 
 
 Vider complètement les tables en utilisant l'instruction suivante. Mais attention: cette instruction est irréversible !
 
-Ne pas oublier de temps en temps de sauvegarder sur un ou plusieurs disques externes la base de données et plus en général toutes les donnes de l'ordinateur.
 
     /*
-    La ligne est commentée afin d'éviter toute erreur de manipulation — décommenter la ligne afin de l'exécuter, puis recommenter
+    La ligne est commentée (ajout de "--" avant la commande) afin d'éviter toute erreur de manipulation — décommenter la ligne afin de l'exécuter, puis recommenter.
+    Noter que ces instructions se trouvent elles-mêmes dans un commentaire long du langage SQL. Elles ne sont pas 'vues' par le logiciel qui exécute les requêtes, précisément car elles sont 'commentées', ce sont des commentaires du code.
     */
-    --DELETE FROM "statement" ;
+    --DELETE FROM "person" ;
+
+    /*
+    * Remettre la séquence à zéro
+    */
+    UPDATE SQLITE_SEQUENCE 
+    SET seq = 0
+    WHERE name ='person';
+
     /* 
     après avoir vidé la table exécuter une instruction vacuum afin de vider la mémoire
     */
     VACUUM;
 
-Normalement cette instruction remet à zéro les valeurs des clés primaires autoincrémentées
+
 
 &nbsp;
 
@@ -32,7 +42,7 @@ Normalement cette instruction remet à zéro les valeurs des clés primaires aut
 
 ### Liste des astronomes—astrologues à exporter
 
-Exécuter la requête suivante, d'abord au format de réponse HTML, puis texte séparé par tabulateur (\t) ou virgule et enregistrer le fichier exporté dans un espace (dossier) dédié du dossier de travail.
+Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspecter, puis en texte séparé par tabulateur (\t) (TSV) ou texte séparé par virgule (CSV) et enregistrer le fichier exporté dans un espace dédié (sous-dossier) du dossier de travail.
 
 
     PREFIX dbr: <http://dbpedia.org/resource/>
@@ -67,42 +77,53 @@ Exécuter la requête suivante, d'abord au format de réponse HTML, puis texte s
 
 ### Creation de la table dans la base SQLIte
 
-En utilisant DBeaver, sélectionner la base de données 'import' et active l'import des données, puis:
+En utilisant DBeaver, sélectionner la base de données 'astronomers_import' et activer par click droit l'import des données, puis suivre les étapes:
 
 * selectionner le fichier TSV (CSV) à importer
+* dans le dialogue 'CSV' vérifier que le séparateur de colonnes (column delimiter) est bien tabulation (\t) et non virgule
+* une nouvelle table sera créée, vous pouvez en modifier le nom sous 'target'
+* le reste est à laisser comme tel, on peut vérifier dans l'étape 'Confirm' que tout est correct (ou revenir), puis:
+* bouton 'Proceed' et la table sera créée
+* si erreur dans la table, on l'efface avec DBeaver et on recommence
 
 
 &nbsp;
 
 ## Importer les personnes
 
-    -- chercher les doublons de la table des personnes importée
+ Chercher les doublons de la table des personnes importée (il faut supprimer manuellement les doublons éventuels, i.e. mêmes URI plus d'une fois, donc plusieurs lignes pour la même personne, inacceptable car dans la table Personne il y a une ligne par individu)
 
+    -- si le résultat est vide (pas de lignes) il n'y a pas de doublons
     SELECT o1
-    FROM liste_personnes_20231208 lp 
+    FROM dbp_liste_personnes lp 
     GROUP BY o1 
     HAVING COUNT(*) > 1 ;
 
-    -- compter les personnes existantes
-    SELECT count(*)
-    FROM person;
-
-    -- vider la table: ATTENTION Irréversible !
-    DELETE FROM person  ;
-
-    -- remettre à 0 la pk
-    update SQLITE_SEQUENCE 
-    set seq = 0
-    where name ='person';
-
-    -- nettoyer automatiquement
-    vacuum;
+    -- compter les personnes à importer
+    SELECT COUNT(*)
+    FROM dbp_liste_personnes lp;
 
 
-    -- insérer les personnes
-    insert into person (label, original_uri)
-    select name, o1
-    from liste_personnes_20231208 lp ;
+* si nécessaire vider préalablement la table personne, cf. ci-dessus
+* ajouter à la table personne la colonne _import_metadata_ and _original_uri_
+* insérer les personnes avec la requête suivante:
+
+    INSERT INTO person (label, original_uri)
+    SELECT name, o1
+    FROM dbp_liste_personnes lp ;
+
+### Créer les lignes dans la table référence contenant l'URI
+
+* ajouter une ligne manuellement concernant chaque requête SPARQL dans la table Document
+* utiliser la clé primaire de la ligne concernée dans la requête suivante
+
+&nbsp;
+
+    INSERT INTO reference (fk_person , exact_reference , fk_document , fk_reference_type)
+    SELECT pk_person, original_uri, 1, 1
+    FROM person p ;
+
+Avec cette requête on créé les lignes dans la table _reference_ associant chaque personne à la requête SPARQL d'origine et on indique quelle est l'URI de la personne dans la requête d'origine.
 
 
 
@@ -140,170 +161,51 @@ En utilisant DBeaver, sélectionner la base de données 'import' et active l'imp
     }
 
 
+## Création des occupations / activités 
 
+Après avoir téléchargé le résultat de la requête en TSV, on créée la table _dbp_occupation_ en important les données comme ci-dessus pour les personnes avec DBeaver.
 
-## Liste des disciplines académiques
+On inspecte ensuite les occupations existantes:
 
+    SELECT target, name, COUNT(*) AS effectif
+    FROM dbp_occupation do 
+    GROUP BY target, name 
+    ORDER BY effectif DESC ;
 
- PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/property/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT DISTINCT (?o1 AS ?subject_uri) (dbo:occupation as ?property_uri) (?target AS ?object_uri)  (?name as ?label)
-    #(COUNT(*) AS ?effectif) 
-    WHERE {
-    SELECT DISTINCT ?o1 ?target (str(?label) as ?name)
-    WHERE { 
-        {
-            {dbr:List_of_astronomers ?p ?o1.}
-        UNION
-            {dbr:List_of_astrologers ?p ?o1.}
-        UNION
-            {?o1 ?p dbr:Astrologer.}
-        UNION
-            {?o1 ?p dbr:Astronomer.}
-        UNION
-            {?o1 ?p dbr:Mathematician.}
-        }
-        ?o1 a dbo:Person;
-        dbp:birthDate | dbo:birthDate ?birthDate;
-        dbp:academicDiscipline ?target.
-    ?target rdfs:label ?label.
-    BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
-            }
-    ORDER BY ?birthYear
-    }
+On constate alors une incohérences des termes utilisés dans Wikipedia et on déduit qu'il faudrait faire un travail de nettoyage. Nous ne le ferons pas fait ici car le but est d'illustrer la démarche d'importation de données.
 
+Après avoir vidé la table si nécessaire, on créé ensuite les occupations regroupées dans la table correspondante ainsi:
 
+    INSERT INTO occupation (original_uri, label)
+    SELECT target, name
+    FROM dbp_occupation do 
+    GROUP BY target, name 
+    ORDER BY name;
 
-## Nationalité
+    --puis on inspecte le résultat
+    SELECT label, original_uri 
+    FROM occupation o ;
 
-    PREFIX dbr: <http://dbpedia.org/resource/>
-    PREFIX dbp: <http://dbpedia.org/property/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT DISTINCT (?o1 AS ?subject_uri) (STR(?target) AS ?text_value) 
-    # (COUNT(*) AS ?effectif) 
-    WHERE {
-    SELECT DISTINCT ?o1 ?target 
-    WHERE { 
-        {
-            {dbr:List_of_astronomers ?p ?o1.}
-        UNION
-            {dbr:List_of_astrologers ?p ?o1.}
-        UNION
-            {?o1 ?p dbr:Astrologer.}
-        UNION
-            {?o1 ?p dbr:Astronomer.}
-        UNION
-            {?o1 ?p dbr:Mathematician.}
-        }
-        ?o1 a dbo:Person;
-        dbp:birthDate | dbo:birthDate ?birthDate;
-        dbp:nationality | dbo:nationality ?target.
-        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && !isIRI(?target) && strlen(STR(?target)) > 0)
-            }
-    ORDER BY ?birthYear
-    }
-
-
-## Créer un table par requête
-
-* Exporter en CSV ou TSV le résultat de la requête SPARQL
-* En utilisant DBeaver, créer une table par fichier TSV dans la base de données
-* Pour les tables des disciplines et nationalités ajouter une colonne pour les valeurs corrigées ou codées, en utilisant SQLite Studio
-
-### Remplir ensuite les colonnes avec les valeurs existantes
-
-Les données seront nettoyées plus tard:
-
-    UPDATE liste_academicDisciplines SET valeur_codee = label ;
-    UPDATE nationalite_20231218  SET valeur_nettoyee  = text_value  ;
-
-
-
-## Créer une vue SQL qui regroupe les personnes, nationalités et disciplines
-
-Cette vue utilisé les colonnes codées et ajoute un colonne avec les périodes de 50 ans
-
-    DROP VIEW v_nationalite_discipline_annee_code ;
-    CREATE VIEW v_nationalite_discipline_annee_code AS
-    WITH RECURSIVE
-    cnt(x) AS (
-    SELECT 1451
-    UNION ALL
-    SELECT x+50 FROM cnt
-    WHERE x < 1801
-    ), tw1 AS (
-    SELECT x as begin_a, x+49 as end_a FROM cnt
-    )
-    SELECT lp.o1, n.valeur_nettoyee as nationalite, lad.valeur_codee as discipline, 
-            lp.birthYear as annee_naissance,
-            begin_a as periode
-    from liste_personnes_20231208 lp
-        left join liste_academicDisciplines lad 
-            on lp.o1 = lad.subject_uri
-        left join nationalite_20231218 n 
-            on n.subject_uri = lp.o1 
-        left join tw1 on lp.birthYear between begin_a and end_a ;
-
-
-    
-
-    SELECT *
-    from v_nationalite_discipline_annee_code;
-
-
-
-## Distribution par période: graphique
-
-Exécuter la requête suivante, exporter sous format CSV le résultat et réaliser un graphique sous Calc (ou Excel)
-
-    WITH tw1 AS (
-    SELECT DISTINCT o1, periode
-    from v_nationalite_discipline_annee_code
-    )
-    SELECT periode, count(*) effectif
-    FROM tw1
-    GROUP BY periode;
-        
-
-
-## Nettoyer les nationalités
-
-    SELECT nationalite, count(*) as eff
-    FROM v_nationalite_discipline_annee_code
-    WHERE nationalite NOTNULL 
-    GROUP BY  nationalite
-    ORDER BY eff DESC  ; 
-
-
-    -- chercher les occurrences d'un terme
-    -- chercher les occurrences d'un terme
-    SELECT *
-    FROM nationalite_20231218 n 
-    WHERE valeur_nettoyee  LIKE '%Italian, French%';
-
-    -- remplacer toute la cellule par un autre terme
     /*
-    * replaced: '%Mulhous%', '%Genev%', '%German, Russian%',
-    * '%Tusc%' Italian, French
+    on inspecte les données à travers la table jointure dbp_occupation
     */
-    UPDATE nationalite_20231218 set valeur_nettoyee = 'Italian'
-    WHERE valeur_nettoyee LIKE '%Italian, French%';
+    SELECT p.label, o.label 
+    FROM dbp_occupation do 
+    JOIN person p ON p.original_uri = do.o1 
+    JOIN occupation o ON o.original_uri = do.target ;
 
+On va ensuite créer les lignes de la table _pursuit_ en utilisant les lignes de la table _db_occupation_ qui associent chaque fois une personne à une occupation
 
-## Graphique des nationalités
+    INSERT INTO pursuit (fk_person, fk_occupation )
+    SELECT p.pk_person, o.pk_occupation 
+    FROM dbp_occupation do 
+    JOIN person p ON p.original_uri = do.o1 
+    JOIN occupation o ON o.original_uri = do.target ;
 
-Exécuter la requête, expoerter le résultat sous forme de CSV et ouvrir avec Calc afin de réaliser un graphique
+On pourra constater que la table, et la vue correspondante _v_pursuit_ sont désormais remplies.
 
-    SELECT DISTINCT o1, nationalite, periode
-    FROM v_nationalite_discipline_annee_code
-    WHERE nationalite in (
-    SELECT nationalite
-    FROM v_nationalite_discipline_annee_code
-    WHERE nationalite NOTNULL 
-    GROUP BY  nationalite
-    HAVING count(*) > 2);
+On pourrait ensuite ajouter toutes les métadonnées d'importation à travers la table _reference_ mais nous ne le ferons pas ici. La méthode sera identique à celle adoptée pour la table _person_ présentée ci-dessus.
+
+Aussi, manquent les dates et autres éléments qu'on pourrait ajouter à partir d'autres sources de données, par importation ou manuellement.
+
+On notera que la qualité de l'information issue de DBPedia n'est pas optimale mais que, en même temps, on peut disposer d'un premier lot de données intéressantes à analyser.
