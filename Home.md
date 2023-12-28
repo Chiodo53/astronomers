@@ -35,6 +35,6 @@ En adoptant une démarche exploratoire, il s'agira de proposer un modèle du cha
 
 ### Récupération et analyse de données existantes
 
-* [[Explorer DBPedia|explorer-dbpedia]]
-* [[Importer les données de DBPaedia|Importer_DBPaedia_base_personnelle.md]]
-* [[Visualiser les données de DBPaedia|Importer_DBPaedia_analyses.md]]
+* [[Explorer DBpedia|explorer-dbpedia]]
+* [[Importer les données de DBpedia|Importer_DBpedia_base_personnelle]]
+* [[Visualiser les données de DBpedia|Importer_DBpedia_analyses]]

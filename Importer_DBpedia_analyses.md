@@ -110,7 +110,7 @@ Par convention la période doit commencer à l'année 'une' de la décennie dans
     SELECT 1451
     UNION ALL
     SELECT x+50 FROM cnt
-    WHERE x < 1801
+    WHERE x < 1751
     ), tw1 AS (
     SELECT x as begin_a, x+59 as end_a FROM cnt
     )
@@ -125,10 +125,10 @@ Puis alimenter cette colonne avec la requête suivante:
 
     WITH RECURSIVE
     cnt(x) AS (
-    SELECT 1501
+    SELECT 1451
     UNION ALL
     SELECT x+50 FROM cnt
-    WHERE x < 1801
+    WHERE x < 1751
     ), tw1 AS (
     SELECT x as begin_a, x+49 as end_a FROM cnt
     )
