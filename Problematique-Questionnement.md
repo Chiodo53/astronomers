@@ -1,6 +1,6 @@
 ## Problématique
 
-En adoptant une démarche exploratoire, il s'agira de proposer un modèle du champ de l'astronomie (cf. la [notion de champ](https://fr.wikipedia.org/wiki/Champ_(sociologie)) de Pierre Bourdieu), c'est-à-dire une représentation simplifiée de la position respective des agents entre eux.elles, ainsi que celle des appartenances aux organisations, et des relations entre celles-ci. On s'efforcera également de proposer un modèle de l'évolution de cette structure dans le temps.
+En adoptant une démarche exploratoire, il s'agira de proposer un modèle du champ de l'astronomie (cf. la [notion de champ](https://fr.wikipedia.org/wiki/Champ_(sociologie)) de Pierre Bourdieu), c'est-à-dire une représentation simplifiée  des positions respectives des agents, ainsi que celle des appartenances aux organisations, et des relations entre celles-ci. Nous nous efforcerons également de proposer un modèle d'évolution de cette structure dans le temps. Par ailleurs, dans le cadre d'une approche prosopographique, nous collecterons systématiquement les caractéristiques des agents (origines géographiques, formations, sujets de publication, etc.) afin de mettre en évidence des profils biographiques et d'activité.
 
 ## Questions de recerche
 
