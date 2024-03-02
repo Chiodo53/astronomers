@@ -25,13 +25,13 @@
 
 <https://dbpedia.org/page/Giovanni_Domenico_Cassini>
 
-Les informations qui figurent sur cette page sont extraites de Wikipedia et produites sous forme de données structurées selon le protocole RDF.
+Les informations qui figurent sur cette page sont extraites de Wikipedia et produites sous forme de données structurées selon le protocole RDF. En d'autres termes, si la page apparaît comme étant du texte, en réalité elle présente, et rend lisibles, les données structurées du graphe concernant cette personne.
 
-On peut donc les interroger et récupérer grâce à des requêtes formulées dans le langage SPARQL.
+On peut donc les interroger et les récupérer grâce à des requêtes formulées dans le langage SPARQL.
 
-Observer dans la page quelle informations intéressantes sont disponibles. RDF fonctionne sur un modèle "sujet -> prédicat-> objet" qui constitue les triplets.
+Il s'agit d'abord d'inspecter la page et relever les  informations intéressantes qui sont disponibles. RDF fonctionne sur un modèle "sujet -> prédicat-> objet" qui constitue les triplets.
 
-Le sujet de la page est le sujet de tous les triplets (dans ce cas la personne). Les prédicats sont exprimés sous forme de propriétés (<u>_properties_</u>) 
+Le sujet de la page est le sujet de tous les triplets (dans ce cas la personne). Les prédicats sont exprimés sous forme de propriétés (<u>_properties_</u> en anglais) 
 
 Exemples de propriétés:
 
@@ -39,7 +39,11 @@ Exemples de propriétés:
   * URI complète de la propriété: <http://dbpedia.org/property/birthDate>
   * préfixe de l'espace de noms: 'dbp' (pour <http://dbpedia.org/property/>)
   * dbp:birthDate est un qualified name, ou QName
-* dbo:influencedBy ('dbo' pour <http://dbpedia.org/ontology>)
+  * noter que ces propriétés ont généralement comme cible une valeur (chaîne de caractères ou nombre) même si elles pointent sur un objet
+* dbo:influencedBy
+  * URI complète de la propriété: https://dbpedia.org/ontology/influenced
+  * préfixe de l'espace de noms 'dbo': <http://dbpedia.org/ontology>
+  * ce type de proriétés associée généralement un objet à un autre objet (et non à une valeur) et donc en sobjet du triplet on trouve une URI
   * essayez de naviguer d'un _influencer_ vers autre: c'est là qu'on voit des données structurées, toutes définies par des URI
   
 &nbsp;
@@ -123,7 +127,7 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
       WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
             }
 
-### Astronomes nés entre 1451 et 1770
+### Astronomes nés entre 1371 et nous jours / 1770
 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     PREFIX dbr: <http://dbpedia.org/resource/>
@@ -133,11 +137,13 @@ SPARQLIS permet de construire des requêtes SPARQL grâce à une interface graph
     WHERE { ?thing_1 dbo:occupation dbr:Astronomer .
          ?thing_1 dbo:birthYear ?birthYear .
          BIND(xsd:integer(str(?birthYear)) AS ?intYear)
-    FILTER ( (?intYear >= 1451
-                  && ?intYear < 1771 ) ) }
+    FILTER ( (?intYear >= 1371
+    ###  La clause de filtre ci-dessous est commentée, i.e. non active. Décommenter pour l'activer
+    #              && ?intYear < 1771 
+                  ) ) }
     ORDER BY ?intYear
 
-Leur effectif (3 décembre 2022): 23
+Leur effectif (3 décembre 2022): 23 / 124
 
 La requête ci-dessous ne change rien, en espace de noms dbr seulement 13 astronomes
 
@@ -156,8 +162,9 @@ La requête ci-dessous ne change rien, en espace de noms dbr seulement 13 astron
         }
      ?thing_1 dbo:birthYear ?birthYear .
      BIND(xsd:integer(str(?birthYear)) AS ?intYear)
-    FILTER ( (?intYear >= 1451 -- mieux: 1371
-              && ?intYear < 1771 ) ) }
+    FILTER ( (?intYear >= 1371 
+      #        && ?intYear < 1771 
+              ) ) }
     ORDER BY ?intYear
 
 &nbsp;
@@ -214,8 +221,9 @@ Noter ces propriétés:
     ?o1 a dbo:Person;
       dbp:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1451
-                && ?birthYear < 1771 ) ) 
+    FILTER ( (?birthYear >= 1371
+    #            && ?birthYear < 1771
+     ) ) 
           }
 
 &nbsp;
@@ -236,8 +244,9 @@ Effectif: 56
     ?o1 a dbo:Person;
       dbp:birthDate | dbo:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1451
-                && ?birthYear < 1771 ) ) 
+    FILTER ( (?birthYear >= 1371
+      #          && ?birthYear < 1771 
+                ) ) 
           }
     ORDER BY ?birthYear
 
@@ -265,14 +274,15 @@ Astonomes et _astrologues_ et _mathématiciens_:
     ?o1 a dbo:Person;
       dbp:birthDate | dbo:birthDate ?birthDate.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1451
-                && ?birthYear < 1771 ) ) 
+    FILTER ( (?birthYear >= 1371
+      #          && ?birthYear < 1771 
+                ) ) 
           }
     ORDER BY ?birthYear
 
 &nbsp;
 
-Effectif : 292 mathématiciens, astrologues, astronomes
+Effectif : 292 / 5138 mathématiciens, astrologues, astronomes
 
 __Définition de la population__: cette requêtes définit la population — cette requête sera la base de toutes les autres
 
@@ -298,8 +308,10 @@ __Définition de la population__: cette requêtes définit la population — cet
         ?o1 a dbo:Person;
           dbp:birthDate | dbo:birthDate ?birthDate.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451
-                    && ?birthYear < 1771 ) ) 
+        FILTER ( (?birthYear >= 1371
+           #         && ?birthYear < 1771 
+                    
+                    ) ) 
               }
       }
 
@@ -325,14 +337,17 @@ Avec les labels des noms (en anglais), même effectif:
               {?o1 ?p dbr:Astronomer.}
           UNION
               {?o1 ?p dbr:Mathematician.}
+          UNION
+              {?o1 ?p dbr:Physicist.}
 
         }
         ?o1 a dbo:Person;
           dbp:birthDate | dbo:birthDate ?birthDate;
           rdfs:label ?label.
         BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451
-                    && ?birthYear < 1771 )
+        FILTER ( (?birthYear >= 1371
+              #      && ?birthYear < 1771 
+                  )
                     && LANG(?label) = 'en') 
               }
       }
@@ -358,12 +373,14 @@ Avec les labels des noms (en anglais), même effectif:
               {?o1 ?p dbr:Astronomer.}
           UNION
               {?o1 ?p dbr:Mathematician.}
+          UNION
+              {?o1 ?p dbr:Physicist.}    
         }
     ?o1 a dbo:Person;
     dbp:birthDate | dbo:birthDate ?birthDate;
         ?p1 ?o2.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
+    FILTER ( (?birthYear >= 1371  )) 
       }
     GROUP BY ?p1
     ORDER BY DESC(?eff)
@@ -384,12 +401,14 @@ Avec les labels des noms (en anglais), même effectif:
               {?o1 ?p dbr:Astronomer.}
           UNION
               {?o1 ?p dbr:Mathematician.}
+          UNION
+              {?o1 ?p dbr:Physicist.}
         }
     ?o1 a dbo:Person;
     dbp:birthDate | dbo:birthDate ?birthDate.
     ?o2 ?p1 ?o1.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )) 
+    FILTER ( (?birthYear >= 1371  )) 
       }
     GROUP BY ?p1
     ORDER BY DESC(?eff)
@@ -402,7 +421,7 @@ Avec les labels des noms (en anglais), même effectif:
 
 Cette requête produit une liste de personnes.
 
-Si on veut importer les données dans une base de données SQLite, suivre les instructions indiquées sur ces pages:
+Si on veut importer les données dans une base de données SQLite, suivre les [instructions indiquées sur ces pages](Importer_DBpedia_base_personnelle.md): 
 
 
 
@@ -423,16 +442,20 @@ Si on veut importer les données dans une base de données SQLite, suivre les in
             {?o1 ?p dbr:Astronomer.}
         UNION
             {?o1 ?p dbr:Mathematician.}
+        UNION
+            {?o1 ?p dbr:Physicist.}
 
       }
       ?o1 a dbo:Person;
         dbp:birthDate | dbo:birthDate ?birthDate;
         rdfs:label ?label.
       BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-      FILTER ( (?birthYear >= 1451
-                  && ?birthYear < 1771 )
+      FILTER ( (?birthYear >= 1371
+      #            && ?birthYear < 1771 
+                  )
                   && LANG(?label) = 'en') 
             }
     }
+    ORDER BY ?birthYear
 
   

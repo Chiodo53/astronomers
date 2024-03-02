@@ -52,7 +52,7 @@ Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspec
     WHERE {
     SELECT DISTINCT ?o1 ?birthDate ?birthYear ?label
     WHERE { 
-        {
+    {
             {dbr:List_of_astronomers ?p ?o1.}
         UNION
             {dbr:List_of_astrologers ?p ?o1.}
@@ -62,17 +62,21 @@ Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspec
             {?o1 ?p dbr:Astronomer.}
         UNION
             {?o1 ?p dbr:Mathematician.}
+        UNION
+            {?o1 ?p dbr:Physicist.}
 
-        }
-        ?o1 a dbo:Person;
+    }
+    ?o1 a dbo:Person;
         dbp:birthDate | dbo:birthDate ?birthDate;
         rdfs:label ?label.
-        BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451
-                    && ?birthYear < 1771 )
-                    && LANG(?label) = 'en') 
+    BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
+    FILTER ( (?birthYear >= 1371
+    #            && ?birthYear < 1771 
+                )
+                && LANG(?label) = 'en') 
             }
     }
+    ORDER BY ?birthYear
 
 
 ### Creation de la table dans la base SQLIte
