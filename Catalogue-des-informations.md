@@ -1,4 +1,3 @@
-# Catalogue des informations
 
 Ce catalogue contient une liste de classes d'objets, ainsi que de leurs propriétés et relations. 
 
