@@ -1,25 +1,12 @@
 
-<html>
-<head>
-	
 
-	<style type="text/css">
-		body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:"Liberation Sans"; font-size:x-small }
-		a.comment-indicator:hover + comment { background:#ffd; position:absolute; display:block; border:1px solid black; padding:0.5em;  } 
-		a.comment-indicator { background:red; display:inline-block; border:1px solid black; width:0.5em; height:0.5em;  } 
-		comment { display:none;  } 
-	</style>
-	
-</head>
-
-<body>
 <table cellspacing="0" border="0">
-	<colgroup width="470"></colgroup>
-	<colgroup span="2" width="85"></colgroup>
+	<!--<colgroup width="470"></colgroup>
+	<colgroup span="2" width="85"></colgroup>-->
 	<tr>
 		<td height="17" align="center"><b><font face="Liberation Serif">proprietes</font></b></td>
 		<td align="center"><b><font face="Liberation Serif">eff</font></b></td>
-		<td align="left">notes</td>
+		<td align="left" style="width: 40%;">notes</td>
 	</tr>
 	<tr>
 		<td height="17" align="left"><font face="Liberation Serif"><a href="http://dbpedia.org/ontology/wikiPageWikiLink">http://dbpedia.org/ontology/wikiPageWikiLink</a></font></td>
@@ -144,7 +131,7 @@
 	<tr>
 		<td height="17" align="left"><font face="Liberation Mono,DejaVu Sans Mono"><a href="http://dbpedia.org/ontology/almaMater">http://dbpedia.org/ontology/almaMater</a></font></td>
 		<td align="right" sdval="23435" sdnum="2057;"><font face="Liberation Mono,DejaVu Sans Mono">23435</font></td>
-		<td align="left">A utiliser afin de disposer des Univeristés d'étude. Cf. la requête ...<br></td>
+		<td align="left"  style="width: 40%;">A utiliser afin de disposer des Univeristés d'étude. Cf. la requête ...<br></td>
 	</tr>
 	<tr>
 		<td height="17" align="left"><font face="Liberation Mono,DejaVu Sans Mono"><a href="http://purl.org/linguistics/gold/hypernym">http://purl.org/linguistics/gold/hypernym</a></font></td>
@@ -4017,7 +4004,4 @@
 		<td align="left"><br></td>
 	</tr>
 </table>
-<!-- ************************************************************************** -->
-</body>
 
-</html>
