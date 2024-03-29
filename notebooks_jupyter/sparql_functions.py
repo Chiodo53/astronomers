@@ -10,7 +10,7 @@
 
 from SPARQLWrapper import SPARQLWrapper, SPARQLWrapper2, JSON, TURTLE, XML, RDFXML
 
-
+import sys
 
 
 ## Fonction qui exécute la requête et renvoit le résultat
@@ -18,7 +18,8 @@ from SPARQLWrapper import SPARQLWrapper, SPARQLWrapper2, JSON, TURTLE, XML, RDFX
 def get_json_sparql_result(endpoint,query):
     
     try:
-        sparql = SPARQLWrapper(endpoint)
+        user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+        sparql = SPARQLWrapper(endpoint, agent=user_agent)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         sparql.setMethod('POST')
