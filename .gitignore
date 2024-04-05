@@ -1,5 +1,4 @@
 
-
 ## fichiers provisoirement invisibles
 /notebooks_jupyter/dbpedia_exploration/dbp_merge_relations_interactif.ipynb
 
@@ -7,6 +6,22 @@
 *.csv
 # HTML non versionnés, sauf exceptions
 *.html
+
+
+# bases sqlite, sauf exceptions
+*.sqlite
+
+# docs ttl, sauf exception
+*.ttl
+
+# docs json, sauf exception
+*.json
+
+# docs rj, sauf exception
+*.rj
+
+# docs nt, sauf exception
+*.nt
 
 *.code-workspace
 .~lock.*

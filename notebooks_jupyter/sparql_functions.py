@@ -24,7 +24,7 @@ def get_json_sparql_result(endpoint,query):
         sparql.setReturnFormat(JSON)
         sparql.setMethod('POST')
         rc = sparql.queryAndConvert()
-        print(type(rc))
+        # print(type(rc))
     except Exception as e:
         print(e)
     else:
