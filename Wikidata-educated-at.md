@@ -30,7 +30,7 @@
         BIND(REPLACE(str(?startTime), "(.*)([0-9]{4})(.*)", "$2") AS ?startYear)
         
         BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?birthYear)
-        FILTER(?birthYear > '1450' )# && ?birthYear < '1901')
+        FILTER(?birthYear > '1370' ) # && ?birthYear < '1901')
         SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
         }
     order by ?birthYear ?startYear

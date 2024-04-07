@@ -48,11 +48,13 @@ Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspec
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
-    SELECT DISTINCT ?o1  (str(?label) as ?name) ?birthYear
+    PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+    SELECT DISTINCT (?o1 AS ?subject_uri) ?birthYear
+    #(COUNT(*) AS ?effectif) 
     WHERE {
-    SELECT DISTINCT ?o1 ?birthDate ?birthYear ?label
+    SELECT DISTINCT ?o1 ?birthYear ?target (str(?label) as ?name)
     WHERE { 
-    {
+        {
             {dbr:List_of_astronomers ?p ?o1.}
         UNION
             {dbr:List_of_astrologers ?p ?o1.}
@@ -62,21 +64,16 @@ Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspec
             {?o1 ?p dbr:Astronomer.}
         UNION
             {?o1 ?p dbr:Mathematician.}
-        UNION
-            {?o1 ?p dbr:Physicist.}
-
-    }
-    ?o1 a dbo:Person;
+        }
+        ?o1 a dbo:Person;
         dbp:birthDate | dbo:birthDate ?birthDate;
-        rdfs:label ?label.
+        dbp:occupation | dbo:occupation ?target.
+    ?target rdfs:label ?label.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-    FILTER ( (?birthYear >= 1371
-    #            && ?birthYear < 1771 
-                )
-                && LANG(?label) = 'en') 
+        FILTER ( (?birthYear >= 1351   )  && LANG(?label) = 'en') #  && ?birthYear < 1771
             }
-    }
     ORDER BY ?birthYear
+    }
 
 
 ### Creation de la table dans la base SQLIte
@@ -85,7 +82,7 @@ En utilisant DBeaver, sélectionner la base de données 'astronomers_import' et 
 
 * selectionner le fichier TSV (CSV) à importer
 * dans le dialogue 'CSV' vérifier que le séparateur de colonnes (column delimiter) est bien tabulation (\t) et non virgule
-* une nouvelle table sera créée, vous pouvez en modifier le nom sous 'target'
+* une nouvelle table sera créée, vous pouvez en modifier le nom sous 'target' et elle sera appelée: *dbp_liste_personnes* 
 * le reste est à laisser comme tel, on peut vérifier dans l'étape 'Confirm' que tout est correct (ou revenir), puis:
 * bouton 'Proceed' et la table sera créée
 * si erreur dans la table, on l'efface avec DBeaver et on recommence
@@ -98,9 +95,9 @@ En utilisant DBeaver, sélectionner la base de données 'astronomers_import' et 
  Chercher les doublons de la table des personnes importée (il faut supprimer manuellement les doublons éventuels, i.e. mêmes URI plus d'une fois, donc plusieurs lignes pour la même personne, inacceptable car dans la table Personne il y a une ligne par individu)
 
     -- si le résultat est vide (pas de lignes) il n'y a pas de doublons
-    SELECT o1
+    SELECT person_uri
     FROM dbp_liste_personnes lp 
-    GROUP BY o1 
+    GROUP BY person_uri
     HAVING COUNT(*) > 1 ;
 
     -- compter les personnes à importer
@@ -112,9 +109,21 @@ En utilisant DBeaver, sélectionner la base de données 'astronomers_import' et 
 * ajouter à la table personne la colonne _import_metadata_ and _original_uri_
 * insérer les personnes avec la requête suivante:
 
-    INSERT INTO person (label, original_uri)
-    SELECT name, o1
-    FROM dbp_liste_personnes lp ;
+&nbsp;
+
+    INSERT INTO person (birth_year, dbpedia_uri, import_metadata)
+    SELECT birthYear, person_uri, "Importé le 15 mars 2024 depuis le résultat d'une requête SPARQL sur DBPedia, cf. astronomers/DBpedia_importer_dans_base_personnelle"
+    FROM dbp_liste_personnes lp ;    
+
+Noter que on a ajouté également une note d'importation qui indique l'origine des données, avec un renvoi à la documentation. On peut aussi créer une documentation plus précise avec la table 'reference' qui fait le lien entre chaque objet et la requête dont il est issu. Un exemple ci-dessous.
+
+
+### Ajouter les noms
+
+    UPDATE person 
+    SET label = TRIM(REPLACE(SUBSTR(dbpedia_uri,LENGTH('http://dbpedia.org/resource/')+ 1), '_', ' '));
+
+
 
 ### Créer les lignes dans la table référence contenant l'URI
 
@@ -123,11 +132,12 @@ En utilisant DBeaver, sélectionner la base de données 'astronomers_import' et 
 
 &nbsp;
 
+   
     INSERT INTO reference (fk_person , exact_reference , fk_document , fk_reference_type)
-    SELECT pk_person, original_uri, 1, 1
+    SELECT pk_person, dbpedia_uri, 1, 1
     FROM person p ;
 
-Avec cette requête on créé les lignes dans la table _reference_ associant chaque personne à la requête SPARQL d'origine et on indique quelle est l'URI de la personne dans la requête d'origine.
+Avec cette requête on créé les lignes dans la table _reference_ associant chaque personne à la requête SPARQL d'origine et on indique quelle est l'URI de la personne dans la requête d'origine. On peut ainsi documenter différentes origines des données.
 
 
 
@@ -159,7 +169,7 @@ Avec cette requête on créé les lignes dans la table _reference_ associant cha
         dbp:occupation | dbo:occupation ?target.
     ?target rdfs:label ?label.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1451   && ?birthYear < 1771 )  && LANG(?label) = 'en') 
+        FILTER ( (?birthYear >= 1351   )  && LANG(?label) = 'en') 
             }
     ORDER BY ?birthYear
     }

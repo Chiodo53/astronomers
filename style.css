@@ -1,0 +1,62 @@
+
+td,
+th {
+vertical-align: top;
+font-size: 10pt;
+padding-left: 5pt;
+}
+
+th {
+font-weight:strong;    
+}
+
+
+
+table {
+border-collapse: collapse;
+border-spacing: 0;
+empty-cells: show;
+}
+
+td,
+th {
+vertical-align: top;
+font-size: 10pt;
+padding-left: 5pt;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+clear: both;
+}
+
+p {
+white-space: nowrap;
+}
+
+ol,
+ul {
+margin: 0;
+padding: 0;
+}
+
+li {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+/* "li span.odfLiEnd" - IE 7 issue*/
+li span. {
+clear: both;
+line-height: 0;
+width: 0;
+height: 0;
+margin: 0;
+padding: 0;
+}

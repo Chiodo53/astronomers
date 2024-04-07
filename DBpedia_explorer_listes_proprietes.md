@@ -1,114 +1,18 @@
-<style type="text/css">
-@page {}
 
-table {
-border-collapse: collapse;
-border-spacing: 0;
-empty-cells: show;
-}
 
-td,
-th {
-vertical-align: top;
-font-size: 10pt;
-padding-left: 5pt;
-}
+<link rel="stylesheet" type="text/css" href="style.css">
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-clear: both;
-}
-
-p {
-white-space: nowrap;
-}
-
-ol,
-ul {
-margin: 0;
-padding: 0;
-}
-
-li {
-list-style: none;
-margin: 0;
-padding: 0;
-}
-
-/* "li span.odfLiEnd" - IE 7 issue*/
-li span. {
-clear: both;
-line-height: 0;
-width: 0;
-height: 0;
-margin: 0;
-padding: 0;
-}
-
-span.footnodeNumber {
-padding-right: 1em;
-}
-
-span.annotation_style_by_filter {
-font-size: 95%;
-font-family: Arial;
-background-color: #fff000;
-margin: 0;
-border: 0;
-padding: 0;
-}
-
-span.heading_numbering {
-margin-right: 0.8rem;
-}
-
-* {
-margin: 0;
-}
-
-.ta1 {
-writing-mode: horizontal-tb;
-direction: ltr;
-}
-
-.Default {
-font-family: Liberation Sans;
-}
-
-.co1 {
-width: 9.567cm;
-}
-
-.co2 {
-width: 1.642cm;
-}
-
-.co3 {
-width: 10.402cm;
-}
-
-.ro1 {
-height: 0.452cm;
-}
-
-/* ODF styles with no properties representable as CSS */
-{}
-</style>
 
 <table border="0" cellspacing="0" cellpadding="0" class="ta1">
 <tr class="ro1">
 <td style="text-align:left;width:9.567cm; " class="Default">
-<p>propiete</p>
+<p>Propriete</p>
 </td>
 <td style="text-align:left;width:1.642cm; " class="Default">
-<p>effectif</p>
+<p>Effectif</p>
 </td>
 <td style="text-align:left;width:40%; " class="Default">
-<p>notes</p>
+<p>Notes</p>
 </td>
 </tr>
 <tr class="ro1">
