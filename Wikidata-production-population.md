@@ -1,5 +1,45 @@
 
-## School
+# Définition de la population
+
+## Compter la population définie
+
+    SELECT (COUNT(?item) as ?eff)
+        WHERE {
+            {
+            {?item wdt:P106 wd:Q169470}
+            UNION
+            {?item wdt:P101 wd:Q413}  
+          UNION 
+          {?item wdt:P106 wd:Q11063}
+            UNION
+            {?item wdt:P101 wd:Q333} 
+            UNION
+              {?item wdt:P106 wd:Q155647}
+            UNION
+            {?item wdt:P101 wd:Q34362} 
+              }
+          
+          ?item wdt:P31 wd:Q5;  # Any instance of a human.
+              wdt:P569 ?birthDate;
+                wdt:P21 ?gender.
+        BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
+        FILTER(xsd:integer(?year) > 1350 )
+        } 
+
+
+
+* exporter le résultat en CSV
+
+
+
+
+
+
+
+
+
+
+## School
 
 
 select ?item ?itemLabel ?birthYear ?statement ?school ?schoolLabel ?startYear ?startTime ?endTime
@@ -116,7 +156,7 @@ s
 
 | Période   | Effectif |
 | --------- | -------- |
-| 1350-1600 | 884      |
+| 1351-1600 | 884      |
 | 1601-1800 | 2292     |
 | 1801-1900 | 6111     |
 | 1901-     | 25849    |

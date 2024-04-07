@@ -1,13 +1,14 @@
 
-# Information concernant la population étudiée disponible dans Wikidata
+
+Information disponible dans Wikidata concernant la population étudiée.
 
 
 ## Documentation concernant les requêtes SPARQL effectuées dans Wikidata
 
 * SPARQL Endpoint: https://query.wikidata.org
 * Query builder: https://query.wikidata.org/querybuilder/?uselang=en
-* [SPARQL query service/queries](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries)
-* [Structure of statements in Wikidata(https://www.wikidata.org/wiki/Help:Statements)]
+* [SPARQL query service/queries](https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries): documentation.
+* [Structure of statements in Wikidata](https://www.wikidata.org/wiki/Help:Statements)
 
 
 ## Inspection des notices
@@ -38,15 +39,16 @@ On retient quelques propriétés qui permettent de retrouver toute la population
             
             # wdt:P101 wd:Q333  # astronomy 2161
             # wdt:P106 wd:Q169470 # physicist 32123
-            #  wdt:P106 wd:Q413 # physics 2
+            #  wdt:P101 wd:Q413 # physics ~ 4000
             #  wdt:P106 wd:Q155647  # astrologer 1364
+            #  wdt:P101 wd:Q34362 # astrology 241
             #  wdt:P106 wd:Q170790  # mathematician 39562
             #  wdt:P106 wd:Q901 # scientist 36117
 
         }  
 
 
-### Combiner avec 'field of work'
+### Combiner 'position' avec 'field of work'
 
 12323 le 14 mars 2024
 
@@ -104,6 +106,7 @@ NB: il peut y avoir des doublons si les dates de naissance sont multiples. La cl
 
 ### Sortantes
 
+Cf. [sur cette page](./Wikidata-liste-proprietes-population.md) les listes de propiétés qui résultent de cette requête
 
     SELECT ?p ?propLabel ?eff
     WHERE {
@@ -134,12 +137,12 @@ NB: il peut y avoir des doublons si les dates de naissance sont multiples. La cl
 
 NB Noter qu'il peut y avoir des problèmes de time-out, la requête est trop longue et on a un message d'erreur.
 <br/>
-Dans ce cas il faut restreindre la période ou les clauses UNION et décomposer la requête dans différentes parties.
+Dans ce cas il faut restreindre la période ou limiter le nombre de clauses UNION et décomposer la requête en différentes parties.
 
 On exporte ensuite cette liste sous forme d'une _table HTML_ afin de documenter la suite des opérations. On ouvre la page HTML avec VS Code, on peut mettre en forme avec la commande (click droit) _format document_, puis on copie seulement la partie 'table' depuis la balise &lt;table&gt; jusqu'à &lt;/table&gt;, balises comprises, et on la colle dans un nouveau document Markdown, cf. [Wikidata-liste-proprietes-population.md](Wikidata-liste-proprietes-population.md)
 
 
-On peut ainsi prendre des notes concernant les opérations effectuées sur les différentes propriétés et documenter les choix effectués.
+On pourra prendre des notes concernant les opérations effectuées sur les différentes propriétés directement dans ce document et documenter ainsi les choix effectués.
 
 
 
@@ -173,7 +176,7 @@ On peut ainsi prendre des notes concernant les opérations effectuées sur les d
 
 
 
-## Inspection des appartenances à une organisation, avec dates si connues
+## Exemple de requête concernant les appartenances à une organisation, avec dates optionnelles si connues
 
 
 On doit dans cette requête sortir du cadre classique de la simple propriété 'member of' et passer à travers l'assertion, le *statement*. Un statement de _Wikidata_ apparait en quelques sortes comme une entité temporelle même si elle n'associe que deux entités principales, comme une propriété.
@@ -189,7 +192,7 @@ On doit dans cette requête sortir du cadre classique de la simple propriété '
             
         ?item wdt:P31 wd:Q5; # Any instance of a human.
                 wdt:P569 ?birthDate;
-                # educated at
+                # member of
                 p:P463 ?statement.
             ?statement ps:P463 ?organization.
         OPTIONAL {
@@ -207,3 +210,30 @@ On doit dans cette requête sortir du cadre classique de la simple propriété '
         }
     ORDER BY ?birthYear ?startYear
 
+
+
+        SELECT DISTINCT ?item  ?itemLabel  ?gender ?year
+        WHERE {
+            {
+            {?item wdt:P106 wd:Q169470}
+            UNION
+            {?item wdt:P101 wd:Q413}  
+          UNION 
+          {?item wdt:P106 wd:Q11063}
+            UNION
+            {?item wdt:P101 wd:Q333} 
+            UNION
+              {?item wdt:P106 wd:Q155647}
+            UNION
+            {?item wdt:P101 wd:Q34362} 
+              }
+          
+          ?item wdt:P31 wd:Q5;  # Any instance of a human.
+              wdt:P569 ?birthDate;
+                wdt:P21 ?gender.
+        BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
+        FILTER(xsd:integer(?year) > 1350 )
+          
+          SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+        } 
+     ORDER BY ?year
