@@ -3,8 +3,8 @@
 
 ## Table propriétés sortantes
 
-La période considérée ici est 1701-1800 inclus:
-<code>FILTER(xsd:integer(?year) > 1700 && xsd:integer(?year) < 1801)>/code>
+La période considérée ici est 1701-1800 inclus (cf. [cette page](Wikidata-exploration.md#lister-les-propriétés-disponibles-avec-effectifs)):
+
 
 <table>
         <thead>
