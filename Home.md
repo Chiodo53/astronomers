@@ -21,6 +21,6 @@ Ce projet vise à étudier l'évolution des conceptions en astronomie concernant
 
 ### Récupération et analyse de données existantes
 
-* [[Explorer DBpedia|explorer-dbpedia]]
-* [[Importer les données de DBpedia|Importer_DBpedia_base_personnelle]]
-* [[Visualiser les données de DBpedia|Importer_DBpedia_analyses]]
+* [[Explorer DBpedia|DBpedia_explorer]]
+* [[Importer les données de DBpedia|DBpedia_importer_dans_base_personnelle]]
+* [[Visualiser les données de DBpedia|DBpedia_analyser_donnees_importees]]
