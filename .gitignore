@@ -1,12 +1,17 @@
 
 ## fichiers provisoirement invisibles
 /notebooks_jupyter/dbpedia_exploration/dbp_merge_relations_interactif.ipynb
+/notebooks_jupyter/wikidata_exploration/wikidata_get_data_from_dbpedia.ipynb
+
 
 # CSV non versionnés, sauf exceptions
 *.csv
+
 # HTML non versionnés, sauf exceptions
 *.html
 
+# JPG non versionnés, sauf exceptions
+*.jpg
 
 # bases sqlite, sauf exceptions
 *.sqlite
