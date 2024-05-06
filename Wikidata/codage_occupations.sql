@@ -118,8 +118,16 @@ FROM wdt_person_occupation po
 --WHERE od.label IS NULL
 LIMIT 20;
 
+--Effectifs des classes = domaines
+SELECT od.label, COUNT(*) as eff 
+FROM wdt_person_occupation po 
+    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
+    LEFT JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
+GROUP BY od.label 
+order by eff desc;
 
--- inspecter les personnes
+
+-- inspecter la table personne occupation
 SELECT wp.personUri, wp.personLabel, count(*) AS eff, GROUP_CONCAT(occupationLabel) occupations,
     GROUP_CONCAT(od.label) domaines
 FROM wdt_person_occupation po 
@@ -127,9 +135,21 @@ FROM wdt_person_occupation po
     JOIN wdt_personne wp ON wp.personUri = po.personUri 
     LEFT JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
 GROUP BY wp.personUri, wp.personLabel
---HAVING COUNT(od.label) = 1
-ORDER BY eff DESC
+-- vérifier si domaines non codés: normalement tous ont au moins astronomie, physique, etc
+--HAVING domaines IS NOT NULL
+ORDER BY eff --DESC
 LIMIT 100;
+
+
+
+-- inspecter les personnnes
+SELECT wp.personUri, wp.personLabel, wp.birthYear, count(*) AS eff, GROUP_CONCAT(od.label) domaines
+FROM wdt_person_occupation po 
+    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
+    JOIN wdt_personne wp ON wp.personUri = po.personUri 
+    LEFT JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
+GROUP BY wp.personUri, wp.personLabel
+HAVING domaines LIKE '%Astrologie%';
 
 
 
@@ -145,3 +165,32 @@ SELECT *
 FROM tw1
 GROUP BY domaines;
 
+-- personnes avec leurs domaines et leurs dates de naissance
+WITH tw1 as (
+SELECT DISTINCT wp.personUri, wp.personLabel, wp.birthYear, od.label domaine
+FROM wdt_person_occupation po 
+    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
+    JOIN wdt_personne wp ON wp.personUri = po.personUri 
+    JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
+ORDER BY wp.personUri, od.label )
+SELECT personUri, personLabel, birthYear, count(*) as eff, group_concat(domaine)
+FROM tw1
+GROUP BY personUri, personLabel, birthYear
+LIMIT 100;
+
+
+WITH tw1 as (
+SELECT DISTINCT wp.personUri, wp.personLabel, wp.birthYear, od.label domaine
+FROM wdt_person_occupation po 
+    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
+    JOIN wdt_personne wp ON wp.personUri = po.personUri 
+    JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
+ORDER BY wp.personUri, od.label ),
+tw2 AS (
+SELECT personUri, personLabel, birthYear, count(*) as eff, group_concat(domaine) domaines
+FROM tw1
+GROUP BY personUri, personLabel, birthYear)
+SELECT domaines, COUNT(*) as eff
+FROM tw2
+GROUP BY domaines
+ORDER BY eff DESC;
