@@ -132,19 +132,6 @@ ORDER BY eff DESC
 LIMIT 100;
 
 
-WTIH tw1 AS (
-SELECT DISTINCT wp.personUri, wp.personLabel, od.label
-FROM wdt_person_occupation po 
-    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
-    JOIN wdt_personne wp ON wp.personUri = po.personUri 
-    LEFT JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
-   ORDER BY wp.personUri, od.label)
-SELECT wp.personUri, wp.personLabel, count(*), group_concat(od.label)
-FROM tw1
-GROUP BY wp.personUri, wp.personLabel;
-
-
-
 
 -- regrouper par effectifs de domaines
 WITH tw1 AS (
