@@ -119,12 +119,15 @@ FROM wdt_person_occupation po
 LIMIT 20;
 
 --Effectifs des classes = domaines
-SELECT od.label, COUNT(*) as eff 
+SELECT od.label, od.pk_occupation_domain, COUNT(*) as eff 
 FROM wdt_person_occupation po 
     JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
     LEFT JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
-GROUP BY od.label 
+GROUP BY od.label, od.pk_occupation_domain 
 order by eff desc;
+
+
+
 
 
 -- inspecter la table personne occupation
@@ -165,18 +168,37 @@ SELECT *
 FROM tw1
 GROUP BY domaines;
 
--- personnes avec leurs domaines et leurs dates de naissance
-WITH tw1 as (
+-- année et classe d'activité
 SELECT DISTINCT wp.personUri, wp.personLabel, wp.birthYear, od.label domaine
 FROM wdt_person_occupation po 
     JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
     JOIN wdt_personne wp ON wp.personUri = po.personUri 
     JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
+ORDER BY wp.personUri, od.label
+LIMIT 50;
+
+
+-- Requête pour le NOTEBOOK: personnes avec leurs domaines, leur genre et leurs dates de naissance
+WITH tw1 as (
+SELECT DISTINCT wp.personUri, wp.personLabel, 
+   CASE 
+       WHEN wp.genderUri = 	'http://www.wikidata.org/entity/Q6581097'
+       THEN 'M'
+       WHEN wp.genderUri = 	'http://www.wikidata.org/entity/Q6581072'
+       THEN 'F'
+       ELSE 'A'
+   END AS gender, wp.birthYear, od.label domaine
+FROM wdt_person_occupation po 
+    JOIN wdt_occupation wo ON po.occupationUri = wo.wdt_uri
+    JOIN wdt_personne wp ON wp.personUri = po.personUri 
+    JOIN occupation_domain od ON od.pk_occupation_domain = wo.fk_domain
 ORDER BY wp.personUri, od.label )
-SELECT personUri, personLabel, birthYear, count(*) as eff, group_concat(domaine)
+SELECT personUri, personLabel,gender, birthYear, count(*) as eff, group_concat(domaine)
 FROM tw1
 GROUP BY personUri, personLabel, birthYear
 LIMIT 100;
+
+
 
 
 WITH tw1 as (
