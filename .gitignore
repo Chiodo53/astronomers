@@ -9,6 +9,8 @@
 # HTML non versionnés, sauf exceptions
 *.html
 
+!/notebooks_jupyter/wikidata_exploration/images/birth_places_choropleth.html
+
 # JPG non versionnés, sauf exceptions
 *.jpg
 
