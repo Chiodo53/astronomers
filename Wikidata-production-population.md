@@ -28,12 +28,6 @@
 
 
 
-* exporter le résultat en CSV
-
-
-
-
-
 
 
 
@@ -42,8 +36,8 @@
 ## School
 
 
-select ?item ?itemLabel ?birthYear ?statement ?school ?schoolLabel ?startYear ?startTime ?endTime
-   where {
+    select ?item ?itemLabel ?birthYear ?statement ?school ?schoolLabel ?startYear ?startTime ?endTime
+    where {
            
      {?item  wdt:P106 wd:Q169470} # physicist 32123
      UNION
@@ -71,39 +65,7 @@ select ?item ?itemLabel ?birthYear ?statement ?school ?schoolLabel ?startYear ?s
       FILTER(?birthYear > '1450' )# && ?birthYear < '1901')
      SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
     }
-order by ?birthYear ?startYear
-
-
-
-s
-
-
-        select ?p (count(*) as ?eff)
-        where {
-            ?item wdt:P31 wd:Q5; # Any instance of a human.
-                    wdt:P569 ?birthDate;
-                    ?p ?o.
-                {SELECT  DISTINCT ?item
-                WHERE
-            {?item  wdt:P106 wd:Q169470} # physicist 32123
-            UNION
-            {?item  wdt:P106 wd:Q155647}     
-            UNION
-            {?item  wdt:P106 wd:Q11063} 
-                UNION
-            {?item  wdt:P106 wd:Q901} # scientist
-                }
-                #  wdt:P106 wd:Q413 # physics 2
-        #          wdt:P106 wd:Q155647  # astrologer 1364
-        #        wdt:P106 wd:Q11063  # astronomer 10162
-                #   wdt:P106 wd:Q170790  # mathematician 39562
-                BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
-            FILTER(xsd:integer(?year) > 1400 && xsd:integer(?year) < 1940)
-            }  
-            GROUP BY ?p
-            ORDER BY DESC(?eff) 
-
-
+    order by ?birthYear ?startYear
 
 
 

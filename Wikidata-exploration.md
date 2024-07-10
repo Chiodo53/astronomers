@@ -48,7 +48,7 @@ On retient quelques propriétés qui permettent de retrouver toute la population
         }  
 
 
-### Combiner 'position' avec 'field of work'
+### Combiner 'occupation' avec 'field of work'
 
 12323 le 14 mars 2024
 
