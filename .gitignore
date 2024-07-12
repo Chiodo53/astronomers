@@ -9,6 +9,7 @@
 # HTML non versionnés, sauf exceptions
 *.html
 
+!/wiki_documentation/idRef/proprietes_population_entrantes.html
 !/notebooks_jupyter/wikidata_exploration/images/birth_places_choropleth.html
 !/notebooks_jupyter/wikidata_exploration/images/birth_places_points.html
 
