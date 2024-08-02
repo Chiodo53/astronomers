@@ -1,4 +1,8 @@
-* Astronome: Wikipedia
+* Astronomie
+  * https://fr.wikipedia.org/wiki/Astronomie
+  * https://en.wikipedia.org/wiki/Astronomy
+
+* Astronome
   * https://fr.wikipedia.org/wiki/Astronome
   * https://en.wikipedia.org/wiki/Astronomer
 * Listes d'astonomes:

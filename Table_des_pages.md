@@ -12,3 +12,4 @@
 * [Liste des propriétés des personnes](https://github.com/Sciences-historiques-numeriques/astronomers/tree/main/wiki_astronomers/wikidata_fuseki/proprietes_astronomes.md)
 * [Créer les liens owl:sameAs](https://github.com/Sciences-historiques-numeriques/astronomers/tree/main/wiki_astronomers/wikidata_fuseki/productin_sameAs.md)
   * on importe de Wikidata les liens vers d'autres silos de données
+
