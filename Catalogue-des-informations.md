@@ -1,5 +1,6 @@
 # Catalogue des informations
 
+[Cf. les instructions](Catalogue-des-informations-instructions)
 
 ##  Objets (avec leurs propriétés)
 
