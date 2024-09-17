@@ -1,4 +1,3 @@
-# Catalogue des informations
 
 [Cf. les instructions](Catalogue-des-informations-instructions)
 
