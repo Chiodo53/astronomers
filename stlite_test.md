@@ -1,4 +1,4 @@
-<!doctype html>
+
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -28,4 +28,3 @@ st.write("Hello,", name or "world")
       );
     </script>
   </body>
-</html>
