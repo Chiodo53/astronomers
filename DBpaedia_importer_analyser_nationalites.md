@@ -41,3 +41,13 @@
             }
     ORDER BY ?birthYear
     }
+
+
+
+
+## Explorations des générations d'astronomes
+
+![Distribution par périodes de 25 ans](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/birth_years_20241208.html)
+
+
+![Distribution par périodes de 25 ans](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/birth_years_20241208.png)
