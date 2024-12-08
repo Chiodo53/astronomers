@@ -44,15 +44,16 @@ Vider complètement les tables en utilisant l'instruction suivante. Mais attenti
 
 Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspecter, puis en texte séparé par tabulateur (\t) (TSV) ou texte séparé par virgule (CSV) et enregistrer le fichier exporté dans un espace dédié (sous-dossier) du dossier de travail.
 
+N.B. Le genre n'est pas renseigné dans DBpaedia. Noter également que plusieurs noms sont disponibles, on choisit ici de ne retenir que les noms en anglais, normalement un nom par personne.
+
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/property/>
     PREFIX dbo: <http://dbpedia.org/ontology/>
     PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-    SELECT DISTINCT (?o1 AS ?subject_uri) ?birthYear
-    #(COUNT(*) AS ?effectif) 
+    SELECT DISTINCT (?o1 AS ?subject_uri) ?birthYear ?label
     WHERE {
-    SELECT DISTINCT ?o1 ?birthYear ?target (str(?label) as ?name)
+    SELECT DISTINCT ?o1 ?birthYear ?label
     WHERE { 
         {
             {dbr:List_of_astronomers ?p ?o1.}
@@ -67,10 +68,11 @@ Exécuter la requête suivante, d'abord au format de réponse HTML pour l'inspec
         }
         ?o1 a dbo:Person;
         dbp:birthDate | dbo:birthDate ?birthDate;
-        dbp:occupation | dbo:occupation ?target.
-    ?target rdfs:label ?label.
+    rdfs:label ?langLabel.
     BIND(xsd:integer(SUBSTR(STR(?birthDate), 1, 4)) AS ?birthYear)
-        FILTER ( (?birthYear >= 1351   )  && LANG(?label) = 'en') #  && ?birthYear < 1771
+    BIND(STR(?langLabel) AS ?label)
+        FILTER ( (?birthYear >= 1351   )  && LANG(?langLabel) = 'en') 
+    ##  && ?birthYear < 1771
             }
     ORDER BY ?birthYear
     }
