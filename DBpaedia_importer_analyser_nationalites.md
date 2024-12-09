@@ -1,6 +1,12 @@
+# Analysis of the generations and nationalities of the DBpedia astronomers
 
 
-## Récupérer les nationalités et les importer dans une table de la base de données
+
+## Query DBpedia and store the result as a table in DBpedia
+
+
+* Execute this query on the [DBpedia SPARQL-Endpoint](https://dbpedia.org/sparql) and export the result as a CSV (not TSV!)
+
 
     PREFIX dbr: <http://dbpedia.org/resource/>
     PREFIX dbp: <http://dbpedia.org/property/>
@@ -43,11 +49,37 @@
     }
 
 
+* Create a new table in the database using DBeaver
+* Update the 'Astronomers' GitHub repository in your noto.epfl space using GIT in JuypterLab 
 
 
-## Explorations des générations d'astronomes
 
+## Explore the dates of births and generations of astronomers
+
+* Open, read and execute the notebook [dbp_annees_de_naissance_exploration](https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/notebooks_jupyter/dbpedia_exploration/dbp_annees_de_naissance_exploration.ipynb)
+
+
+### Distribution of astronomers' births by 25-year period
+
+#### Using the Matplotlib library
 ![Distribution par périodes de 25 ans](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/birth_years_plt_20241208.png)
 
+#### Using the Plotly library
 ![Distribution par périodes de 25 ans](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/birth_years_20241208.png)
 
+For this library see also the interactive HTML export (cannot be embedded/opened in GigHub)
+
+
+ ## Explore the evolution and distribution of nationalities over time
+
+ * Add a table 'code_nationality_country' to the database and code the nationalities in relation to countries (at least for the most frequent ones)
+ * Open, read and execute the notebook [dpb_countries_births](https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/notebooks_jupyter/dbpedia_exploration/dpb_countries_births.ipynb)
+
+
+### Distribution of astronomer's births grouped by nationalities over time
+
+Distributions of persons per nationality and density diagram (violin-plot) showing the distribution over time.
+
+![Distribution par nationalité](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_year_20241209.png)
+
+ 
