@@ -5,7 +5,7 @@
 ## Query DBpedia and store the result as a table in DBpedia
 
 
-* Execute this query on the [DBpedia SPARQL-Endpoint](https://dbpedia.org/sparql) and export the result as a CSV (not TSV!)
+Execute this query on the [DBpedia SPARQL-Endpoint](https://dbpedia.org/sparql) and export the result as a CSV (not TSV!)
 
 
     PREFIX dbr: <http://dbpedia.org/resource/>
@@ -47,6 +47,10 @@
             }
     ORDER BY ?birthYear
     }
+
+
+
+
 
 
 * Create a new table in the database using DBeaver
