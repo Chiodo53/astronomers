@@ -86,7 +86,8 @@ Distributions of persons per nationality and density diagram (violin-plot) showi
 
 ![Distribution par nationalité](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_year_20241209.png)
 
- 
+![Distribution par nationalité: boxplot](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_boxplot_20241216.png)
+
 ### Distribution grouped by 15 time quantiles 
 
 ![Heatmap par nationalité et période](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_period_20241216.png)
