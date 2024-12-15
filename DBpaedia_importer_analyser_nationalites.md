@@ -53,7 +53,7 @@ Execute this query on the [DBpedia SPARQL-Endpoint](https://dbpedia.org/sparql) 
 
 
 
-* Create a new table in the database using DBeaver
+* Create a new table in the database using DBeaver using the CSV with the DBpedia data
 * Update the 'Astronomers' GitHub repository in your noto.epfl space using GIT in JuypterLab 
 
 
@@ -87,3 +87,6 @@ Distributions of persons per nationality and density diagram (violin-plot) showi
 ![Distribution par nationalité](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_year_20241209.png)
 
  
+### Distribution grouped by 15 time quantiles 
+
+![Heatmap par nationalité et période](https://raw.github.com/Sciences-historiques-numeriques/astronomers/master/notebooks_jupyter/dbpedia_exploration/pictures/natio_code_birth_period_20241216.png)
