@@ -1,7 +1,7 @@
 # Le champ de l'astronomie en Europe du XVe au XXe siècle
 
 
-Ce projet vise à étudier l'évolution des conceptions en astronomie concernant la structure fondamentale de l'univers, géocentrique ou héliocentrique, en relation avec la position des acteurs dans le champ disciplinaire de l'astronomie, en observant la structure et les dynamiques de ce dernier.
+Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie, en tant que discipline scientifique qui évolue dans différents contextes géographiques et sociaux, en relation avec la position des acteurs au sein de ce champ disciplinaire et en relation au reste de la société, tout en observant la structure et les dynamiques du champs disciplinaire concerné.
 
 
 ## Système d'information
