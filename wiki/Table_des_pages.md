@@ -2,8 +2,8 @@
 
 ## Wikidata
 
-* [Exploration](./Wikidata-exploration)
-* [Liste des propriétés de la population](Wikidata-liste-proprietes-population)
+* [Exploration](Wikidata-exploration.md)
+* [Liste des propriétés de la population](wikidata/Wikidata-liste-proprietes-population.md)
 * [Documentation de la production de la population](Wikidata-production-population)
 
 

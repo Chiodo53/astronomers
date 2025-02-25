@@ -9,8 +9,3 @@ ou lire sur [jupyter nbviewer](https://nbviewer.org/github/Sciences-historiques-
 <br/>
 
 Pour la documentation du projet voir le [Wiki](wiki/Home.md)
-
-
-
-
-(https://github.com/Sciences-historiques-numeriques/astronomers/wiki)
