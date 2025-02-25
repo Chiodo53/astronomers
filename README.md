@@ -8,4 +8,4 @@ ou lire sur [jupyter nbviewer](https://nbviewer.org/github/Sciences-historiques-
 
 <br/>
 
-Pour la documentation du projet voir le [Wiki](wiki/Home.md)
+Pour la __documentation du projet__ voir le __[Wiki](wiki/Home.md)__
