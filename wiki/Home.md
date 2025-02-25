@@ -6,7 +6,7 @@ Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie
 
 ## Système d'information
 
-[[Table des matières | Table_des_pages]] qui liste toutes les pages du wiki
+[Table des matières](Table_des_pages.md) qui liste toutes les pages du wiki
 
 
 ###  Phase exploratoire
