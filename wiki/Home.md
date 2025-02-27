@@ -12,8 +12,8 @@ Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie
 ###  Phase exploratoire
 
 
-* [[Problématique et questionnement | Problematique-Questionnement]] 
-* [[Listes d'astronomes|Listes d'astronomes]]
+* [Problématique et questionnement](Problematique-Questionnement.md) 
+* [Listes d'astronomes](Listes-d'astronomes.md)
 *  [[Catalogue des informations|Catalogue-des-informations]]
 
 ### Création de la base de données
