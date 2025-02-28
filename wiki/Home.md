@@ -24,8 +24,8 @@ Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie
 ### Récupération et analyse de données existantes
 
 * [Explorer DBpedia](DBpedia/DBpedia_explorer.md)
-* [[Importer les données de DBpedia](DBpedia/DBpedia_importer_dans_base_personnelle.md)
-* [[Visualiser les données de DBpedia](DBpedia/DBpedia_analyser_donnees_importees.md)
+* [Importer les données de DBpedia](DBpedia/DBpedia_importer_dans_base_personnelle.md)
+* [Visualiser les données de DBpedia](DBpedia/DBpedia_analyser_donnees_importees.md)
 
 
 ### Analyse des données de Wikidata (notebooks Python)
