@@ -14,18 +14,18 @@ Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie
 
 * [Problématique et questionnement](Problematique-Questionnement.md) 
 * [Listes d'astronomes](Listes-d'astronomes.md)
-*  [[Catalogue des informations|Catalogue-des-informations]]
+* [Catalogue des informations](Catalogue-des-informations.md)
 
 ### Création de la base de données
 
-*  [[Commentaire du modèle conceptuel|Modèle-conceptuel-(MCD):-commentaire]]
-*  [[Modèle logique ou relationnel|Modèle-logique-ou-relationnel]]
+*  [Commentaire du modèle conceptuel](Modèle-conceptuel-(MCD):-commentaire.md)
+*  [Modèle logique ou relationnel](Modèle-logique-ou-relationnel.md)
 
 ### Récupération et analyse de données existantes
 
-* [[Explorer DBpedia|DBpedia_explorer]]
-* [[Importer les données de DBpedia|DBpedia_importer_dans_base_personnelle]]
-* [[Visualiser les données de DBpedia|DBpedia_analyser_donnees_importees]]
+* [Explorer DBpedia](DBpedia/DBpedia_explorer.md)
+* [[Importer les données de DBpedia](DBpedia/DBpedia_importer_dans_base_personnelle.md)
+* [[Visualiser les données de DBpedia](DBpedia/DBpedia_analyser_donnees_importees.md)
 
 
 ### Analyse des données de Wikidata (notebooks Python)
