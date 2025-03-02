@@ -1,0 +1,14 @@
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "SELECT DISTINCT ?item  ?itemLabel  ?gender ?genderLabel ?year\n        WHERE {\n            {\n            {?item wdt:P106 wd:Q169470}\n          UNION \n          {?item wdt:P106 wd:Q11063}\n              }\n          \n          ?item wdt:P31 wd:Q5;  # Any instance of a human.\n              wdt:P569 ?birthDate;\n                wdt:P21 ?gender.\n        BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n        FILTER(xsd:integer(?year) > 1780 )\n          \n          SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n        } \n     #ORDER BY ?year\n     LIMIT 10",
+    "metadata": {}
+  }
+]
