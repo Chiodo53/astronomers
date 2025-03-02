@@ -8,4 +8,4 @@ ou lire sur [jupyter nbviewer](https://nbviewer.org/github/Sciences-historiques-
 
 <br/>
 
-Pour la __documentation du projet__ voir le __[Wiki](wiki/Home.md)__
+Voir la __[documentation technique du projet](documentation/Home.md)__ ainsi que le  __[site web](https://historian.digital/astronomers)__
