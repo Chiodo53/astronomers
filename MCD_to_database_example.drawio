@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-        <mxGraphModel dx="1222" dy="675" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1251" dy="492" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="WIyWlLk6GJQsqaUBKTNV-0"/>
                 <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0"/>
@@ -446,18 +446,15 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="Bw8D9-mf-STMI-rw64IU-128" value="Organisation" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-                    <mxGeometry x="1280" y="270" width="110" height="120" as="geometry">
+                    <mxGeometry x="1280" y="260" width="110" height="120" as="geometry">
                         <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="Bw8D9-mf-STMI-rw64IU-129" value="name" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Bw8D9-mf-STMI-rw64IU-128" vertex="1">
                     <mxGeometry y="40" width="110" height="26" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="name" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="Bw8D9-mf-STMI-rw64IU-128">
-                    <mxGeometry y="66" width="110" height="26" as="geometry"/>
-                </mxCell>
                 <mxCell id="Bw8D9-mf-STMI-rw64IU-134" value="definition" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" parent="Bw8D9-mf-STMI-rw64IU-128" vertex="1">
-                    <mxGeometry y="92" width="110" height="26" as="geometry"/>
+                    <mxGeometry y="66" width="110" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="Bw8D9-mf-STMI-rw64IU-135" value="takes place with" style="endArrow=classic;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Bw8D9-mf-STMI-rw64IU-77" target="Bw8D9-mf-STMI-rw64IU-128" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -475,13 +472,13 @@
                         <mxPoint x="-24.97" y="19.98" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="Bw8D9-mf-STMI-rw64IU-139" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="Bw8D9-mf-STMI-rw64IU-70" edge="1" target="Bw8D9-mf-STMI-rw64IU-129">
+                <mxCell id="Bw8D9-mf-STMI-rw64IU-139" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1" source="Bw8D9-mf-STMI-rw64IU-70">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="930.8800000000001" y="741.1759999999999" as="sourcePoint"/>
                         <mxPoint x="1380" y="310" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="1590" y="744"/>
-                            <mxPoint x="1590" y="320"/>
+                            <mxPoint x="1590" y="310"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
