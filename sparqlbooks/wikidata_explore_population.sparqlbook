@@ -2,19 +2,37 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "",
+    "value": "In this notebook, we refine and document the main requests available on the page [Exploration of Wikidata].(../documentation/wikidata/Wikidata-exploration.md) \n\n\nIn order to prepare the queries, they can be executed on the Wikidata SPARQL endpoint, then documented and executed in this notebook.",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "   SELECT (COUNT(*) as ?eff)\n    WHERE {\n        ?item wdt:P31 wd:Q5;  # Any instance of a human.\n        wdt:P106 wd:Q11063  # astronomer 10162\n        \n        # wdt:P101 wd:Q333  # astronomy 2161\n        # wdt:P106 wd:Q169470 # physicist 32123\n        #  wdt:P101 wd:Q413 # physics ~ 4000\n        #  wdt:P106 wd:Q155647  # astrologer 1364\n        #  wdt:P101 wd:Q34362 # astrology 241\n        #  wdt:P106 wd:Q170790  # mathematician 39562\n        #  wdt:P106 wd:Q901 # scientist 36117\n\n    }  \n    LIMIT 20",
+    "value": "   ## Count and inspect occupations and fields of work\n   SELECT (COUNT(*) as ?eff)\n    WHERE {\n        ?item wdt:P31 wd:Q5;  # Any instance of a human.\n\n            wdt:P106 wd:Q11063  # astronomer 10162\n        \n            # wdt:P101 wd:Q333  # astronomy 2161\n            # wdt:P106 wd:Q169470 # physicist 32123\n            #  wdt:P101 wd:Q413 # physics ~ 4000\n            #  wdt:P106 wd:Q155647  # astrologer 1364\n            #  wdt:P101 wd:Q34362 # astrology 241\n            #  wdt:P106 wd:Q170790  # mathematician 39562\n            #  wdt:P106 wd:Q901 # scientist 36117\n\n    }  \n    LIMIT 20",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "SELECT ?p ?propLabel ?eff\nWHERE {\n{\nSELECT ?p  (count(*) as ?eff)\nWHERE {\n    {?item wdt:P106 wd:Q11063}\n    UNION\n    {?item wdt:P101 wd:Q333}    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    ?item  ?p ?o.\n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1700 && xsd:integer(?year) < 1801)\n    }\nGROUP BY ?p \n\n    }\n?prop wikibase:directClaim ?p .\n\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n\n\n}  \nORDER BY DESC(?eff)",
+    "value": "### Modern astronomers\nSELECT (count(*) as ?number)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    \n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1751 )\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Modern astronomers and physicists\nSELECT (count(*) as ?number)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    UNION\n    {?item wdt:P106 wd:Q169470}  # physicist\n    UNION\n    {?item wdt:P101 wd:Q413}     # physics\n    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    \n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1750  && xsd:integer(?year) < 1951 )\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Count how many properties are available for the considered population\n\nExecute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will save in your project: [population properties list](../Wikidata/properties_20250306.csv)\n\n\nLimit here with the HAVING clause, not in the exported document.\n\nOpen your CSV file with a spreadsheet editor:\n* Inspect the content of the results an look for relevant properties \n* Observe all the links to other semantic web repositories, probably the sources of this information.\n* You can transform this file to your preferred spreadsheet editor format (Calc, Excel, and take notes row per row)\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?p ?propLabel ?eff\nWHERE {\n{\nSELECT ?p  (count(*) as ?eff)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    UNION\n    {?item wdt:P106 wd:Q169470}  # physicist\n    UNION\n    {?item wdt:P101 wd:Q413}     # physics   \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    ?item  ?p ?o.\n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    ### Experiment with different time filters if too many values\n    FILTER(xsd:integer(?year) > 1750  && xsd:integer(?year) < 1951)\n    # FILTER(xsd:integer(?year) > 1850  && xsd:integer(?year) < 1951)\n\n}\nGROUP BY ?p \n\n    }\n\n# get the original property (in the the statement construct)     \n?prop wikibase:directClaim ?p .\n\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n\n\n}  \nORDER BY DESC(?eff)",
     "metadata": {}
   }
 ]
