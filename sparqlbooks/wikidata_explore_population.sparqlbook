@@ -2,8 +2,38 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "In this notebook, we refine and document the main requests available on the page [Exploration of Wikidata].(../documentation/wikidata/Wikidata-exploration.md) \n\n\nIn order to prepare the queries, they can be executed on the Wikidata SPARQL endpoint, then documented and executed in this notebook.",
+    "value": "## Explore Wikidata\n\nIn this notebook, we refine and document the main requests available on the page [Exploration of Wikidata](../documentation/wikidata/Wikidata-exploration.md) \n\n\nWhen you prepare the queries, you can execute them on the Wikidata SPARQL endpoint, and then document and execute them in this notebook.",
     "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Explore occupations and fields of work",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### List 50 more frequent occupations\n\nPREFIX wd: <http://www.wikidata.org/entity/>\n\n\nSELECT ?occupation ?occupationLabel ?n\nWHERE {\n\n    {\n    SELECT ?occupation (COUNT(*) as ?n)\n    WHERE {\n        ?item wdt:P106 ?occupation.\n        # ?occupation wdt:P31 wd:Q11862829\n        }\n    GROUP BY ?occupation \n    ORDER BY DESC(?n)\n\n    #OFFSET 20\n    LIMIT 20\n    }\n\n    SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n    \n    }\n    ORDER BY DESC(?n)\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### List more frequent occupations\n\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?field ?fieldLabel ?n\nWHERE {\n\n    {\n    SELECT ?field (COUNT(*) as ?n)\n    WHERE {\n        ?item wdt:P101 ?field.\n        }\n    GROUP BY ?field \n    ORDER BY DESC(?n)\n\n    #OFFSET 20\n    LIMIT 20\n    }\n\n    SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n    \n    }\n    ORDER BY DESC(?n)\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Inspect astronomers and related occupations",
+    "metadata": {
+      "metadata": {
+        "tags": [
+          "parameters"
+        ]
+      }
+    }
   },
   {
     "kind": 2,
@@ -14,7 +44,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Modern astronomers\nSELECT (count(*) as ?number)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    \n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1751 )\n}",
+    "value": "### Modern astronomers : born from 1751 onward\nSELECT (count(*) as ?number)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    \n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1750 )\n}",
     "metadata": {}
   },
   {
@@ -26,7 +56,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Count how many properties are available for the considered population\n\nExecute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will save in your project: [population properties list](../Wikidata/properties_20250306.csv)\n\n\nLimit here with the HAVING clause, not in the exported document.\n\nOpen your CSV file with a spreadsheet editor:\n* Inspect the content of the results an look for relevant properties \n* Observe all the links to other semantic web repositories, probably the sources of this information.\n* You can transform this file to your preferred spreadsheet editor format (Calc, Excel, and take notes row per row)\n",
+    "value": "### Count how many properties are available for the considered population\n\nExecute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will store in your project: [population properties list](../Wikidata/properties_20250306.csv)\n\n\nOpen your CSV file with a spreadsheet editor:\n* Inspect the content of the results and look for relevant properties with regard to your research questions\n* Observe all the links to other semantic web repositories, probably the sources of this information.\n* You can transform this file to your preferred spreadsheet editor format (Calc, Excel, etc.) and take notes row per row in the spreadsheet.\n",
     "metadata": {}
   },
   {

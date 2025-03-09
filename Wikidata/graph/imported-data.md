@@ -1,3 +1,6 @@
-this graph etc.
+This graph contains data imported from Wikidata
 
-/home/francesco/kDrive/python_notebooks/astronomers/Wikidata/graph/imported-data.md
+* Import on 9 March 2025: cf. notebook [Wikidata Import population](../../sparqlbooks/wikidata_import_population.sparqlbook) 
+
+
+
