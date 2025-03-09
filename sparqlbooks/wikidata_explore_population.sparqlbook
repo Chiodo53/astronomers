@@ -1,0 +1,20 @@
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "   SELECT (COUNT(*) as ?eff)\n    WHERE {\n        ?item wdt:P31 wd:Q5;  # Any instance of a human.\n        wdt:P106 wd:Q11063  # astronomer 10162\n        \n        # wdt:P101 wd:Q333  # astronomy 2161\n        # wdt:P106 wd:Q169470 # physicist 32123\n        #  wdt:P101 wd:Q413 # physics ~ 4000\n        #  wdt:P106 wd:Q155647  # astrologer 1364\n        #  wdt:P101 wd:Q34362 # astrology 241\n        #  wdt:P106 wd:Q170790  # mathematician 39562\n        #  wdt:P106 wd:Q901 # scientist 36117\n\n    }  \n    LIMIT 20",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "SELECT ?p ?propLabel ?eff\nWHERE {\n{\nSELECT ?p  (count(*) as ?eff)\nWHERE {\n    {?item wdt:P106 wd:Q11063}\n    UNION\n    {?item wdt:P101 wd:Q333}    \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    ?item  ?p ?o.\n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    FILTER(xsd:integer(?year) > 1700 && xsd:integer(?year) < 1801)\n    }\nGROUP BY ?p \n\n    }\n?prop wikibase:directClaim ?p .\n\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n\n\n}  \nORDER BY DESC(?eff)",
+    "metadata": {}
+  }
+]

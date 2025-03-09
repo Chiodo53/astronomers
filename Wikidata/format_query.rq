@@ -1,0 +1,7 @@
+SELECT ?occupation (COUNT(*) as ?n)
+WHERE {
+
+?item wdt:P106 ?occupation
+}
+GROUP BY ?occupation
+ORDER BY DESC(?n)
