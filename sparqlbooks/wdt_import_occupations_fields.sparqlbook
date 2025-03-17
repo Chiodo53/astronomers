@@ -1,0 +1,38 @@
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s ?p ?o}\n}\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Number of persons \nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s wdt:P31 wd:Q5.}\n}\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s wdt:P31 wd:Q5.}\n}\nORDER BY ?s\nLIMIT 3\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?occupation\n# CONSTRUCT {?s wdt:P106 ?occupation}\nWHERE {\n    \n    {\n    SELECT ?s\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n            {?s wdt:P31 wd:Q5.}\n    }\n    ORDER BY ?s\n    LIMIT 3\n    }\n\n    SERVICE <https://query.wikidata.org/sparql> {\n        ?s wdt:P106 ?occupation\n    }\n\n\n \n    \n    \n}\n\nLIMIT 10\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?occupation\n# CONSTRUCT {?s wdt:P106 ?occupation}\nWHERE {\n    \n    SERVICE <https://query.wikidata.org/sparql> {\n        wd:Q130365874 wdt:P106 ?occupation\n    }\n\n}\n",
+    "metadata": {}
+  }
+]

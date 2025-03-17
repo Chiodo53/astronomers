@@ -1,0 +1,32 @@
+[
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "select * where {\n    {\n    ?s ?p ?o .}\n} limit 5",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "sparql-qr",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "select * where {\n    service <https://ag16gm9pr0meths2.allegrograph.cloud/repositories/astronomers>\n    {\n    ?s ?p ?o .}\n} limit 3",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "select * where {\n    {\n    ?s ?p ?o .}\n} limit 5",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf4j: <http://rdf4j.org/schema/rdf4j#>\nPREFIX sesame: <http://www.openrdf.org/schema/sesame#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\nPREFIX fn: <http://www.w3.org/2005/xpath-functions#>\n\n\nINSERT DATA {\n  \n  GRAPH <test.org> {\n  \n  wd:Q410 rdfs:label \"Carl Sagan\"@en;\n  wdt:P21 wd:Q6581097;\n  wdt:P569 1934;\n  wdt:P31 wd:Q5 .\n\nwd:Q464 rdfs:label \"Philipp Ludwig von Seidel\"@en;\n  wdt:P21 wd:Q6581097;\n  wdt:P569 1821;\n  wdt:P31 wd:Q5 .}\n}",
+    "metadata": {}
+  }
+]
