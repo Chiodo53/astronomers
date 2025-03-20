@@ -14,7 +14,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### List 50 more frequent occupations\n\nPREFIX wd: <http://www.wikidata.org/entity/>\n\n\nSELECT ?occupation ?occupationLabel ?n\nWHERE {\n\n    {\n    SELECT ?occupation (COUNT(*) as ?n)\n    WHERE {\n        ?item wdt:P106 ?occupation.\n        }\n    GROUP BY ?occupation \n    ORDER BY DESC(?n)\n\n    #OFFSET 20\n    LIMIT 20\n    }\n\n    SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n    \n    }\n    ORDER BY DESC(?n)\n\n",
+    "value": "### List 'n' more frequent occupations\n\nPREFIX wd: <http://www.wikidata.org/entity/>\n\n\nSELECT ?occupation ?occupationLabel ?n\nWHERE {\n\n    {\n    SELECT ?occupation (COUNT(*) as ?n)\n    WHERE {\n        ?item wdt:P106 ?occupation.\n        }\n    GROUP BY ?occupation \n    ORDER BY DESC(?n)\n\n    #OFFSET 20\n    LIMIT 20\n    }\n\n    SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n    \n    }\n    ORDER BY DESC(?n)\n\n",
     "metadata": {}
   },
   {
@@ -62,7 +62,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?p ?propLabel ?eff\nWHERE {\n{\nSELECT ?p  (count(*) as ?eff)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    UNION\n    {?item wdt:P106 wd:Q169470}  # physicist\n    UNION\n    {?item wdt:P101 wd:Q413}     # physics   \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    ?item  ?p ?o.\n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    ### Experiment with different time filters if too many values\n    FILTER(xsd:integer(?year) > 1750  && xsd:integer(?year) < 1951)\n    # FILTER(xsd:integer(?year) > 1850  && xsd:integer(?year) < 1951)\n\n}\nGROUP BY ?p \n\n    }\n\n# get the original property (in the the statement construct)     \n?prop wikibase:directClaim ?p .\n\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n\n\n}  \nORDER BY DESC(?eff)",
+    "value": "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?p ?propLabel ?eff\nWHERE {\n{\nSELECT ?p  (count(*) as ?eff)\nWHERE {\n    {?item wdt:P106 wd:Q11063}  # astronomer\n    UNION\n    {?item wdt:P101 wd:Q333}     # astronomy\n    UNION\n    {?item wdt:P106 wd:Q169470}  # physicist\n    UNION\n    {?item wdt:P101 wd:Q413}     # physics   \n    ?item wdt:P31 wd:Q5; # Any instance of a human.\n            wdt:P569 ?birthDate.\n    ?item  ?p ?o.\n\n    BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n    ### Experiment with different time filters if too many values\n    FILTER(xsd:integer(?year) > 1750  && xsd:integer(?year) < 1951)\n    # FILTER(xsd:integer(?year) > 1850  && xsd:integer(?year) < 1951)\n\n}\nGROUP BY ?p \n\n    }\n\n# get the original property (in the the statement construct)     \n?prop wikibase:directClaim ?p .\n\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n\n\n}  \nORDER BY DESC(?eff)",
     "metadata": {}
   }
 ]

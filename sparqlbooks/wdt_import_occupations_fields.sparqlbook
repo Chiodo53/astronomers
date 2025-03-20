@@ -8,31 +8,69 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s ?p ?o}\n}\n",
+    "value": "### Number of persons \nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s a wd:Q5.}\n}\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons \nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s wdt:P31 wd:Q5.}\n}\n",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s a wd:Q5.}\n}\nORDER BY ?s\nLIMIT 3\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n        {?s wdt:P31 wd:Q5.}\n}\nORDER BY ?s\nLIMIT 3\n",
+    "value": "### This insert query has to be carried out directly on the Allegrograph server\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 23000 persons  \n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\nINSERT {?item wdt:P101 ?field}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P101 ?field.\n            }\n                \n        }",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?occupation\n# CONSTRUCT {?s wdt:P106 ?occupation}\nWHERE {\n    \n    {\n    SELECT ?s\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n            {?s wdt:P31 wd:Q5.}\n    }\n    ORDER BY ?s\n    LIMIT 3\n    }\n\n    SERVICE <https://query.wikidata.org/sparql> {\n        ?s wdt:P106 ?occupation\n    }\n\n\n \n    \n    \n}\n\nLIMIT 10\n",
+    "value": "### This insert query has to be carried out directly on the Allegrograph server\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 23000 persons  \n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\nINSERT {?item wdt:P106 ?occupation}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P106 ?occupation.\n            }\n                \n        }",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?occupation\n# CONSTRUCT {?s wdt:P106 ?occupation}\nWHERE {\n    \n    SERVICE <https://query.wikidata.org/sparql> {\n        wd:Q130365874 wdt:P106 ?occupation\n    }\n\n}\n",
+    "value": "\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\n\n\nSELECT DISTINCT ?occupation ?occupationType\nWHERE {\n   GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n   {\n\n    ?item wdt:P106 ?occupation.\n    ?occupation a wd:Q29028649\n    #?occupation a ?occupationType.\n    \n    \n   } \n}\nlimit 20",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "\n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\n\n\nSELECT ?occupationType (COUNT(*) as ?n)\nWHERE {\n   GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n   {\n\n    ?item wdt:P106 ?occupation.\n    #?occupation a ?occupationType\n    \n\n   } \n}\ngroup by ?occupationType\norder by desc(?n)\n",
+    "metadata": {
+      "file": "update_wrong_classes.rq"
+    }
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### \nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nCONSTRUCT  {\n    ?o rdfs:label ?oLabel.\n    ?o a ?class.\n    ?class rdfs:label ?classLabel   \n}\n#SELECT DISTINCT ?o ?oLabel  ?class ?classLabel\nWHERE {\n\n    {\n        SELECT DISTINCT ?o\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n            {\n                ?s wdt:P101|wdt:P106 ?o.\n            }\n            }\n    LIMIT 10\n    }\n\n    SERVICE <https://query.wikidata.org/sparql>\n                {\n                    OPTIONAL{?o wdt:P31 ?class.}\n                BIND (?oLabel as ?oLabel)\n                BIND (?classLabel as ?classLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n                }\n\n\n\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### \nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\nINSERT  {\n    ?o rdfs:label ?oLabel.\n    ?o a ?class.\n    ?class rdfs:label ?classLabel   \n}\nWHERE {\n\n    {\n        SELECT DISTINCT ?o\n        WHERE \n            {\n                ?s wdt:P101|wdt:P106 ?o.\n            }\n                \n    }\n\n    SERVICE <https://query.wikidata.org/sparql>\n                {\n                    OPTIONAL{?o wdt:P31 ?class.}\n                BIND (?oLabel as ?oLabel)\n                BIND (?classLabel as ?classLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n                }\n\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?occupation ?occupationLabel (COUNT(*) as ?number)\nWHERE \n{\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n    {\n        ?s wdt:P106 ?occupation.\n        ?occupation rdfs:label ?occupationLabel\n    }\n}\nGROUP BY ?occupation ?occupationLabel\nORDER BY DESC(?number)\nLIMIT 10",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?occupation ?occupationLabel (COUNT(*) as ?number)\nWHERE \n{\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n    {\n        ?s wdt:P106 ?occupation.\n        ?occupation rdfs:label ?occupationLabel\n    }\n}\nGROUP BY ?occupation ?occupationLabel\nORDER BY DESC(?number)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?field ?fieldLabel ?fieldType (COUNT(*) as ?number)\nWHERE \n{\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>\n    {\n        ?s wdt:P101 ?field.\n        ?field rdfs:label ?fieldLabel\n        OPTIONAL {?field a ?fieldType}\n    }\n}\nGROUP BY ?field ?fieldLabel ?fieldType\nORDER BY DESC(?number)\nOFFSET 10\nLIMIT 10",
     "metadata": {}
   }
 ]

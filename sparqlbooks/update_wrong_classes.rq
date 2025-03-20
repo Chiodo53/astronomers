@@ -1,0 +1,23 @@
+
+
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+
+SELECT ?occupationType (COUNT(*) as ?n)
+WHERE {
+   GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/Wikidata/graph/imported-data.md>
+   {
+
+    ?item wdt:P106 ?occupation.
+    #?occupation a ?occupationType
+    
+
+   } 
+}
+group by ?occupationType
+order by desc(?n)
