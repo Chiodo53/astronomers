@@ -2,7 +2,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "## Import to Allegrograph\n\nIn this notebook we describe the steps of data import to our Allegrograph repository.\n\n\nThe SPARQL queries are to be executed on the Allegrograph SPARQL Endpoint:\n\nFirst we check the basic properties of the population: name, sex, year of birth.",
+    "value": "## Import to Allegrograph\n\nIn this notebook we describe the steps of data import to your Allegrograph repository.\n\n\nThe SPARQL queries are to be executed on the Allegrograph SPARQL Endpoint:\n\nFirst we check the basic properties of the population: name, sex, year of birth.",
     "metadata": {}
   },
   {
@@ -26,7 +26,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Import the triples into a dedicated graph\n\nTwo import strategies are possible: \n* directly through a federated query\n  * the query can be executed on a sparql-book \n  * or directly on the Allegrograph server, if it takes to much time to work through the notebook \n* execute a CONTRUCT with the complete data (without LIMIT clause) and export it to the Turtle format (suffix: .ttl)\n  * then import the data into Allegrograph with the appropriate functionality\n\n\nIn all cases, activate in Allegrograph the 'Duplication suppression' of type SPOG, cf. menu: Repository control -> Manage duplicates -> Duplicate suppression type\n\n\nThe graph URI is in fact a URL pointing to a page with the description of the [imported data](../Wikidata/graph/imported-data.md)",
+    "value": "### Import the triples into a dedicated graph\n\nTwo import strategies are possible: \n* directly through a federated query\n  * the query can be executed on a sparql-book \n  * or directly on the Allegrograph server, if it takes to much time to work through the notebook or it does not work\n* directly in Wikidata with import/export of the data \n  * execute a CONTRUCT query with the complete data (without the SERIVICE and LIMIT clause) and export it to the Turtle format (suffix: .ttl)\n  * then import the data into Allegrograph with the appropriate functionality\n\n\nIn all cases, activate in Allegrograph the 'Duplication suppression' of type SPOG, cf. menu: Repository control -> Manage duplicates -> Duplicate suppression type\n\n\nThe graph URI is in fact a URL pointing to a page with the description of the [imported data](../graphs/wikidata-imported-data.md)",
     "metadata": {}
   },
   {
@@ -38,13 +38,25 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Correctif si la requête précédente a été réalisée avec wdt:P31 à la place de rdf:type\n\n* rdf:tpye permet d'indiquer explicitement que wd:Q5 est un type RDF et donc vituellement une classe\n* noter qu'il faut exécuter cette requête DIRECTEMENT sur le serveur Allegrograph  ",
+    "value": "#### Correctif si la requête précédente a été réalisée avec wdt:P31 à la place de rdf:type\n\n* rdf:tpye permet d'indiquer explicitement que wd:Q5 est un type RDF et donc vituellement une classe\n* noter qu'il faut exécuter cette requête DIRECTEMENT sur le serveur Allegrograph  ",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
     "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nDELETE {?item  wdt:P31 wd:Q5}\nINSERT {?item rdf:type wd:Q5}\nWHERE { GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n       {\n            ?item wdt:P31 wd:Q5.\n        }\n       }\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "#### Add a label to the Person class",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nINSERT DATA {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {\n        wd:Q5 rdfs:label \"Person\"\n    }\n}\n",
     "metadata": {}
   },
   {
@@ -66,6 +78,12 @@
     "metadata": {}
   },
   {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Explore the gender",
+    "metadata": {}
+  },
+  {
     "kind": 2,
     "language": "sparql",
     "value": "### Number of persons having more than one gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s wdt:P21 ?gen}\n}\nGROUP BY ?s\nHAVING (?n > 1)",
@@ -80,13 +98,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?gen (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s wdt:P21 ?gen}\n}\nGROUP BY ?gen\nHAVING (?n > 1)",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Number of persons per gender\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?gen (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s wdt:P21 ?gen;\n            wdt:P569 ?birthDate.\n        FILTER (?birthDate < '1900')     \n          }\n}\nGROUP BY ?gen\n#HAVING (?n > 1)",
+    "value": "### Number of persons per gender in relation to a period\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?gen (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s wdt:P21 ?gen;\n            wdt:P569 ?birthDate.\n        FILTER (?birthDate < '1900')     \n          }\n}\nGROUP BY ?gen\n#HAVING (?n > 1)",
     "metadata": {}
   },
   {
@@ -128,7 +140,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Nombre de personnes\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n          # ?s wdt:P31 wd:Q5 \n          ?s a wd:Q5\n          }\n}",
+    "value": "### Number of persons\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n          # ?s wdt:P31 wd:Q5 \n          ?s a wd:Q5\n          }\n}",
     "metadata": {}
   },
   {
@@ -141,6 +153,18 @@
     "kind": 2,
     "language": "sparql",
     "value": "### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire)\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\nSELECT  ?s (MAX(?label) as ?label) (xsd:integer(MAX(?birthDate)) as ?birthDate) (MAX(?gen) as ?gen)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s wdt:P21 ?gen;\n            rdfs:label ?label;\n            wdt:P569 ?birthDate.\n          }\n}\nGROUP BY ?s\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Ajouter le label pour la propriété \"date of birth\"\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{    wdt:P569 rdfs:label \"date of birth\"\n}    \n}\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire)\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{    wd:P21 rdfs:label \"sex or gender\"\n}    \n}\n\n",
     "metadata": {}
   }
 ]
