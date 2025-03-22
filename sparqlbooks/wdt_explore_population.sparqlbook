@@ -56,7 +56,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Count how many properties are available for the considered population\n\nExecute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will store in your project: [population properties list](../Wikidata/properties_20250306.csv)\n\n\nOpen your CSV file with a spreadsheet editor:\n* Inspect the content of the results and look for relevant properties with regard to your research questions\n* Observe all the links to other semantic web repositories, probably the sources of this information.\n* You can transform this file to your preferred spreadsheet editor format (Calc, Excel, etc.) and take notes row per row in the spreadsheet.\n",
+    "value": "### Count how many properties are available for the considered population\n\nExecute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will store in your project: [population properties list](../Wikidata/properties_20250309.csv)\n\n\nOpen your CSV file with a spreadsheet editor:\n* Inspect the content of the results and look for relevant properties with regard to your research questions\n* Observe all the links to other semantic web repositories, probably the sources of this information.\n* You can transform this file to your preferred spreadsheet editor format (Calc, Excel, etc.) and take notes row per row in the spreadsheet.\n",
     "metadata": {}
   },
   {

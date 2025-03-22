@@ -164,7 +164,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire)\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{    wd:P21 rdfs:label \"sex or gender\"\n}    \n}\n\n",
+    "value": "### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire)\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{    wdt:P21 rdfs:label \"sex or gender\"\n}    \n}\n\n",
     "metadata": {}
   }
 ]
