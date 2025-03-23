@@ -182,31 +182,19 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Persons with more than one citizenship\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=\", \") AS ?onctinents )\n    ( GROUP_CONCAT(?coutryLabel; separator=\", \") AS ?countries )\nWHERE {\n    SELECT DISTINCT ?item ?continentLabel ?coutryLabel\n    WHERE \n        {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n            ?item wdt:P27 ?country.\n            ?country wdt:P30 ?continent;\n                rdfs:label ?coutryLabel.\n            ?continent rdfs:label ?continentLabel.\n            ## Excluding Eurasia, Australia and Oceania insular\n            FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))\n            }\n        }\n}\nGROUP BY ?item\nHAVING (?n > 1)\nORDER BY DESC(?n)\nOFFSET 10\nLIMIT 10",
+    "value": "### Persons with more than one citizenship\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=\", \") AS ?continents )\n    ( GROUP_CONCAT(?countryLabel; separator=\", \") AS ?countries )\nWHERE {\n    SELECT DISTINCT ?item ?continentLabel ?coutryLabel\n    WHERE \n        {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n            ?item wdt:P27 ?country.\n            ?country wdt:P30 ?continent;\n                rdfs:label ?countryLabel.\n            ?continent rdfs:label ?continentLabel.\n            ## Excluding Eurasia, Australia and Oceania insular\n            FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))\n            }\n        }\n}\nGROUP BY ?item\n#HAVING (?n > 1)\nORDER BY DESC(?n)\n#OFFSET 10\nLIMIT 10",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Number of persons with more than one citizenship\n# We see that we have an issue: 1/5 of population with more than one citizenship\n# How to treat this ?\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) AS ?no)\nWHERE {\n    SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=\", \") AS ?countries )\n    WHERE {\n        SELECT DISTINCT ?item ?continentLabel\n        WHERE \n            {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                ?item wdt:P27 ?country.\n                ?country wdt:P30 ?continent.\n                ?continent rdfs:label ?continentLabel.\n                ## Excluding Eurasia, Australia and Oceania insular\n                FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))\n                }\n            }\n    }\n    GROUP BY ?item\n    HAVING (?n > 1)\n}",
-    "metadata": {}
-  },
-  {
-    "kind": 1,
-    "language": "markdown",
-    "value": "## Inspect the Wikidata graph in your repository",
+    "value": "### Persons with more than one citizenship\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?item (COUNT(*) as ?n) \n            ( GROUP_CONCAT(?continentLabel; separator=\", \") AS ?continents )\n#            ( GROUP_CONCAT(?countryLabel; separator=\", \") AS ?countries )\nWHERE {\n    SELECT DISTINCT ?item \n    ?continentLabel \n    # ?countryLabel\n    WHERE \n        {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n            ?item wdt:P27 ?country.\n            ?country wdt:P30 ?continent;\n                rdfs:label ?countryLabel.\n            ?continent rdfs:label ?continentLabel.\n            ## Excluding Eurasia, Australia and Oceania insular\n            FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))\n            }\n        }\n}\nGROUP BY ?item\nHAVING (?n > 1)\nORDER BY DESC(?n)\n#OFFSET 10\nLIMIT 10",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Count instances of 'classes' in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nSELECT ?class ?classLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s rdf:type ?class.\n        OPTIONAL {?class rdfs:label ?classLabel}\n    }\n}\nGROUP BY ?class ?classLabel\nORDER BY DESC(?n)",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Count properties in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?pLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s ?p ?o.\n        OPTIONAL {?p rdfs:label ?pLabel}\n    }\n}\nGROUP BY ?p ?pLabel\nORDER BY DESC(?n)",
+    "value": "### Number of persons with more than one citizenship\n# We see that we have an issue: 1/5 of population with more than one citizenship\n# How to treat this ?\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) AS ?no)\nWHERE {\n    SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=\", \") AS ?continents )\n    WHERE {\n        SELECT DISTINCT ?item ?continentLabel\n        WHERE \n            {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                ?item wdt:P27 ?country.\n                ?country wdt:P30 ?continent.\n                ?continent rdfs:label ?continentLabel.\n                ## Excluding Eurasia, Australia and Oceania insular\n                FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))\n                }\n            }\n    }\n    GROUP BY ?item\n    HAVING (?n > 1)\n}",
     "metadata": {}
   }
 ]

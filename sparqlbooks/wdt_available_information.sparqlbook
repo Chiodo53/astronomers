@@ -2,7 +2,13 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "",
+    "value": "# Inspect available information in your repository's Wikidata graph",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Count instances of 'classes' in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nSELECT ?class ?classLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s rdf:type ?class.\n        OPTIONAL {?class rdfs:label ?classLabel}\n    }\n}\nGROUP BY ?class ?classLabel\nORDER BY DESC(?n)",
     "metadata": {}
   },
   {
@@ -26,7 +32,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Propriétés des personnes\n\nLa difficulté est ici de disposer des labels.\n\nPour que la requête marche, il faut un LIMIT à 100 sur le graphe.\n\nAvec la clause OFFSET on peut explorer différentes parties du graphe \n\n",
+    "value": "### Propriétés des personnes\n\n\nOn souhaite partir de la liste de la population dans son propre graphe, puis interroger Wikidata pour connaître les propriétés disponibles et leurs effectifs.\n\n\n\nLa difficulté est ici de disposer des labels.\n\nPour que la requête marche, il faut un LIMIT à 100 sur le graphe.\n\nAvec la clause OFFSET on peut explorer différentes parties du graphe \n\nSe référer donc au fichier CSV précédemment réalisé directement sur Wikidata\n",
     "metadata": {}
   },
   {
