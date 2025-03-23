@@ -309,15 +309,16 @@ WHERE
 ```
 
 ```sparql
-### Ajouter le label pour la propriété "date of birth"
+### Ajouter le label pour le concept Country
 
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 INSERT DATA {
 GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-    {    wd:Q6256 rdfs:label "Country"
+    {    wd:Q6256 rdfs:label "Country".
     }    
 }
 
@@ -517,19 +518,110 @@ WHERE
 ```
 
 ```sparql
-### Ajouter le label pour la propriété "date of birth"
+### Ajouter le label pour la classe "Continent"
 
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 INSERT DATA {
 GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-    {    wd:Q5107 rdfs:label "Continent"
+    {    wd:Q5107 rdfs:label "Continent".
     }    
 }
 
 
+```
+### Inspect the persons in relations to continents
+
+```sparql
+###  Inspect the persons in continents
+# number of persons having this citizenship
+
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+
+SELECT ?continent ?continentLabel (COUNT(*) as ?n)
+WHERE {
+GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+{
+   ?s wdt:P27 ?country.
+   ?country wdt:P30 ?continent.
+   ?continent rdfs:label ?continentLabel.
+}
+
+}
+GROUP BY ?continent ?continentLabel
+ORDER BY DESC(?n)
+
+```
+
+```sparql
+### Persons with more than one citizenship
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+
+SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?onctinents )
+    ( GROUP_CONCAT(?coutryLabel; separator=", ") AS ?countries )
+WHERE {
+    SELECT DISTINCT ?item ?continentLabel ?coutryLabel
+    WHERE 
+        {
+        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+            {
+            ?item wdt:P27 ?country.
+            ?country wdt:P30 ?continent;
+                rdfs:label ?coutryLabel.
+            ?continent rdfs:label ?continentLabel.
+            ## Excluding Eurasia, Australia and Oceania insular
+            FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))
+            }
+        }
+}
+GROUP BY ?item
+HAVING (?n > 1)
+ORDER BY DESC(?n)
+OFFSET 10
+LIMIT 10
+```
+
+```sparql
+### Number of persons with more than one citizenship
+# We see that we have an issue: 1/5 of population with more than one citizenship
+# How to treat this ?
+
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT (COUNT(*) AS ?no)
+WHERE {
+    SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?countries )
+    WHERE {
+        SELECT DISTINCT ?item ?continentLabel
+        WHERE 
+            {
+            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+                {
+                ?item wdt:P27 ?country.
+                ?country wdt:P30 ?continent.
+                ?continent rdfs:label ?continentLabel.
+                ## Excluding Eurasia, Australia and Oceania insular
+                FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))
+                }
+            }
+    }
+    GROUP BY ?item
+    HAVING (?n > 1)
+}
 ```
 ## Inspect the Wikidata graph in your repository
 

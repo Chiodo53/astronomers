@@ -50,13 +50,13 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "#### Add a label to the Person class",
+    "value": "#### Add a label to the Person class\n\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nINSERT DATA {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {\n        wd:Q5 rdfs:label \"Person\"\n    }\n}\n",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nINSERT DATA {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {\n        wd:Q5 rdfs:label \"Person\".\n    }\n}\n",
     "metadata": {}
   },
   {
