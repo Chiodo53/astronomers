@@ -478,7 +478,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 INSERT DATA {
 GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-{    wd:P21 rdfs:label "sex or gender"
+{    wdt:P21 rdfs:label "sex or gender"
 }    
 }
 
