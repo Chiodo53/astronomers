@@ -74,7 +74,37 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "###  Inspect the citizenships\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?citizenship ?citizenshipLabel (COUNT(*) as ?n)\nWHERE {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{\n   ?s wdt:P27 ?citizenship.\n   ?citizenship rdfs:label ?citizenshipLabel.\n}\n\n}\nGROUP BY ?citizenship ?citizenshipLabel\nORDER BY DESC(?n)\nlimit 20",
+    "value": "###  Inspect the citizenships\n# number of persons having this citizenship\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?citizenship ?citizenshipLabel (COUNT(*) as ?n)\nWHERE {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{\n   ?s wdt:P27 ?citizenship.\n   ?citizenship rdfs:label ?citizenshipLabel.\n}\n\n}\nGROUP BY ?citizenship ?citizenshipLabel\nORDER BY DESC(?n)\nlimit 20",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Add the country class",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "###  Inspect the countries:\n# number of different countries\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE\n   {\n   SELECT DISTINCT ?country\n   WHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P27 ?country.\n         }\n      }\n   }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the class 'country' for all countries\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n   ?country rdf:type wd:Q6256.\n}\nWHERE\n   {\n   SELECT DISTINCT ?country\n   WHERE {\n         {\n            ?s wdt:P27 ?country.\n         }\n      }\n   }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Ajouter le label pour la propriété \"date of birth\"\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {    wd:Q6256 rdfs:label \"Country\"\n    }    \n}\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Persons with more thant one citizenship",
     "metadata": {}
   },
   {
@@ -87,6 +117,12 @@
     "kind": 2,
     "language": "sparql",
     "value": "### Number of persons with more than one citizenship\n# We see that we have an issue: 1/5 of population with more than one citizenship\n# How to treat this ?\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) AS ?no)\nWHERE {\n    SELECT ?item (COUNT(*) as ?n)\n    WHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {\n    ?item wdt:P27 ?citizenship.\n        ?citizenship rdfs:label ?citizenshipLabel.\n    }\n\n    }\n    GROUP BY ?item\n    HAVING (?n > 1)\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Add the continents",
     "metadata": {}
   },
   {
@@ -110,19 +146,43 @@
   {
     "kind": 1,
     "language": "markdown",
+    "value": "### Add the continent class",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "###  Inspect the continents:\n# number of different continents\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE\n   {\n   SELECT DISTINCT ?continent\n   WHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P30 ?continent.\n         }\n      }\n   }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the class 'continent' for all continents\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n   ?continent rdf:type wd:Q5107.\n}\nWHERE\n   {\n   SELECT DISTINCT ?continent\n   WHERE {\n         {\n            ?s wdt:P30 ?continent.\n         }\n      }\n   }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Ajouter le label pour la propriété \"date of birth\"\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {    wd:Q5107 rdfs:label \"Continent\"\n    }    \n}\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
     "value": "## Inspect the Wikidata graph in your repository",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Count properties in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?pLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s ?p ?o.\n        OPTIONAL {?p rdfs:label ?pLabel}\n    }\n}\nGROUP BY ?p ?pLabel\nORDER BY DESC(?n)",
+    "value": "### Count instances of 'classes' in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nSELECT ?class ?classLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s rdf:type ?class.\n        OPTIONAL {?class rdfs:label ?classLabel}\n    }\n}\nGROUP BY ?class ?classLabel\nORDER BY DESC(?n)",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Count instances of 'classes' in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n\nSELECT ?class ?classLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s rdf:type ?class.\n        OPTIONAL {?class rdfs:label ?classLabel}\n    }\n}\nGROUP BY ?class ?classLabel\nORDER BY DESC(?n)",
+    "value": "### Count properties in the repository\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?pLabel (COUNT(*) AS ?n)\nWHERE {\n    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   \n    {\n        ?s ?p ?o.\n        OPTIONAL {?p rdfs:label ?pLabel}\n    }\n}\nGROUP BY ?p ?pLabel\nORDER BY DESC(?n)",
     "metadata": {}
   }
 ]
