@@ -174,15 +174,80 @@ WHERE { GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/bl
 ```
 #### Add a label to the Person class
 
+
+
 ```sparql
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 INSERT DATA {
     GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
     {
-        wd:Q5 rdfs:label "Person"
+        wd:Q5 rdfs:label "Person".
+    }
+}
+
+```
+### Add the gender class
+
+```sparql
+###  Inspect the genders:
+# number of different countries
+
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT (COUNT(*) as ?n)
+WHERE
+   {
+   SELECT DISTINCT ?gender
+   WHERE {
+      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+         {
+            ?s wdt:P21 ?gender.
+         }
+      }
+   }
+```
+
+```sparql
+### Insert the class 'gender' for all countries
+# Please note that strictly speaking Wikidata has no ontology,
+# therefore no classes. We add this for our convenience
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+WITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+INSERT {
+   ?gender rdf:type wd:Q48264.
+}
+WHERE
+   {
+   SELECT DISTINCT ?gender
+   WHERE {
+         {
+            ?s wdt:P21 ?gender.
+         }
+      }
+   }
+```
+
+```sparql
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+INSERT DATA {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+    {
+        wd:Q48264 rdfs:label "Gender Identity".
     }
 }
 
