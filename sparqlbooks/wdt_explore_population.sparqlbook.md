@@ -7,7 +7,7 @@ When you prepare the queries, you can execute them on the Wikidata SPARQL endpoi
 ### Explore occupations and fields of work
 
 ```sparql
-### List 50 more frequent occupations
+### List 'n' more frequent occupations
 
 PREFIX wd: <http://www.wikidata.org/entity/>
 
@@ -124,7 +124,7 @@ WHERE {
 ```
 ### Count how many properties are available for the considered population
 
-Execute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will store in your project: [population properties list](../Wikidata/properties_20250306.csv)
+Execute this query on the Wikidata sparql-endpoint and save the result to a CSV document that you will store in your project: [population properties list](../Wikidata/properties_20250309.csv)
 
 
 Open your CSV file with a spreadsheet editor:
@@ -135,6 +135,9 @@ Open your CSV file with a spreadsheet editor:
 
 ```sparql
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
 
 SELECT ?p ?propLabel ?eff
 WHERE {
