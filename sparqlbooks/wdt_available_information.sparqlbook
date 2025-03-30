@@ -32,6 +32,30 @@
   {
     "kind": 1,
     "language": "markdown",
+    "value": "## Propriétés des Occupations",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT (COUNT(*) as ?n)\nWHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?item a wd:Q12737077.}\n        }\n         ",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Propriétés des Occupations: outgoing\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?label (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s a wd:Q12737077;\n            ?p ?o.\n        OPTIONAL {?p rdfs:label ?label}    \n          }\n}\nGROUP BY ?p ?label\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Propriétés des Occupations: incoming\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?label (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s a wd:Q12737077.\n         ?s1 ?p ?s.\n        OPTIONAL {?p rdfs:label ?label}    \n          }\n}\nGROUP BY ?p ?label\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
     "value": "### Propriétés des personnes disponibles dans Wikidata\n\n\nOn souhaite partir de la liste de la population dans son propre graphe, puis interroger Wikidata pour connaître les propriétés disponibles et leurs effectifs.\n\n\n\nLa difficulté est ici de disposer des labels.\n\nPour que la requête marche, il faut un LIMIT à 100 sur le graphe.\n\nAvec la clause OFFSET on peut explorer différentes parties du graphe \n\nSe référer donc au fichier CSV précédemment réalisé directement sur Wikidata\n",
     "metadata": {}
   },
