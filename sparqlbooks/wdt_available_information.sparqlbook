@@ -32,7 +32,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Propriétés des personnes\n\n\nOn souhaite partir de la liste de la population dans son propre graphe, puis interroger Wikidata pour connaître les propriétés disponibles et leurs effectifs.\n\n\n\nLa difficulté est ici de disposer des labels.\n\nPour que la requête marche, il faut un LIMIT à 100 sur le graphe.\n\nAvec la clause OFFSET on peut explorer différentes parties du graphe \n\nSe référer donc au fichier CSV précédemment réalisé directement sur Wikidata\n",
+    "value": "### Propriétés des personnes disponibles dans Wikidata\n\n\nOn souhaite partir de la liste de la population dans son propre graphe, puis interroger Wikidata pour connaître les propriétés disponibles et leurs effectifs.\n\n\n\nLa difficulté est ici de disposer des labels.\n\nPour que la requête marche, il faut un LIMIT à 100 sur le graphe.\n\nAvec la clause OFFSET on peut explorer différentes parties du graphe \n\nSe référer donc au fichier CSV précédemment réalisé directement sur Wikidata\n",
     "metadata": {}
   },
   {
