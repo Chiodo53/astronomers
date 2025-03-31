@@ -568,8 +568,8 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 
-SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?onctinents )
-    ( GROUP_CONCAT(?coutryLabel; separator=", ") AS ?countries )
+SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?continents )
+    ( GROUP_CONCAT(?countryLabel; separator=", ") AS ?countries )
 WHERE {
     SELECT DISTINCT ?item ?continentLabel ?coutryLabel
     WHERE 
@@ -578,7 +578,42 @@ WHERE {
             {
             ?item wdt:P27 ?country.
             ?country wdt:P30 ?continent;
-                rdfs:label ?coutryLabel.
+                rdfs:label ?countryLabel.
+            ?continent rdfs:label ?continentLabel.
+            ## Excluding Eurasia, Australia and Oceania insular
+            FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))
+            }
+        }
+}
+GROUP BY ?item
+#HAVING (?n > 1)
+ORDER BY DESC(?n)
+#OFFSET 10
+LIMIT 10
+```
+
+```sparql
+### Persons with more than one citizenship
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+
+SELECT ?item (COUNT(*) as ?n) 
+            ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?continents )
+#            ( GROUP_CONCAT(?countryLabel; separator=", ") AS ?countries )
+WHERE {
+    SELECT DISTINCT ?item 
+    ?continentLabel 
+    # ?countryLabel
+    WHERE 
+        {
+        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+            {
+            ?item wdt:P27 ?country.
+            ?country wdt:P30 ?continent;
+                rdfs:label ?countryLabel.
             ?continent rdfs:label ?continentLabel.
             ## Excluding Eurasia, Australia and Oceania insular
             FILTER ( ?continent NOT IN (wd:Q538, wd:Q3960, wd:Q5401))
@@ -588,7 +623,7 @@ WHERE {
 GROUP BY ?item
 HAVING (?n > 1)
 ORDER BY DESC(?n)
-OFFSET 10
+#OFFSET 10
 LIMIT 10
 ```
 
@@ -604,7 +639,7 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 SELECT (COUNT(*) AS ?no)
 WHERE {
-    SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?countries )
+    SELECT ?item (COUNT(*) as ?n) ( GROUP_CONCAT(?continentLabel; separator=", ") AS ?continents )
     WHERE {
         SELECT DISTINCT ?item ?continentLabel
         WHERE 
@@ -622,42 +657,4 @@ WHERE {
     GROUP BY ?item
     HAVING (?n > 1)
 }
-```
-## Inspect the Wikidata graph in your repository
-
-```sparql
-### Count instances of 'classes' in the repository
-
-PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-
-SELECT ?class ?classLabel (COUNT(*) AS ?n)
-WHERE {
-    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   
-    {
-        ?s rdf:type ?class.
-        OPTIONAL {?class rdfs:label ?classLabel}
-    }
-}
-GROUP BY ?class ?classLabel
-ORDER BY DESC(?n)
-```
-
-```sparql
-### Count properties in the repository
-
-PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT ?p ?pLabel (COUNT(*) AS ?n)
-WHERE {
-    GRAPH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>   
-    {
-        ?s ?p ?o.
-        OPTIONAL {?p rdfs:label ?pLabel}
-    }
-}
-GROUP BY ?p ?pLabel
-ORDER BY DESC(?n)
 ```
