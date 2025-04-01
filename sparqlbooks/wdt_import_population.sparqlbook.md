@@ -30,8 +30,10 @@ SELECT DISTINCT ?item  ?itemLabel  ?gender ?year
             ?item wdt:P31 wd:Q5;  # Any instance of a human.
                 wdt:P569 ?birthDate;
                 wdt:P21 ?gender.
-        BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
-         FILTER(xsd:integer(?year) > 1750  && xsd:integer(?year) < 1951) 
+        BIND(year(?birthDate) as ?year)
+        #BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
+        FILTER(xsd:integer(?year) > 1750 && xsd:integer(?year) < 2001) )
+        
 
         ## Add this clause in order to fill the variable      
         BIND ( ?itemLabel as ?itemLabel)
@@ -58,8 +60,11 @@ PREFIX bd: <http://www.bigdata.com/rdf#>
 CONSTRUCT 
         {?item  rdfs:label ?itemLabel.
            ?item wdt:P21 ?gender.
-           ?item wdt:P569 ?year. 
-           ?item  wdt:P31 wd:Q5. }
+           ?item wdt:P569 ?year.
+           # ?item  wdt:P31 wd:Q5.
+           # Noter qu'on odifie pour disposer de la propriété standard
+           # pour déclarer l'appartenance d'une instance à une classe
+           ?item  rdf:type wd:Q5. }
         
         WHERE {
 
@@ -77,15 +82,16 @@ CONSTRUCT
             ?item wdt:P31 wd:Q5;  # Any instance of a human.
                 wdt:P569 ?birthDate;
                 wdt:P21 ?gender.
-        BIND(xsd:integer(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2")) AS ?year)
-        FILTER(?year > 1750  && ?year < 1951) 
+        BIND(year(?birthDate) as ?year)
+        #BIND(xsd:integer(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2")) AS ?year)
+        FILTER(?year > 1750  && ?year < 2001) 
 
         ## Add this clause in order to fill the variable      
         BIND ( ?itemLabel as ?itemLabel)
         SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }   
         }
         }
-        LIMIT 10
+        LIMIT 5
     
 
 ```
@@ -141,8 +147,8 @@ INSERT {
             ?item wdt:P31 wd:Q5;  # Any instance of a human.
                 wdt:P569 ?birthDate;
                 wdt:P21 ?gender.
-        BIND(xsd:integer(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2")) AS ?year)
-        FILTER(?year > 1750  && ?year < 1951) 
+        BIND(year(?birthDate) as ?year)
+        FILTER(?year > 1750  && ?year < 2001) 
 
         ## Add this clause in order to fill the variable      
         BIND ( ?itemLabel as ?itemLabel)
@@ -153,26 +159,7 @@ INSERT {
     
 
 ```
-#### Correctif si la requête précédente a été réalisée avec wdt:P31 à la place de rdf:type
-
-* rdf:tpye permet d'indiquer explicitement que wd:Q5 est un type RDF et donc vituellement une classe
-* noter qu'il faut exécuter cette requête DIRECTEMENT sur le serveur Allegrograph  
-
-```sparql
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-
-DELETE {?item  wdt:P31 wd:Q5}
-INSERT {?item rdf:type wd:Q5}
-WHERE { GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-       {
-            ?item wdt:P31 wd:Q5.
-        }
-       }
-
-```
-#### Add a label to the Person class
+#### Add a label to the class "Person"
 
 
 
@@ -323,6 +310,9 @@ GROUP BY ?gen
 ```sparql
 ### Add the label to the gender
 
+# This query will first retrieve all the genders, 
+# then fetch in Wikidata the gender's labels
+
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
@@ -447,10 +437,13 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 
-SELECT ?s ?label ?birthDate ?gen
+SELECT ?s ?label ?birthDate ?genLabel
 WHERE {
     GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-        {?s wdt:P21 ?gen;
+        {
+            ## A property path passes through 
+            # two or more properties
+            ?s wdt:P21 / rdfs:label ?genLabel;
             rdfs:label ?label;
             wdt:P569 ?birthDate.
           }
@@ -484,12 +477,14 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 
-SELECT  ?s (MAX(?label) as ?label) (xsd:integer(MAX(?birthDate)) as ?birthDate) (MAX(?gen) as ?gen)
+SELECT  ?s (MAX(?label) as ?label) (xsd:integer(MAX(?birthDate)) as ?birthDate) 
+    (MAX(?gen) as ?gen) (MAX(?genLabel) AS ?genLabel)
 WHERE {
     GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
         {?s wdt:P21 ?gen;
             rdfs:label ?label;
             wdt:P569 ?birthDate.
+        ?gen rdfs:label ?genLabel    
           }
 }
 GROUP BY ?s
@@ -498,7 +493,7 @@ LIMIT 10
 ```
 
 ```sparql
-### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire)
+### Nombre de personnes avec propriétés de base sans doublons (choix aléatoire par MAX)
 
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -506,7 +501,8 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT (COUNT(*) as ?n)
 WHERE {
-SELECT  ?s (MAX(?label) as ?label) (xsd:integer(MAX(?birthDate)) as ?birthDate) (MAX(?gen) as ?gen)
+SELECT  ?s (MAX(?label) as ?label) (xsd:integer(MAX(?birthDate)) as ?birthDate) 
+            (MAX(?gen) as ?gen) (MAX(?genLabel) AS ?genLabel)
 WHERE {
     GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
         {?s wdt:P21 ?gen;
