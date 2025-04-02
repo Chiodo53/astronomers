@@ -56,14 +56,13 @@ WHERE
         ORDER BY ?item      
         OFFSET 0
         #OFFSET 10000
-        #OFFSET 20000
         LIMIT 10
 
         }
         ## 
         SERVICE <https://query.wikidata.org/sparql>
             {
-                ?item wdt:P27 ?citizenship.
+                ?item wdt:P27 ?country.
                 BIND (?citizenshipLabel as ?citizenshipLabel)
                 SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } 
             }
@@ -93,9 +92,10 @@ WHERE
         WHERE 
                 {?item a wd:Q5.}
         ORDER BY ?item      
-        OFFSET 0
-        #OFFSET 10000
-        #OFFSET 20000
+        #OFFSET 8000
+        #OFFSET 16000
+        #OFFSET 24000
+        #OFFSET 32000
         LIMIT 10000
 
         }
@@ -106,6 +106,19 @@ WHERE
             }
                 
         }
+```
+
+```sparql
+### Insert the label of the property
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+
+INSERT DATA {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+  {wdt:P27 rdfs:label 'country of citizenship'.}
+}
 ```
 
 ```sparql
@@ -127,17 +140,164 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 ```
 
 ```sparql
-### Insert the label of the property
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+### Persons without a country of citizenship
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-
-INSERT DATA {
-  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-  {wdt:P27 rdfs:label 'country of citizenship'.}
+SELECT (COUNT(*) as ?n)
+WHERE 
+{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+        
+    {?item a wd:Q5.
+    MINUS {
+            ?item wdt:P27 ?country   .
+        }     
+    }
 }
+
 ```
+
+```sparql
+### Persons without a country of citizenship
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT ?item ?label
+WHERE 
+{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+        
+    {?item a wd:Q5;
+        rdfs:label ?label.
+    MINUS {
+            ?item wdt:P27 ?country   .
+        }     
+    }
+}
+OFFSET 50
+LIMIT 10
+```
+### Add missing citizenships
+
+On April 2nd, 2025 a number of citizenships are missing in the SPARQL endpoint of Wikidata as wdt:P27 properties but they are present in the statements: cf. following example
+
+
+
+```sparql
+### test a specific person
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+
+SELECT ?item ?o ?p ?statement_o
+    {
+
+        ## 
+        SERVICE <https://query.wikidata.org/sparql>
+            {
+                 
+                BIND(<http://www.wikidata.org/entity/Q1001072> as ?item)
+                {
+                    ?item ?p ?statement_o.
+                    FILTER(contains(str(?p), 'P27'))
+                }
+                OPTIONAL{
+                    ?item wdt:P27 ?o.
+                }
+
+            }
+                
+        }
+```
+
+```sparql
+### Get the country value
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+
+
+SELECT ?item ?os ?osLabel
+
+WHERE
+    {
+
+        ## 
+        SERVICE <https://query.wikidata.org/sparql>
+        {
+            {
+
+                BIND(<http://www.wikidata.org/entity/Q1001072> as ?item)
+                ?item p:P27 [ps:P27 ?os]
+
+                BIND(?osLabel AS ?osLabel)
+                SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+            }        
+                
+        }
+    }
+```
+
+```sparql
+### Get the country value
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+
+
+SELECT ?item ?os ?osLabel
+
+WHERE
+    {
+
+        {SELECT ?item
+        WHERE 
+                {?item a wd:Q5.
+                MINUS {
+                        ?item wdt:P27 ?country   .
+                    }  
+        }
+                
+        ORDER BY ?item  
+       
+        }
+
+        ## 
+        SERVICE <https://query.wikidata.org/sparql>
+        {
+            {
+
+                ?item p:P27 [ps:P27 ?os]
+
+                BIND(?osLabel AS ?osLabel)
+                SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+            }        
+                
+        }
+    }
+    LIMIT 20
+```
+### Conslusion about missing citizenships
+
+Apparently, there are only five persons with this special situation, all other around 8700 are missing, as a quick inspection shows.
+
+They will be excluded from the analysis
 ### Inspect the available information
 
 With the queries [in this sparqlbook](wdt_available_information.sparqlbook) you can inspect the available information
@@ -165,7 +325,7 @@ ORDER BY DESC(?n)
 ## Enrich the information available in your graph about countries  
 
 ```sparql
-### Get the labels of the countries or citizenships
+### Get the labels of the countries 
 # Prepare the insert
 
 PREFIX wikibase: <http://wikiba.se/ontology#>
@@ -174,17 +334,17 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 CONSTRUCT  {
-    ?citizenship rdfs:label ?citizenshipLabel.
+    ?country rdfs:label ?countryLabel.
 }
-#SELECT DISTINCT ?citizenship ?citizenshipLabel
+#SELECT DISTINCT ?country ?countryLabel
 WHERE {
 
     {
-    SELECT DISTINCT ?citizenship
+    SELECT DISTINCT ?country
     WHERE {
         GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
             {
-                ?s wdt:P27 ?citizenship.
+                ?s wdt:P27 ?country.
             }
             }
     LIMIT 5
@@ -192,8 +352,8 @@ WHERE {
 
     SERVICE <https://query.wikidata.org/sparql>
                 {
-                BIND (?citizenship as ?citizenship)
-                BIND (?citizenshipLabel as ?citizenshipLabel)
+                BIND (?country as ?country)
+                BIND (?countryLabel as ?countryLabel)
                 SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } 
                 }
 
