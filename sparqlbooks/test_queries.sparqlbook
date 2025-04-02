@@ -1,0 +1,8 @@
+[
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?person ?personLabel ?dateOfBirth ?dateOfDeath #?positionsHeld\nWHERE {\nSERVICE <https://query.wikidata.org/sparql>{\n SELECT ?person ?personLabel ?dateOfBirth ?dateOfDeath \n        #(GROUP_CONCAT(DISTINCT ?positionLabel; separator=\", \") AS ?positionsHeld)\n  WHERE { \n    ?person wdt:P31 wd:Q5;              # instance of human\n            wdt:P569 ?dateOfBirth;\n#            wdt:P570 ?dateOfDeath;\n            wdt:P27 wd:Q822;            # country of citizenship: Lebanon\n            wdt:P106 wd:Q82955.         # occupation: politician\n\n  #OPTIONAL { ?person wdt:P569 ?dateOfBirth. }\n  #OPTIONAL { ?person wdt:P570 ?dateOfDeath. }\n  #OPTIONAL { ?person wdt:P39 ?position. }\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n\n  # Filter for activity likely between 1920 and 1975\n  BIND (year(?dateOfBirth) AS ?birthYear)\n  FILTER(?birthYear > 1900)\n    \n#    (!BOUND(?dateOfBirth) || ?dateOfBirth <= \"1955-12-31\"^^xsd:date) &&\n#    (!BOUND(?dateOfDeath) || ?dateOfDeath >= \"1920-01-01\"^^xsd:date)\n  \n}\n}\n}\nLIMIT\n",
+    "metadata": {}
+  }
+]

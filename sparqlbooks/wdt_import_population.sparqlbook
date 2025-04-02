@@ -62,7 +62,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Insert the class 'gender' for all countries\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n   ?gender rdf:type wd:Q48264.\n}\nWHERE\n   {\n   SELECT DISTINCT ?gender\n   WHERE {\n         {\n            ?s wdt:P21 ?gender.\n         }\n      }\n   }",
+    "value": "### Insert the class 'gender' for all types of gender\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n   ?gender rdf:type wd:Q48264.\n}\nWHERE\n   {\n   SELECT DISTINCT ?gender\n   WHERE {\n         {\n            ?s wdt:P21 ?gender.\n         }\n      }\n   }",
     "metadata": {}
   },
   {

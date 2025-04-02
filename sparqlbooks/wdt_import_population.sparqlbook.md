@@ -202,7 +202,7 @@ WHERE
 ```
 
 ```sparql
-### Insert the class 'gender' for all countries
+### Insert the class 'gender' for all types of gender
 # Please note that strictly speaking Wikidata has no ontology,
 # therefore no classes. We add this for our convenience
 
