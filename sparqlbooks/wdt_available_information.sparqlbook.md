@@ -23,6 +23,7 @@ ORDER BY DESC(?n)
 PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 SELECT ?p ?pLabel (COUNT(*) AS ?n)
 WHERE {
