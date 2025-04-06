@@ -2,7 +2,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "# Import occupations",
+    "value": "# Import occupations\n\n\nIn this notebook we import occupations of our populations and try to find ways to aggregate them",
     "metadata": {}
   },
   {
@@ -62,7 +62,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### This insert query has to be carried out directly on the Allegrograph server\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 23000 persons  \n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?item wdt:P106 ?occupation.\n         ?occupation rdfs:label ?occupationLabel}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P106 ?occupation.\n                BIND (?occupationLabel as ?occupationLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "value": "### This insert query has to be carried out directly on the Allegrograph server\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 23000 persons  \n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?item wdt:P106 ?occupation.\n         ?occupation rdfs:label ?occupationLabel}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P106 ?occupation.\n                BIND (?occupationLabel as ?occupationLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
     "metadata": {}
   },
   {
@@ -110,7 +110,7 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "## Get the occupations' parent occupations ('classes')",
+    "value": "## Get the occupations' parent occupations ('classes')\n\n\nGiven the dispersion of occupations observed in the [analysis notebook](../notebooks_jupyter/wikidata_exploration/wdt_occupations_triplestore_exploration.ipynb), we try to obtain parent terms of occupations to see if some groupings are possible.",
     "metadata": {}
   },
   {
@@ -222,12 +222,6 @@
     "metadata": {}
   },
   {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Fourth classification level\n\n# This level is present in the data although not explicitely inserted\n\n# no result after first insert\n# result after second insert !\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?parentOccupation ?parentOccupationlabel (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s a wd:Q5.\n        \n        ## property path:\n        ?s  wdt:P106/wdt:P279/wdt:P279/wdt:P279/wdt:P279  ?parentOccupation\n\n        OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n          }\n}\nGROUP BY ?parentOccupation ?parentOccupationlabel \nORDER BY DESC(?n)\nLIMIT 20",
-    "metadata": {}
-  },
-  {
     "kind": 1,
     "language": "markdown",
     "value": "### Test: get rid of the classifications and restart\n\n**Beware**, the created parent and ancestor occupations will also be deleted\n\n**Beware**, do not execute theses queries after you added *instance of* 'classes' to the occupations ",
@@ -248,115 +242,37 @@
   {
     "kind": 1,
     "language": "markdown",
-    "value": "## Add the *instance of* metaclasses to occupations\n\n**CAUTION** : add these classifications ONLY after you are finished with your three (or more) inserts of occupations as parents of other occupations",
+    "value": "## Inspect the *instance of* metaclasses to occupations\n\n**CAUTION** : add these classifications ONLY after you are finished with your two (or more) inserts of occupations as parents of other occupations",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?metaclass ?metaclassLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q12737077.}\n        ORDER BY ?item      \n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of\n                ?item wdt:P31 ?metaclass.\n                BIND (?metaclassLabel as ?metaclassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?metaclass ?metaclassLabel\nORDER BY DESC(?n)\nLIMIT 20\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?metaclass ?metaclassLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q12737077.}\n        ORDER BY ?item      \n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of, DEUX niveaux\n                ?item wdt:P31/wdt:P31 ?metaclass.\n                BIND (?metaclassLabel as ?metaclassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?metaclass ?metaclassLabel\nORDER BY DESC(?n)\nLIMIT 20\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {\n    ?item wdt:P31 ?metaclass.\n    ?metaclass rdfs:label ?metaclassLabel.\n    }\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q12737077.}\n        ORDER BY ?item      \n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # subclass of\n                ?item wdt:P31 ?metaclass.\n                BIND (?metaclassLabel as ?metaclassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nORDER BY DESC(?item)\nLIMIT 5\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## Insert metaclasses, first level\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n    ?item wdt:P31 ?metaclass.\n    ?metaclass rdfs:label ?metaclassLabel.\n    }\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q12737077.}\n        ORDER BY ?item      \n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # subclass of\n                ?item wdt:P31 ?metaclass.\n                BIND (?metaclassLabel as ?metaclassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\n\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Insert the label of the property\n\n## This is needed just once\n\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nINSERT DATA {\n  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n  {wdt:P31 rdfs:label 'instance of'.}\n}",
+    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?occupation ?occupationLabel ?metaclass ?metaclassLabel ?n\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        {SELECT ?occupation ?occupationLabel (COUNT(*) as ?n)\n        WHERE \n                {?item a wd:Q5.\n                ?item wdt:P106 ?occupation.\n                ?occupation rdfs:label ?occupationLabel}\n        GROUP BY ?occupation ?occupationLabel      \n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of\n                ?occupation wdt:P31 ?metaclass.\n                BIND (?metaclassLabel as ?metaclassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nORDER BY DESC(?n)\nLIMIT 30\n",
     "metadata": {}
   },
   {
     "kind": 1,
     "language": "markdown",
-    "value": "### Inspect inserted metaclasses",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?personLabel ?birthYear ?item\n            ?occupation ?occupationLabel\n            ?parentOccupation ?parentOccupationLabel \n    \nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        { ?item a wd:Q5;\n             rdfs:label ?personLabel;\n           wdt:P569 ?birthYear;\n            wdt:P106 ?occupation.\n            ?occupation   wdt:P279 ?parentOccupation;\n                    rdfs:label ?occupationLabel.\n            ?parentOccupation rdfs:label ?parentOccupationLabel.\n        }\n    }    \nORDER BY ?birthYear\nLIMIT 20\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?parentOccupation ?parentOccupationLabel (COUNT(*) as ?n)\n    \nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        { ?item a wd:Q5;\n             rdfs:label ?personLabel;\n           wdt:P569 ?birthYear;\n            wdt:P106 ?occupation.\n            ?occupation   wdt:P279 ?parentOccupation;\n                    rdfs:label ?occupationLabel.\n            ?parentOccupation rdfs:label ?parentOccupationLabel.\n        }\n    }\nGROUP BY ?parentOccupation ?parentOccupationLabel        \nORDER BY DESC(?n)\nLIMIT 20\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "## \n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\n    \nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        ## Find the persons in the imported graph\n        {\n            ?item a wd:Q12737077;\n                wdt:P31 ?pseudoClass.\n            ?pseudoClass rdfs:label ?pseudoClassLabel.\n        }\n    }    \nGROUP BY ?pseudoClass ?pseudoClassLabel\nORDER BY DESC(?n)\nLIMIT 20\n",
+    "value": "**CONCLUSION**\n\nWe observe that this kind of classification does not allow to separate scientific and other occupations.\n\nWe do not therefore move further in this direction",
     "metadata": {}
   },
   {
     "kind": 1,
     "language": "markdown",
-    "value": "## Add occupations fields",
+    "value": "## Inspect parent occupations fields\n\nThe aim is to find a way to distinguish between occupations",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### First classification level\n\n# filled after first insert\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n          ?occupationField ?occupationFieldLabel\n          ?knowledgeClassification ?knowledgeClassificationLabel\n          (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {SELECT ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n        \n        WHERE\n        {?s a wd:Q5.\n        \n        ?s  wdt:P106 ?occupation.\n        ?occupation  wdt:P279  ?parentOccupation.\n        \n\n        OPTIONAL {?occupation rdfs:label ?occupationLabel}    \n        OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n          }\n        LIMIT 1000\n        }\n\n        SERVICE <https://query.wikidata.org/sparql>\n          {\n              # field of this occupation\n              ?parentOccupation wdt:P425 ?occupationField.\n              # instance of\n              ?occupationField wdt:P31 ?knowledgeClassification\n\n              BIND (?occupationFieldLabel as ?occupationFieldLabel)\n              BIND (?knowledgeClassificationLabel as ?knowledgeClassificationLabel)\n              SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n          }\n\n}\nGROUP BY ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n          ?occupationField ?occupationFieldLabel\n          ?knowledgeClassification ?knowledgeClassificationLabel\nORDER BY DESC(?n)\nLIMIT 20",
+    "value": "### Find fields and parent fields of parent occupations\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n          ?occupationField ?occupationFieldLabel\n          ?knowledgeClassification ?knowledgeClassificationLabel\n          ?parentKnowledgeClassification ?parentKnowledgeClassificationLabel\n          (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {SELECT ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n          ?parentKnowledgeClassification ?parentKnowledgeClassificationLabel\n        \n        WHERE\n        {?s a wd:Q5.\n        \n        ?s  wdt:P106 ?occupation.\n        ?occupation  wdt:P279  ?parentOccupation.\n        ?occupation rdfs:label ?occupationLabel.\n        ?parentOccupation rdfs:label ?parentOccupationlabel    \n        }\n        LIMIT 3000\n        }\n\n        SERVICE <https://query.wikidata.org/sparql>\n          {\n              # field of this occupation\n              ?parentOccupation wdt:P425 ?occupationField.\n              # instance of\n              ?occupationField wdt:P31 ?knowledgeClassification.\n              # subclass of\n              ?knowledgeClassification wdt:P279 ?parentKnowledgeClassification.\n\n\n              BIND (?occupationFieldLabel as ?occupationFieldLabel)\n              BIND (?knowledgeClassificationLabel as ?knowledgeClassificationLabel)\n              BIND (?parentKnowledgeClassificationLabel as ?parentKnowledgeClassificationLabel)\n              SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n          }\n\n}\nGROUP BY ?occupation ?occupationLabel\n          ?parentOccupation ?parentOccupationlabel \n          ?occupationField ?occupationFieldLabel\n          ?knowledgeClassification ?knowledgeClassificationLabel\n          ?parentKnowledgeClassification ?parentKnowledgeClassificationLabel\nORDER BY DESC(?n)\nLIMIT 20",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### First classification level\n\n\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {\n          ?parentOccupation  wdt:P425 ?occupationField.\n          ?occupationField rdfs:label ?occupationFieldLabel.\n          ?occupationField wdt:P31 ?knowledgeClassification.\n          ?knowledgeClassification rdfs:label ?knowledgeClassificationLabel.\n          }\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n          SELECT DISTINCT ?parentOccupation ?parentOccupationlabel \n        \n        WHERE\n        {?s a wd:Q5.\n        \n        ?s  wdt:P106 / wdt:P279  ?parentOccupation.\n        \n\n        OPTIONAL {?occupation rdfs:label ?occupationLabel}    \n        OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n          }\n        LIMIT 10\n        }\n\n        SERVICE <https://query.wikidata.org/sparql>\n          {\n              # field of this occupation\n              ?parentOccupation wdt:P425 ?occupationField.\n              # instance of\n              ?occupationField wdt:P31 ?knowledgeClassification\n\n              BIND (?occupationFieldLabel as ?occupationFieldLabel)\n              BIND (?knowledgeClassificationLabel as ?knowledgeClassificationLabel)\n              SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n          }\n\n}\n\nLIMIT 10",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### First classification level\n\n\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n          ?parentOccupation  wdt:P425 ?occupationField.\n          ?occupationField rdfs:label ?occupationFieldLabel.\n          ?occupationField wdt:P31 ?knowledgeClassification.\n          ?knowledgeClassification rdfs:label ?knowledgeClassificationLabel.\n          }\nWHERE {\n        {\n          SELECT DISTINCT ?parentOccupation ?parentOccupationlabel  \n          WHERE\n          {?s a wd:Q5.  \n          ?s  wdt:P106 / wdt:P279  ?parentOccupation.\n          OPTIONAL {?occupation rdfs:label ?occupationLabel}    \n          OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n            }\n        }\n\n        SERVICE <https://query.wikidata.org/sparql>\n          {\n              # field of this occupation\n              ?parentOccupation wdt:P425 ?occupationField.\n              # instance of\n              ?occupationField wdt:P31 ?knowledgeClassification\n\n              BIND (?occupationFieldLabel as ?occupationFieldLabel)\n              BIND (?knowledgeClassificationLabel as ?knowledgeClassificationLabel)\n              SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n          }\n\n}\n",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Insert the label of the property\n\n## This is needed just once\n\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nINSERT DATA {\n  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n  {wdt:P425 rdfs:label 'field of this occupation'.}\n}",
-    "metadata": {}
-  },
-  {
-    "kind": 1,
-    "language": "markdown",
-    "value": "### Inspect imported fields",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?parentOccupationlabel ?occupationFieldLabel ?knowledgeClassificationLabel (count(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        {?s a wd:Q5.  \n          ?s  wdt:P106 / wdt:P279  ?parentOccupation.\n          ?parentOccupation  wdt:P425 ?occupationField.\n          ?occupationField wdt:P31 ?knowledgeClassification.\n          \n          OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n          OPTIONAL {?occupationField rdfs:label ?occupationFieldLabel}    \n          OPTIONAL {?knowledgeClassification rdfs:label ?knowledgeClassificationLabel}    \n        }\n}\nGROUP BY ?parentOccupationlabel ?occupationFieldLabel ?knowledgeClassificationLabel\nORDER BY DESC(?n)\nlimit 20",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?knowledgeClassification ?knowledgeClassificationLabel (count(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        {?s a wd:Q5.  \n          ?s  wdt:P106 / wdt:P279  ?parentOccupation.\n          ?parentOccupation  wdt:P425 ?occupationField.\n          ?occupationField wdt:P31 ?knowledgeClassification.\n          \n          OPTIONAL {?parentOccupation rdfs:label ?parentOccupationlabel}    \n          OPTIONAL {?occupationField rdfs:label ?occupationFieldLabel}    \n          OPTIONAL {?knowledgeClassification rdfs:label ?knowledgeClassificationLabel}    \n        }\n}\nGROUP BY ?knowledgeClassification ?knowledgeClassificationLabel\nORDER BY DESC(?n)    ",
-    "metadata": {}
-  },
-  {
-    "kind": 2,
-    "language": "sparql",
-    "value": "",
+    "value": "### Simplified query\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT DISTINCT \n?occupation ?occupationLabel ?parentField ?parentFieldLabel\n?n\n          #?parentKnowledgeClassification ?parentKnowledgeClassificationLabel \n          # (SUM(?n) as ?sn)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n          SELECT ?occupation ?occupationLabel\n          ?parentOccupation (COUNT(*) as ?n)\n        \n        WHERE\n        {\n          ?s a wd:Q5;  \n              wdt:P106 ?occupation.\n          ?occupation rdfs:label ?occupationLabel.\n          ?occupation  wdt:P279  ?parentOccupation.\n          }  \n        GROUP BY ?occupation ?occupationLabel\n          ?parentOccupation\n        }\n\n        SERVICE <https://query.wikidata.org/sparql>\n          {\n              # field of parent occupation / instance of /  subclass of  \n              ?parentOccupation wdt:P425 / wdt:P31 ?parentField.\n              # ?parentField wdt:P279 ?parentKnowledgeClassification.\n\n\n              #BIND (?occupation as ?occupationLabel)\n              BIND (?parentFieldLabel as ?parentFieldLabel)\n              # BIND (?parentKnowledgeClassificationLabel as ?parentKnowledgeClassificationLabel)\n              SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n          }\n\n}\n# GROUP BY ?occupation ?occupationLabel ?parentField ?parentFieldLabel\n          # ?parentKnowledgeClassification ?parentKnowledgeClassificationLabel \nORDER BY DESC(?n)\nLIMIT 30",
     "metadata": {}
   },
   {

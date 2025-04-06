@@ -54,6 +54,12 @@
     "metadata": {}
   },
   {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Persons with more than one citizenship\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nSELECT ?citizenship ?citizenshipLabel (COUNT(*) as ?n) \nWHERE {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n{\n   ?item wdt:P27 ?citizenship.\n    ?citizenship rdfs:label ?citizenshipLabel.\n}\n\n}\nGROUP BY ?citizenship ?citizenshipLabel\nORDER BY DESC(?n)\n\nLIMIT 5",
+    "metadata": {}
+  },
+  {
     "kind": 1,
     "language": "markdown",
     "value": "### Add missing citizenships\n\nOn April 2nd, 2025 a number of citizenships are missing in the SPARQL endpoint of Wikidata as wdt:P27 properties but they are present in the statements: cf. following example\n\n",
