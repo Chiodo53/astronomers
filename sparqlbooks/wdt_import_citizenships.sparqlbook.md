@@ -176,6 +176,29 @@ WHERE
 OFFSET 50
 LIMIT 10
 ```
+
+```sparql
+### Persons with more than one citizenship
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+
+SELECT ?citizenship ?citizenshipLabel (COUNT(*) as ?n) 
+WHERE {
+GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+{
+   ?item wdt:P27 ?citizenship.
+    ?citizenship rdfs:label ?citizenshipLabel.
+}
+
+}
+GROUP BY ?citizenship ?citizenshipLabel
+ORDER BY DESC(?n)
+
+LIMIT 5
+```
 ### Add missing citizenships
 
 On April 2nd, 2025 a number of citizenships are missing in the SPARQL endpoint of Wikidata as wdt:P27 properties but they are present in the statements: cf. following example
