@@ -1,0 +1,116 @@
+[
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Propriétés des personnes\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?s ?label \nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n            ?s a wd:Q5;\n            rdfs:label ?label.\n        }     \n}\nLIMIT 5",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Propriétés des personnes\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nSELECT ?s ?label ?sDbp\nWHERE\n    {\n    \n\n        {\n        SELECT ?s ?label \n        WHERE {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                    ?s a wd:Q5;\n                    rdfs:label ?label.\n                }     \n        }\n       LIMIT 10000\n        }\n\n\n SERVICE <https://dbpedia.org/sparql> {\n        ?sDbp owl:sameAs ?s.\n        \n    }\n\n    }\n    LIMIT 10",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Import data",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nCONSTRUCT {?s owl:sameAs ?sDbp}\nWHERE\n    {\n    \n\n        {\n        SELECT ?s ?label \n        WHERE {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                    ?s a wd:Q5;\n                    rdfs:label ?label.\n                }     \n        }\n       LIMIT 10000\n        }\n\n\n SERVICE <https://dbpedia.org/sparql> {\n        ?sDbp owl:sameAs ?s.\n        \n    }\n\n    }\n    LIMIT 10",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?s owl:sameAs ?sDbp}\nWHERE\n    {\n    \n\n        {\n        SELECT ?s ?label \n        WHERE {\n                {\n                    ?s a wd:Q5.\n                }     \n        }\n        OFFSET 1000\n        #OFFSET 20000\n        #OFFSET 30000\n        LIMIT 1000\n        }\n\n\n SERVICE <https://dbpedia.org/sparql> {\n        ?sDbp owl:sameAs ?s.\n        \n    }\n\n    }\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Autre méthode",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Version anglaise",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Db pedia en anglais\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?s ?article ?uri_dbpedia\nWHERE\n    {\n        {SELECT ?s ?label \n            WHERE {\n                GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                    {\n                        ?s a wd:Q5;\n                        rdfs:label ?label.\n                    }     \n            }\n        LIMIT 10}\n\n        SERVICE <https://query.wikidata.org/sparql> {\n         ?article schema:about ?s .\n         ?article schema:inLanguage \"en\" .\n         #FILTER (SUBSTR(str(?article), 1, 25) = \"https://en.wikipedia.org/\")\n         FILTER (CONTAINS(str(?article), \"https://en.wikipedia.org/\"))\n            BIND (URI(replace(str(?article), \"https://en.wikipedia.org/wiki/\", \"http://dbpedia.org/resource/\")) AS ?uri_dbpedia)\n     }\n\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\nCONSTRUCT {?s owl:sameAs ?uri_dbpedia}\nWHERE\n    {\n        {SELECT ?s ?label \n            WHERE {\n                GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                    {\n                        ?s a wd:Q5;\n                        rdfs:label ?label.\n                    }     \n            }\n        LIMIT 10}\n\n        SERVICE <https://query.wikidata.org/sparql> {\n         ?article schema:about ?s .\n         ?article schema:inLanguage \"en\" .\n         FILTER (SUBSTR(str(?article), 1, 25) = \"https://en.wikipedia.org/\")\n            BIND (URI(replace(str(?article), \"https://en.wikipedia.org/wiki/\", \"http://dbpedia.org/resource/\")) AS ?uri_dbpedia)\n     }\n\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?s owl:sameAs ?uri_dbpedia}\nWHERE\n    {\n    \n\n        {\n        SELECT ?s \n        WHERE {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                    ?s a wd:Q5.\n                }     \n        }\n        #OFFSET 10000\n        # OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n        }\n\n        SERVICE <https://query.wikidata.org/sparql> {\n         ?article schema:about ?s .\n         ?article schema:inLanguage \"en\" .\n         FILTER (SUBSTR(str(?article), 1, 25) = \"https://en.wikipedia.org/\")\n            BIND (URI(replace(str(?article), \"https://en.wikipedia.org/wiki/\", \"http://dbpedia.org/resource/\")) AS ?uri_dbpedia)\n     }\n\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\n\nSELECT ?s ?label (COUNT(*) as ?number)\n    ( GROUP_CONCAT(DISTINCT ?sameAs; separator=\", \") AS ?concatSameAs ) \n   #(MIN(?sameAs) as ?sA)\n    WHERE {\n            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                    ?s a wd:Q5; \n                        rdfs:label ?label;\n                        owl:sameAs ?sameAs\n\n                }     \n        }\nGROUP BY ?s ?label\nHAVING (?number > 1)\nLIMIT 10       ",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\n\nSELECT ?p (COUNT(*) as ?number)\n   #(MIN(?sameAs) as ?sA)\n    WHERE {\n            {SELECT ?s ?sameAs\n            WHERE\n{            GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                {\n                    ?s a wd:Q5; \n                        rdfs:label ?label;\n                        owl:sameAs ?sameAs\n\n                }     \n}               \n LIMIT 2000\n        }\n        \n         SERVICE <https://dbpedia.org/sparql> {\n        ?sameAs ?p ?o.\n        \n    }\n\n        \n        \n        \n        \n        }\nGROUP BY ?p\nORDER BY DESC(?number)",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Version francophone",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### DBPedia en français\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?s ?article ?uri_dbpedia\nWHERE\n    {\n        {SELECT ?s ?label \n            WHERE {\n                GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                    {\n                        ?s a wd:Q5;\n                        rdfs:label ?label.\n                    }     \n            }\n        LIMIT 10}\n\n        SERVICE <https://query.wikidata.org/sparql> {\n         ?article schema:about ?s .\n         ?article schema:inLanguage \"fr\" .\n         FILTER (SUBSTR(str(?article), 1, 25) = \"https://fr.wikipedia.org/\")\n            BIND (URI(replace(str(?article), \"https://fr.wikipedia.org/wiki/\", \"http://fr.dbpedia.org/resource/\")) AS ?uri_dbpedia)\n     }\n\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### DBPedia en allemand — ne semble pas marcher le 10 avril 2025\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX schema: <http://schema.org/>\n\nSELECT ?s ?article ?uri_dbpedia\nWHERE\n    {\n        {SELECT ?s ?label \n            WHERE {\n                GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n                    {\n                        ?s a wd:Q5;\n                        rdfs:label ?label.\n                    }     \n            }\n        LIMIT 10}\n\n        SERVICE <https://query.wikidata.org/sparql> {\n         ?article schema:about ?s .\n         ?article schema:inLanguage \"de\" .\n         FILTER (SUBSTR(str(?article), 1, 25) = \"https://de.wikipedia.org/\")\n            BIND (URI(replace(str(?article), \"https://de.wikipedia.org/wiki/\", \"http://de.dbpedia.org/resource/\")) AS ?uri_dbpedia)\n     }\n\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX schema: <http://schema.org/>\n\nSELECT DISTINCT ?item ?article ?uri_dbpedia\n      WHERE {\n      # SERVICE <https://query.wikidata.org/sparql>\n      {\n            \n       {\n        {?item wdt:P106 wd:Q169470}\n        UNION\n        {?item wdt:P106 wd:Q11063}\n        UNION\n        {?item wdt:P106 wd:Q155647}\n        }\n          \n          ?item wdt:P31 wd:Q5;  # Any instance of a human.\n              wdt:P569 ?birthDate.\n        BIND(REPLACE(str(?birthDate), \"(.*)([0-9]{4})(.*)\", \"$2\") AS ?year)\n        FILTER(xsd:integer(?year) > 1300 )\n          # OPTIONAL {\n      ?article schema:about ?item .\n      ?article schema:inLanguage \"en\" .\n     FILTER (SUBSTR(str(?article), 1, 25) = \"https://en.wikipedia.org/\")\n      BIND (replace(str(?article), \"https://en.wikipedia.org/wiki/\", \"http://dbpedia.org/resource/\") AS ?uri_dbpedia)       \n\n#  }\n             }\n             }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the label of the property\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nINSERT DATA {\n  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n  {wdt:P106 rdfs:label 'occupation'.}\n}",
+    "metadata": {}
+  }
+]

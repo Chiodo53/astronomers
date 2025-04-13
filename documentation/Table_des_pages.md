@@ -10,6 +10,6 @@
 ## Wikidata : importer dans Fuseki
 * [Création des personnes](wikidata_fuseki/production_astronomes.md)
 * [Liste des propriétés des personnes](wikidata_fuseki/proprietes_astronomes.md)
-* [Créer les liens owl:sameAs](wikidata_fuseki/productin_sameAs.md)
+* [Créer les liens owl:sameAs](wikidata_fuseki/production_sameAs.md)
   * on importe de Wikidata les liens vers d'autres silos de données
 
