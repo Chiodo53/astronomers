@@ -1,4 +1,4 @@
-## List of repository graphs
+## List of repository graphs
 
 
 * [Data imported from Wikidata](wikidata-imported-data.md)
