@@ -41,6 +41,24 @@ ORDER BY DESC(?n)
 ```sparql
 ### Nombre de personnes
 
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT (COUNT(*) as ?n)
+WHERE {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+        {?s a wd:Q5;
+        rdfs:label ?label.
+          }
+}
+```
+
+```sparql
+### Nombre de personnes à double
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -51,6 +69,8 @@ WHERE {
         {?s a wd:Q5
           }
 }
+GROUP BY ?s
+HAVING ( ?n > 1)
 ```
 
 ```sparql
@@ -72,6 +92,36 @@ WHERE {
 }
 GROUP BY ?p ?label
 ORDER BY DESC(?n)
+```
+
+```sparql
+### Insert the label of the property rdf:type
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+INSERT DATA {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+  {rdf:type rdfs:label 'has type'.}
+}
+```
+
+```sparql
+### Insert the label of the property rdf:type
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+INSERT DATA {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+  {rdfs:label rdfs:label 'has label'.}
+}
 ```
 
 ```sparql

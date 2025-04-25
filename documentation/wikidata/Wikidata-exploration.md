@@ -211,29 +211,39 @@ On doit dans cette requête sortir du cadre classique de la simple propriété '
     ORDER BY ?birthYear ?startYear
 
 
+### Autre exemple
 
-        SELECT DISTINCT ?item  ?itemLabel  ?gender ?year
-        WHERE {
-            {
-            {?item wdt:P106 wd:Q169470}
-            UNION
-            {?item wdt:P101 wd:Q413}  
-          UNION 
-          {?item wdt:P106 wd:Q11063}
-            UNION
-            {?item wdt:P101 wd:Q333} 
-            UNION
-              {?item wdt:P106 wd:Q155647}
-            UNION
-            {?item wdt:P101 wd:Q34362} 
-              }
-          
-          ?item wdt:P31 wd:Q5;  # Any instance of a human.
-              wdt:P569 ?birthDate;
-                wdt:P21 ?gender.
-        BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?year)
-        FILTER(xsd:integer(?year) > 1350 )
-          
-          SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
-        } 
-     ORDER BY ?year
+     SELECT DISTINCT ?item ?itemLabel ?birthYear ?statement ?organization ?organizationLabel 
+                    ?startYear ?endYear  ?startTime ?endTime
+    where {
+            
+        {?item wdt:P106 wd:Q11063}
+                UNION
+                {?item wdt:P101 wd:Q333}
+            
+        ?item wdt:P31 wd:Q5; # Any instance of a human.
+                wdt:P569 ?birthDate;
+                # member of
+                # p:P463 ?statement.
+                # ?statement ps:P463 ?organization.
+                # educated at
+                p:P69 ?statement.
+                ?statement ps:P69 ?organization.
+              # employer
+                #p:P108 ?statement.
+                #?statement ps:P108 ?organization.
+      #  OPTIONAL
+      {
+                        ?statement pq:P580 ?startTime;
+                        pq:P582 ?endTime.
+            }
+        
+        BIND(REPLACE(str(?startTime), "(.*)([0-9]{4})(.*)", "$2") AS ?startYear)
+        BIND(REPLACE(str(?endTime), "(.*)([0-9]{4})(.*)", "$2") AS ?endYear)
+        
+        BIND(REPLACE(str(?birthDate), "(.*)([0-9]{4})(.*)", "$2") AS ?birthYear)
+        FILTER(xsd:integer(?birthYear) > 1800 && xsd:integer(?birthYear) < 1901)
+            
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+        }
+    ORDER BY ?item

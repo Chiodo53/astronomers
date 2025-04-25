@@ -14,7 +14,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Some examples\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s ?label ?birthYear\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s a wd:Q5;\n            rdfs:label ?label;\n            wdt:P569 ?birthYear}\n}\nORDER BY ?s\nLIMIT 3\n",
+    "value": "### Some examples of persons\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?s ?label ?birthYear\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?s a wd:Q5;\n            rdfs:label ?label;\n            wdt:P569 ?birthYear}\n}\nORDER BY ?s\nLIMIT 3\n",
     "metadata": {}
   },
   {
@@ -44,13 +44,13 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Persons without a country of citizenship\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE \n{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        \n    {?item a wd:Q5.\n    MINUS {\n            ?item wdt:P27 ?country   .\n        }     \n    }\n}\n",
+    "value": "### Persons without a country of citizenship\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE \n{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        \n    {?item a wd:Q5;\n        rdfs:label ?label.\n    MINUS {\n            ?item wdt:P27 ?country   .\n        }     \n    }\n}\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Persons without a country of citizenship\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?item ?label\nWHERE \n{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        \n    {?item a wd:Q5;\n        rdfs:label ?label.\n    MINUS {\n            ?item wdt:P27 ?country   .\n        }     \n    }\n}\nOFFSET 50\nLIMIT 10",
+    "value": "### Persons without a country of citizenship\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?item ?label\nWHERE \n{GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        \n    {?item a wd:Q5;\n        rdfs:label ?label.\n    MINUS {\n            ?item wdt:P27 ?country   .\n        }     \n    }\n}\nOFFSET 10000\nLIMIT 10",
     "metadata": {}
   },
   {

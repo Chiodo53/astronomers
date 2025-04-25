@@ -52,5 +52,11 @@
     "language": "sparql",
     "value": "\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n   {\n        {\n        SELECT DISTINCT ?award\n        WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n                ?s wdt:P166 ?award.\n            }\n      }\n    }\n    SERVICE <https://query.wikidata.org/sparql>\n        {\n            ### instance of\n            ?award wdt:P31 ?pseudoClass.\n            BIND (?pseudoClassLabel as ?pseudoClassLabel)\n            SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n        }\n   }\n   GROUP BY ?pseudoClass ?pseudoClassLabel\n   ORDER BY DESC(?n)",
     "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Add the award pseudo-class\n\n\nIn order to easily find 'awards', i.e. entities associated to persons with the relationship wdt:P166 award received\n\n",
+    "metadata": {}
   }
 ]

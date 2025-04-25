@@ -16,7 +16,7 @@ WHERE {
 ```
 
 ```sparql
-### Some examples
+### Some examples of persons
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
@@ -148,7 +148,8 @@ SELECT (COUNT(*) as ?n)
 WHERE 
 {GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
         
-    {?item a wd:Q5.
+    {?item a wd:Q5;
+        rdfs:label ?label.
     MINUS {
             ?item wdt:P27 ?country   .
         }     
@@ -173,7 +174,7 @@ WHERE
         }     
     }
 }
-OFFSET 50
+OFFSET 10000
 LIMIT 10
 ```
 

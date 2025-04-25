@@ -345,7 +345,7 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
 INSERT DATA {
 GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
-    {    wd:Q627436 rdfs:label "field of work".
+    {    wd:Q627436 rdfs:label "Field of Work".
     }    
 }
 

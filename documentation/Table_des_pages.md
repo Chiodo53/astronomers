@@ -1,3 +1,4 @@
+([Retour à la page d'accueil](Home.md))
 
 
 ## Wikidata
@@ -6,6 +7,12 @@
 * [Liste des propriétés de la population](wikidata/Wikidata-liste-proprietes-population.md)
 * [Documentation de la production de la population](wikidata/Wikidata-production-population.md)
 
+
+## Wikidata : production de données
+
+### Sparqlbooks (2025)
+
+See the [Sparqlbooks table of contents](wikidata/Wikidata-Sparqlbooks-list.md).
 
 ## Wikidata : importer dans Fuseki
 * [Création des personnes](wikidata_fuseki/production_astronomes.md)

@@ -92,7 +92,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Ajouter le label pour le concept field\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {    wd:Q627436 rdfs:label \"field of work\".\n    }    \n}\n\n",
+    "value": "### Ajouter le label pour le concept field\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nINSERT DATA {\nGRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n    {    wd:Q627436 rdfs:label \"Field of Work\".\n    }    \n}\n\n",
     "metadata": {}
   },
   {
