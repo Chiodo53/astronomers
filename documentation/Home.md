@@ -1,7 +1,9 @@
-# Le champ de l'astronomie en Europe du XVe au XXe siècle
+# The scientific fields of astronomy and physics (15th-20th centuries)
 
 
-Ce projet vise à étudier l'évolution des doctrines et méthodes en astronomie, en tant que discipline scientifique qui évolue dans différents contextes géographiques et sociaux, en relation avec la position des acteurs au sein de ce champ disciplinaire et en relation au reste de la société, tout en observant la structure et les dynamiques du champs disciplinaire concerné.
+This project aims to study the evolution of doctrines and methods in astronomy and physics, as scientific disciplines that evolve in different geographical and social contexts, in relation to the position of actors within this disciplinary field and in relation to the rest of society, while observing the structure and dynamics of the disciplinary field concerned.
+
+[Back to the repository README](../README.md)
 
 
 ## Système d'information
