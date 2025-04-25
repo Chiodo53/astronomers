@@ -4,7 +4,7 @@
 This project aims to study the evolution of doctrines and methods in astronomy and physics, as scientific disciplines that evolve in different geographical and social contexts, in relation to the position of actors within this disciplinary field and in relation to the rest of society, while observing the structure and dynamics of the disciplinary field concerned.
 
 [Back to the repository README](../README.md)
-
+    
 
 ## Système d'information
 

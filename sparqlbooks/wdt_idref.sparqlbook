@@ -14,19 +14,19 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "\n\n## Explorer les idref\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?item ?idRef\nWHERE\n    {\n\n         GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n   \n        ## Find the persons in the imported graph\n        {SELECT ?item ?birthYear\n        WHERE \n                {?item a wd:Q5}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 1000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('https://www.idref.fr/', ?idRefId)) as ?idRef)\n\n            }\n                \n        }\nORDER BY ?birthYear \nLIMIT 5\n",
+    "value": "\n\n## Explorer les idref\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?item ?idRef\nWHERE\n    {\n\n         GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n   \n        ## Find the persons in the imported graph\n        {SELECT ?item ?birthYear\n        WHERE \n                {?item a wd:Q5}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 1000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('http://www.idref.fr/', ?idRefId, '/id')) as ?idRef)\n\n            }\n                \n        }\nORDER BY ?birthYear \nLIMIT 5\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nCONSTRUCT {?item wdt:P269 ?idRef.}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # IdRef\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('https://www.idref.fr/', ?idRefId)) as ?idRef)\n\n            }\n                \n        }",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nCONSTRUCT {?item wdt:P269 ?idRef.}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n        LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # IdRef\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('http://www.idref.fr/', ?idRefId, '/id')) as ?idRef)\n\n            }\n                \n        }",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?item wdt:P269 ?idRef.}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 10000\n        #OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # IdRef\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('https://www.idref.fr/', ?idRefId)) as ?idRef)\n\n            }\n                \n        }",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?item wdt:P269 ?idRef.}\nWHERE\n    {\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 10000\n        #OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # IdRef\n                ?item wdt:P269 ?idRefId.\n                BIND(URI(CONCAT('http://www.idref.fr/', ?idRefId, '/id')) as ?idRef)\n\n            }\n                \n        }",
     "metadata": {}
   },
   {
@@ -62,13 +62,91 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?s ?p\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 10\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s ?p ?idRef.\n  }\n}\n",
+    "value": "\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p ?o\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 3\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?idRef ?p ?o.\n  }\n}\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Inspect available information in IdRef / SUDOC",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Outgoing properties\n\n\nWe can observe that there is a number of instances maximum set for queries, so we observe the first 4000 persons.\n\n\nThe outgoing properties provide basic identification information, like names, _same as_ references to other data stores, citizenships, gender, births (as events)\n\n\n[April 2025] For the time being, we do not use this information.\n",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p (count(*) as ?eff)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 1000\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s ?p ?idRef.\n  }\n}\nGROUP BY ?p\nORDER BY DESC(?eff)",
+    "value": "### Outgoing properties\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p (COUNT(*) as ?n)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 4000\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?idRef ?p ?o.\n  }\n}\nGROUP BY ?p\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Incoming properties\n\n\nThe information provided by the incoming properties (namely from the SUDOC collective catalogue of university libraries) is richer.\n\nIt is about authorship of books, being an editor, etc.\n\nWe can also see that many properties are expressed using the Library of Congress catalogue vocabulary. \n\nExamples of properties can be found [in this file](../Wikidata/idref_properties_20250425.csv).\n\nIn order to collect this information, and put it into a specific graph, we will use a dedicated Jupyter notebook\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Incoming properties\n# The result is stored \n# in the 'Wikidata/idref_properties_20250425.csv' file\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p (COUNT(*) as ?n)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 4000\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s ?p ?idRef.\n  }\n}\nGROUP BY ?p\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Inspect ABES data sources and available information",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Resources base-URI in the ABES data repository\n# substr\tns\n# www.sudoc.fr\t1062\n# /hal.archive\t608\n# hub.abes.fr/\t300\n# www.idref.fr\t163\n# /zbmath.org/\t50\n# www.calames.\t29\n# www.numdam.o\t22\n# /orbi.uliege\t13\n# /archive-ouv\t9\n\n\n\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?substr (STR(COUNT(*)) as ?ns) (COUNT(*) as ?n)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 300\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s <http://id.loc.gov/vocabulary/relators/aut> ?idRef.\n    BIND (substr(str(?s), 8, 12) as ?substr)\n  }\n}\nGROUP BY ?substr\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Properties of SUDOC items of which the population persons\n# are authors\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p (COUNT(*) as ?n)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 1000\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s <http://id.loc.gov/vocabulary/relators/aut> ?idRef;\n         ?p ?o.\n    FILTER (CONTAINS(STR(?s), 'sudoc'))\n  }\n}\nGROUP BY ?p\nHAVING (?n > 20)\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Examples of books\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX dc11:\t<http://purl.org/dc/elements/1.1/>\n\nSELECT DISTINCT ?s ?idRef ?author ?date ?bibliographicCitation ?dcterms_subject\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 7\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n        ?s marcrel:aut ?idRef;\n            marcrel:aut ?author;\n            dc11:date\t?date;\n            dcterms:bibliographicCitation\t?bibliographicCitation.\n        FILTER (STR(?idRef) != STR(?author))\n        FILTER (CONTAINS(STR(?s), 'sudoc'))\n        OPTIONAL {?s dcterms:subject\t?dcterms_subject}\n        #OPTIONAL {?s rdf:type\t?rdf_type}\n        #OPTIONAL {?s dc11:subject\t?dc11_subject}\n    \n  }\n}\n\nORDER BY ?s ?idRef ?author ?date",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Properties of journal articles of which the population persons\n# are authors\n## Cf. https://scienceplus.abes.fr/ \n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\n\nSELECT ?p (COUNT(*) as ?n)\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 1000\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n    ?s <http://id.loc.gov/vocabulary/relators/aut> ?idRef;\n         ?p ?o.\n    FILTER (CONTAINS(STR(?s), 'hub.abes'))\n  }\n}\nGROUP BY ?p\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Examples of periodical articles\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX dc11:\t<http://purl.org/dc/elements/1.1/>\n\nSELECT DISTINCT ?s ?idRef ?author ?date ?title ?dcterms_subject\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 7\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n        ?s marcrel:aut ?idRef;\n            marcrel:aut ?author;\n            dc11:date\t?date;\n            dcterms:title\t?title.\n        FILTER (STR(?idRef) != STR(?author))\n        FILTER (CONTAINS(STR(?s), 'hub.abes'))\n        OPTIONAL {?s dcterms:subject\t?dcterms_subject}\n        #OPTIONAL {?s rdf:type\t?rdf_type}\n        #OPTIONAL {?s dc11:subject\t?dc11_subject}\n    \n  }\n}\n\nORDER BY ?s ?idRef ?author ?date",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Import SUDOC publications",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Examples of books\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX dc11:\t<http://purl.org/dc/elements/1.1/>\n\nSELECT DISTINCT ?s ?idRef\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 7\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n        ?s marcrel:aut ?idRef.\n    FILTER (CONTAINS(STR(?s), 'sudoc'))\n  }\n}\nORDER BY ?s ?idRef ",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Examples of books\n\n\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX dc11:\t<http://purl.org/dc/elements/1.1/>\n\n\nINSERT {GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>\n      \n      } DISTINCT ?s ?idRef\nWHERE {  \n  { SELECT DISTINCT ?idRef\n    WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n      { ?item wdt:P269 ?idRef\n      }                   \n    }\n    LIMIT 7\n  }\n  SERVICE <https://data.idref.fr/sparql> {\n        ?s marcrel:aut ?idRef.\n    FILTER (CONTAINS(STR(?s), 'sudoc'))\n  }\n}\nORDER BY ?s ?idRef ",
     "metadata": {}
   }
 ]
