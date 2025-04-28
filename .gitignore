@@ -1,10 +1,20 @@
 
+## configuraion !
+config.py
+
+
 ## fichiers provisoirement invisibles
 /notebooks_jupyter/dbpedia_exploration/dbp_merge_relations_interactif.ipynb
 /notebooks_jupyter/wikidata_exploration/wikidata_get_data_from_dbpedia_rdflib.ipynb
 
 # CSV non versionnés, sauf exceptions
 *.csv
+
+!/Wikidata/properties_20250309.csv
+!/Wikidata/idref_books_properties_20250425.csv
+!/Wikidata/idref_persons_incoming_properties_20250425.csv
+
+*.svg
 
 # HTML non versionnés, sauf exceptions
 *.html

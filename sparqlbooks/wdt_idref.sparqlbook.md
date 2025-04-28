@@ -220,6 +220,7 @@ WHERE {
       { ?item wdt:P269 ?idRef
       }                   
     }
+    OFFSET 10
     LIMIT 3
   }
   SERVICE <https://data.idref.fr/sparql> {
@@ -238,11 +239,11 @@ We can observe that there is a number of instances maximum set for queries, so w
 The outgoing properties provide basic identification information, like names, _same as_ references to other data stores, citizenships, gender, births (as events)
 
 
-[April 2025] For the time being, we do not use this information.
 
 
 ```sparql
 ### Outgoing properties
+
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX wd: <http://www.wikidata.org/entity/>
@@ -255,6 +256,7 @@ WHERE {
       { ?item wdt:P269 ?idRef
       }                   
     }
+    OFFSET 8000
     LIMIT 4000
   }
   SERVICE <https://data.idref.fr/sparql> {
@@ -274,8 +276,6 @@ It is about authorship of books, being an editor, etc.
 We can also see that many properties are expressed using the Library of Congress catalogue vocabulary. 
 
 Examples of properties can be found [in this file](../Wikidata/idref_properties_20250425.csv).
-
-In order to collect this information, and put it into a specific graph, we will use a dedicated Jupyter notebook
 
 
 ```sparql
@@ -363,7 +363,8 @@ WHERE {
       { ?item wdt:P269 ?idRef
       }                   
     }
-    LIMIT 1000
+    OFFSET 10000
+    LIMIT 4000
   }
   SERVICE <https://data.idref.fr/sparql> {
     ?s <http://id.loc.gov/vocabulary/relators/aut> ?idRef;
@@ -396,15 +397,23 @@ WHERE {
       { ?item wdt:P269 ?idRef
       }                   
     }
-    LIMIT 7
+    OFFSET 10
+    LIMIT 3
   }
   SERVICE <https://data.idref.fr/sparql> {
-        ?s marcrel:aut ?idRef;
-            marcrel:aut ?author;
-            dc11:date	?date;
-            dcterms:bibliographicCitation	?bibliographicCitation.
-        FILTER (STR(?idRef) != STR(?author))
-        FILTER (CONTAINS(STR(?s), 'sudoc'))
+          
+          { 
+            {
+              ?s marcrel:aut ?idRef.
+              FILTER (CONTAINS(STR(?s), 'sudoc'))
+            }
+            
+            ?s marcrel:aut ?author.
+            FILTER (STR(?idRef) != STR(?author))
+            }
+            ?s dc11:date ?date;
+                dcterms:bibliographicCitation	?bibliographicCitation.
+        
         OPTIONAL {?s dcterms:subject	?dcterms_subject}
         #OPTIONAL {?s rdf:type	?rdf_type}
         #OPTIONAL {?s dc11:subject	?dc11_subject}
@@ -513,4 +522,520 @@ WHERE {
   }
 }
 ORDER BY ?s ?idRef 
+```
+
+```sparql
+### Import SUDOC bibliographic references
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+
+INSERT {GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+      {?s marcrel:aut ?idRef}
+      } 
+WHERE {  
+  { SELECT DISTINCT ?idRef
+    WHERE {
+        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+      { ?item wdt:P269 ?idRef
+      }                   
+    }
+    ### wdt:P269 same as IdRef 12770
+    OFFSET 12000 # 9000 6000  3000 0
+    LIMIT 3000
+  }
+  SERVICE <https://data.idref.fr/sparql> {
+        ?s marcrel:aut ?idRef.
+    ## Only works in SUDOC    
+    FILTER (CONTAINS(STR(?s), 'sudoc'))
+  }
+}
+```
+
+```sparql
+### Number of books and authors
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+
+SELECT (COUNT(*) as ?n)
+WHERE
+   {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+      {?s marcrel:aut ?idRef}
+       
+
+  }      
+
+```
+
+```sparql
+### Number of books and authors
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+
+SELECT (COUNT(*) as ?n)
+WHERE
+   {
+    SELECT ?s (COUNT(*) as ?auth_number)
+    WHERE
+    {GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+      {?s marcrel:aut ?idRef}
+    }  
+    GROUP BY ?s
+
+  }      
+
+```
+
+```sparql
+### Number of books and authors
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+
+SELECT ?auth_number (COUNT(*) as ?n)
+WHERE
+   {
+    SELECT ?s (COUNT(*) as ?auth_number)
+    WHERE
+    {GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+      {?s marcrel:aut ?idRef}
+    }  
+    GROUP BY ?s
+
+  } 
+  GROUP BY ?auth_number
+  ORDER BY DESC(?auth_number)
+
+```
+## Get additional elements from ABES data
+
+
+In order to collect this information, and put it into a specific graph, we will use a dedicated [Python jupyter notebook](../notebooks_jupyter/wikidata_exploration/wdt_idref_abes_get_additional_information.ipynb)
+
+This is the [IdRef graph](../graphs/idref.md) we will use to store the information.
+
+```sparql
+### Resources authors and, optionally, editors
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT DISTINCT ?s ?date ?author ?editor
+WHERE {  
+  {
+    SELECT DISTINCT ?s ?idRef ?editor
+  WHERE {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?idRef}
+    } 
+    OFFSET 30
+    LIMIT 10
+  }
+  SERVICE <https://data.idref.fr/sparql> {
+         ?s marcrel:aut ?author;
+          dc11:date	?date.   
+         OPTIONAL {?s marcrel:edt ?editor}
+  }
+}
+ORDER BY ?s
+```
+
+```sparql
+### Resources authors and, optionally, editors
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+CONSTRUCT {
+  ?s marcrel:aut ?author.
+ ?s marcrel:edt ?editor.
+ }
+WHERE {  
+  {
+    SELECT DISTINCT ?s ?idRef ?editor
+  WHERE {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?idRef}
+    } 
+    # OFFSET 100
+    LIMIT 10
+  }
+  SERVICE <https://data.idref.fr/sparql> {
+         ?s marcrel:aut ?author.   
+         OPTIONAL {?s marcrel:edt ?editor}
+  }
+}
+ORDER BY ?s
+```
+For the INSERT query see [this Python jupyter notebook](../notebooks_jupyter/wikidata_exploration/wdt_idref_abes_get_additional_information.ipynb)
+
+```sparql
+## Editors
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT (COUNT(*) as ?n)
+WHERE {  
+  {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:edt ?editor}
+    } 
+  }
+```
+
+```sparql
+## Authors
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT (COUNT(*) as ?n)
+WHERE {  
+  {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author}
+    } 
+  }
+```
+## Inspect graph properties
+
+```sparql
+### Propriétés dans le graphe
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?p ?label (COUNT(*) as ?n)
+WHERE {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+        {?s ?p ?o.
+        OPTIONAL {?p rdfs:label ?label}    
+          }
+}
+GROUP BY ?p ?label
+ORDER BY DESC(?n)
+```
+## Add correspondent classes to instances of the IdRef graph
+
+We use here the classes provided by data.idref.fr
+
+
+* Persons: http://xmlns.com/foaf/0.1/Person
+* Bibliographic references: http://purl.org/ontology/bibo/Document
+
+
+```sparql
+### Types of bibliographic objects
+# It appears that bibo:Document is associated to each instance
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT ?rdf_type (count(*) as ?n)
+WHERE {  
+  {
+  SELECT DISTINCT ?s 
+  WHERE {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author.
+    } 
+  }
+  LIMIT 1000
+  }
+
+  SERVICE <https://data.idref.fr/sparql> {
+         ?s rdf:type ?rdf_type.
+  }
+}
+group by ?rdf_type
+order by desc(?n)
+```
+
+```sparql
+### Insert the class 'bibo:Document' for all publications
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+
+WITH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+INSERT {
+   ?s rdf:type bibo:Document.
+}
+WHERE
+   {
+   SELECT DISTINCT ?s
+   WHERE {
+         ?s marcrel:aut ?author
+         } 
+   }
+```
+
+```sparql
+ 
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+
+
+SELECT (COUNT(*) as ?n) 
+  WHERE {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?document a bibo:Document.
+    } 
+  }
+```
+
+```sparql
+### Insert the class 'foaf:Person' for all authors
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+
+WITH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+INSERT {
+   ?person rdf:type foaf:Person.
+}
+WHERE
+   {
+   SELECT DISTINCT ?person
+   WHERE {
+         ?s marcrel:aut ?person
+         } 
+   }
+```
+
+```sparql
+### Insert the class 'foaf:Person' for all editors
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+
+WITH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+INSERT {
+   ?person rdf:type foaf:Person.
+}
+WHERE
+   {
+   SELECT DISTINCT ?person
+   WHERE {
+         ?s marcrel:edt ?person
+         } 
+   }
+```
+
+```sparql
+
+```
+
+```sparql
+## Authors
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT ?s ?author
+WHERE {  
+  {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author}
+    } 
+  }
+  LIMIT 10
+```
+
+```sparql
+## Graphe
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT ?s ?author_1 ?author_2
+WHERE {  
+  {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author_1;
+        marcrel:aut ?author_2.
+     FILTER(  str(?author_1) > str(?author_2))   
+      }
+    } 
+  }
+  LIMIT 10
+```
+
+```sparql
+### ...
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT DISTINCT ?s ?date ?biblio
+WHERE {  
+  {
+  SELECT DISTINCT ?s 
+  WHERE {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author
+    } 
+  }
+  LIMIT 15
+  }
+  SERVICE <https://data.idref.fr/sparql> {
+         ?s  dc11:date	?date;
+              #dcterms:bibliographicCitation ?biblio;
+              rdf:type <http://purl.org/ontology/bibo/Book>
+
+         #OPTIONAL  {?s dcterms:title	?title.}
+        #OPTIONAL {?s dcterms:subject	?dcterms_subject}
+        #
+        #OPTIONAL {?s rdf:type	?rdf_type}
+        #OPTIONAL {?s dc11:subject	?dc11_subject}
+    
+  }
+}
+
+#ORDER BY ?s ?idRef ?author ?date
+```
+
+```sparql
+## Graphe
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+SELECT ?s ?author_1 ?author_2
+WHERE {  
+  {
+  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+    {?s marcrel:aut ?author_1;
+        marcrel:aut ?author_2.
+     FILTER(  str(?author_1) > str(?author_2))   
+      }
+    } 
+  }
+  LIMIT 10
+```
+
+```sparql
+### Number of authors already in the database
+
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX marcrel:	<http://id.loc.gov/vocabulary/relators/>
+PREFIX dc11:	<http://purl.org/dc/elements/1.1/>
+
+
+SELECT (COUNT(*) as ?n)
+WHERE
+   {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>
+      {?s marcrel:aut ?idRef}
+       
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+      { ?item wdt:P269 ?idRef
+      }  
+  }      
+
+```
+
+```sparql
+
 ```

@@ -1,0 +1,62 @@
+[
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### IdRef Data inspection of available information",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": " \nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX bibo: <http://purl.org/ontology/bibo/>\n\n\nSELECT ?type (COUNT(*) as ?n) \n  WHERE {\n  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>\n    {?item a ?type.\n    } \n  }\n  GROUP BY ?type\n  ORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Available properties in the graph\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\n\nSELECT ?p ?label (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/idref.md>\n        {?s ?p ?o.\n        OPTIONAL {?p rdfs:label ?label}    \n          }\n}\nGROUP BY ?p ?label\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Inspect single persons\n\n\n### Values\n<http://www.idref.fr/031038549/id>",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Types of bibliographic objects\n# It appears that bibo:Document is associated to each instance\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf:\t<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX dcterms:\t<http://purl.org/dc/terms/>\nPREFIX marcrel:\t<http://id.loc.gov/vocabulary/relators/>\nPREFIX dc11:\t<http://purl.org/dc/elements/1.1/>\n\nSELECT ?item ?p ?o\nWHERE {  \n\n    VALUES ?item { <http://www.idref.fr/031038549/id> }  \n    SERVICE <https://data.idref.fr/sparql> {     \n       \n        ?item ?p ?o.\n  }\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "",
+    "metadata": {}
+  }
+]
