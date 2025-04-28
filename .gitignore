@@ -14,7 +14,13 @@ config.py
 !/Wikidata/idref_books_properties_20250425.csv
 !/Wikidata/idref_persons_incoming_properties_20250425.csv
 
+# CSV non versionnés, sauf exceptions
 *.svg
+
+!/notebooks_jupyter/wikidata_exploration/images/idref_smaller_betw.svg
+!/notebooks_jupyter/wikidata_exploration/images/idref_big_betw.svg
+
+
 
 # HTML non versionnés, sauf exceptions
 *.html
