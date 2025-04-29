@@ -20,7 +20,7 @@ wdt:P213	ISNI	17847
 wdt:P1343	described by source	16294	
 wdt:P10832	WorldCat Entities ID	14727	
 wdt:P227	GND ID	14678	
-wdt:P244	Library of Congress authority ID	14203	Regarder, API
+wdt:P244	Library of Congress authority ID	14203	Regarder; API
 wdt:P20	place of death	13517	
 wdt:P269	IdRef ID	12682	
 wdt:P1207	NUKAT ID	12134	
@@ -663,7 +663,7 @@ wdt:P2287	CRIStin ID	23
 wdt:P3325	student register of the University of Helsinki ID (1853–1899)	23	
 wdt:P4527	UK Parliament thesaurus ID	23	
 wdt:P4808	Royal Academy new identifier	23	
-wdt:P6482	Image Archive, Herder Institute	23	
+wdt:P6482	Image Archive; Herder Institute	23	
 wdt:P6746	Paměť národa ID	23	
 wdt:P9307	Fancyclopedia 3 ID	23	
 wdt:P9662	LdiF person ID	23	
@@ -714,7 +714,7 @@ wdt:P8367	Legacy.com person ID	19
 wdt:P8793	Quirinale ID	19	
 wdt:P9298	Encyclopedia of Plzeň person ID	19	
 wdt:P9629	Armeniapedia ID	19	
-wdt:P9656	Istituto Veneto di Scienze, Lettere ed Arti member ID	19	
+wdt:P9656	Istituto Veneto di Scienze; Lettere ed Arti member ID	19	
 wdt:P9795	ARPI author ID	19	
 wdt:P10596	Chuvash Encyclopedia person ID	19	
 wdt:P12595	National Library of Uruguay authority ID	19	
@@ -1612,7 +1612,7 @@ wdt:P4263	THW Kiel player ID	1
 wdt:P4286	Nominis saint ID	1	
 wdt:P4386	Virginia Sports Hall of Fame ID	1	
 wdt:P4392	British Columbia Sports Hall of Fame ID	1	
-wdt:P4438	BFI Films, TV and people ID	1	
+wdt:P4438	BFI Films; TV and people ID	1	
 wdt:P4515	Prisma ID	1	
 wdt:P4580	Berlinische Galerie artist ID	1	
 wdt:P4660	CPDOC ID	1	
