@@ -10,7 +10,8 @@ config.py
 # CSV non versionnés, sauf exceptions
 *.csv
 
-!/Wikidata/properties_20250309.csv
+!/Wikidata/wdt_persons_properties_20250309.csv
+!/Wikidata/wdt_organisations_properties_20250502.csv
 !/Wikidata/idref_books_properties_20250425.csv
 !/Wikidata/idref_persons_incoming_properties_20250425.csv
 

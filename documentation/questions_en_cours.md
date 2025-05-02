@@ -1,15 +1,29 @@
 ## Questions diverses en cours
 
 
-* créer une visualisation sous forme de graphe de prix en relation avec universités (de formation / de travail) avec diamètre proportionnel aux effectifs de prix par université et liens en fonction du nombre de relations
+* utiliser les 'régions' pour affiner la catégorisation des origines géographiques, en tant que variable qualitative
+  * ajouter ces catégories comme propriétés des sommets dans un réseau
+
+
+
+----
+
+* créer une visualisation sous forme de graphe de prix en relation avec universités (de formation / de travail)
+  * relation prix-universités:  diamètre proportionnel aux effectifs de prix par université et liens en fonction du nombre de relations
+  * personnes, prix, universités ?
 * dans la même logique, pour les publications, éditeurs, sujets en relation avec les organisations
 
-* IdRdf / SUDOC -> coauteurs, préfaces
+* IdRdf / SUDOC -> coauteurs, éditeurs, préfaces
 
 * pour ANALYSE DE RÉSEAUX:
+  * études dans quelles organisations, entre 18 et 28 ans
+    * publications communes liées à des études dans les mêmes lieux, ou participations/travail dans les mêmes organisations?
   * liens entre personnes actives dans mêmes instutions, 30 ans, structure
   * liens entre organisations, idem, et évolution dans le temps
   * et aussi pour les sociétés savantes, éventuellement mêlant les deux
+  * mettre plusieurs liens dans un réseau et observer si on a des différences
+
+* liens entre employers et field of work
 
 * lien entre éléments structuraux du réseaux et propriétés: nationalité, époque, etc.?
 
