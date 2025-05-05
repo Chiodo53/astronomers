@@ -18,6 +18,10 @@ config.py
 # CSV non versionnés, sauf exceptions
 *.svg
 
+!/notebooks_jupyter/wikidata_exploration/images/biggest_egos_education_relationships_component_1851_1900.svg
+!/notebooks_jupyter/wikidata_exploration/images/biggest_education_relationships_component_1851_1900.svg
+!/notebooks_jupyter/wikidata_exploration/images/biggest_education_relationships_component_test.svg
+!/notebooks_jupyter/wikidata_exploration/images/biggest_bipartite_component_test.svg
 !/notebooks_jupyter/wikidata_exploration/images/idref_smaller_betw.svg
 !/notebooks_jupyter/wikidata_exploration/images/idref_big_betw.svg
 !/notebooks_jupyter/wikidata_exploration/images/idref_big_betw_2.svg
