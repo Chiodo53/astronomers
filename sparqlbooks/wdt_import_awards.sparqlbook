@@ -12,21 +12,33 @@
     "metadata": {}
   },
   {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Explore awards\n\nWe look for the awards received by our population",
+    "metadata": {}
+  },
+  {
     "kind": 2,
     "language": "sparql",
     "value": "### Inspect the data to be imported\n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?award  ?awardLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P166 ?award.\n                BIND (?awardLabel as ?awardLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?award ?awardLabel    \nORDER BY DESC(?n)    \nLIMIT 10",
     "metadata": {}
   },
   {
-    "kind": 2,
-    "language": "sparql",
-    "value": "### Prepare the data to be imported\n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {?item wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P166 ?award.\n                BIND (?awardLabel as ?awardLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Import process",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### To be sure, the insert query has to be carried out directly on the Allegrograph server\n# but it also could work if executed in this notebook\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 32000 persons  \n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?item wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel}\nWHERE\n    {\n        \n        ## Find the persons in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item a wd:Q5.}\n        ORDER BY ?item      \n        #OFFSET 10000\n        #OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?item wdt:P166 ?award.\n                BIND (?awardLabel as ?awardLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "value": "### Prepare the data to be imported\n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {?person wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the persons in the imported graph\n        {SELECT ?person\n        WHERE \n                {?person a wd:Q5.}\n        ORDER BY ?person      \n        OFFSET 0\n        #OFFSET 10000\n        LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?person wdt:P166 ?award.\n                BIND (?awardLabel as ?awardLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### To be sure, the insert query has to be carried out directly on the Allegrograph server\n# but it also could work if executed in this notebook\n## Also, you have to carry it out in three steps. The accepted limit by Wikidata \n## of instances in a variable ('item' in our case) appears to be 10000.\n## You therefore have to have three steps for a population of around 32000 persons  \n\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH  <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?person wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel}\nWHERE\n    {\n        \n        ## Find the persons in the imported graph\n        {SELECT ?person\n        WHERE \n                {?person a wd:Q5.}\n        ORDER BY ?person      \n        #OFFSET 10000\n        #OFFSET 20000\n        OFFSET 30000\n        LIMIT 10000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?person wdt:P166 ?award.\n                BIND (?awardLabel as ?awardLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
     "metadata": {}
   },
   {
@@ -36,27 +48,207 @@
     "metadata": {}
   },
   {
-    "kind": 2,
-    "language": "sparql",
-    "value": "###  Inspect the countries:\n# number of different countries\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?award ?awardLabel (COUNT(*) as ?n)\nWHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel\n         }\n   }\nGROUP BY ?award ?awardLabel\nORDER BY DESC(?n)\nLIMIT 20",
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Inspect the collected data",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "###  Inspect the awards:\n# number of different awards\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE\n   {\n   SELECT DISTINCT ?award\n   WHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P166 ?award.\n         }\n      }\n   }",
+    "value": "###  Number of different awards:\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT (COUNT(*) as ?n)\nWHERE\n   {\n   SELECT DISTINCT ?award\n   WHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P166 ?award.\n         }\n      }\n   }",
     "metadata": {}
   },
   {
     "kind": 2,
     "language": "sparql",
-    "value": "\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n   {\n        {\n        SELECT DISTINCT ?award\n        WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n                ?s wdt:P166 ?award.\n            }\n      }\n    }\n    SERVICE <https://query.wikidata.org/sparql>\n        {\n            ### instance of\n            ?award wdt:P31 ?pseudoClass.\n            BIND (?pseudoClassLabel as ?pseudoClassLabel)\n            SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n        }\n   }\n   GROUP BY ?pseudoClass ?pseudoClassLabel\n   ORDER BY DESC(?n)",
+    "value": "###  Inspect the awards:\n# number of different awards\n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?award ?awardLabel (COUNT(*) as ?n)\nWHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?s wdt:P166 ?award.\n            ?award rdfs:label ?awardLabel\n         }\n   }\nGROUP BY ?award ?awardLabel\nORDER BY DESC(?n)\nLIMIT 20",
     "metadata": {}
   },
   {
     "kind": 1,
     "language": "markdown",
     "value": "### Add the award pseudo-class\n\n\nIn order to easily find 'awards', i.e. entities associated to persons with the relationship wdt:P166 award received\n\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the class 'award' for all the awards\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {\n   ?award rdf:type wd:Q618779.\n}\nWHERE\n   {\n   SELECT DISTINCT ?award\n   WHERE {\n         {\n            ?s wdt:P166 ?award.\n         }\n      }\n   }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the class 'award' for all the awards\n# Please note that strictly speaking Wikidata has no ontology,\n# therefore no classes. We add this for our convenience\n\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT(COUNT(*) as ?number)\nWHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md> {\n               ?award rdf:type wd:Q618779.\n\n      }\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Inspect the other types of awards (property P166 instance of)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Pseudo-classes: instance of\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n   {\n        {\n        SELECT DISTINCT ?award\n        WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n                # receive award\n                ?s wdt:P166 ?award.\n            }\n      }\n    }\n    SERVICE <https://query.wikidata.org/sparql>\n        {\n            ### instance of\n            ?award wdt:P31 ?pseudoClass.\n            BIND (?pseudoClassLabel as ?pseudoClassLabel)\n            SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n        }\n   }\n   GROUP BY ?pseudoClass ?pseudoClassLabel\n   ORDER BY DESC(?n)\n   LIMIT 30",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Additional information available on Wikidata",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Inspect the properties of awards in Wikidata\n\nPREFIX franzOption_serviceTimeout: <franz:240>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?p ?propLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT DISTINCT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?item      \n        LIMIT 200\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                ?award ?p ?o.\n                # get the original property (in the the statement construct)     \n                ?prop wikibase:directClaim ?p .\n                BIND (?propLabel as ?propLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?p ?propLabel    \nORDER BY DESC(?n)    \nLIMIT 30",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Instance of",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "## Group and count\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT DISTINCT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 5000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of\n                ?award wdt:P31 ?pseudoClass.\n                BIND (?pseudoClassLabel as ?pseudoClassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?pseudoClass ?pseudoClassLabel\nORDER BY DESC(?n)\nLIMIT 10\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {?award wdt:P108 ?pseudoClass.\n            ?pseudoClass rdfs:label ?pseudoClassLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of\n                ?award wdt:P31 ?pseudoClass.\n                ### NB : we exclude the type 'Award' because\n                # we use this as a class\n                MINUS {?award wdt:P31 wd:Q618779}\n                BIND (?pseudoClassLabel as ?pseudoClassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?award wdt:P31 ?pseudoClass.\n            ?pseudoClass rdfs:label ?pseudoClassLabel}\nWHERE\n    {\n        \n        ## Find the awards in the imported graph\n        {SELECT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        \n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # instance of\n                ?award wdt:P31 ?pseudoClass.\n                ### NB : we exclude the type 'Award' because\n                # we use this as a class\n                MINUS {?award wdt:P31 wd:Q618779}\n                BIND (?pseudoClassLabel as ?pseudoClassLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "## Group and count\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        {?award rdf:type wd:Q618779;\n            wdt:P108 ?pseudoClass.\n          ?pseudoClass  rdfs:label ?pseudoClassLabel.\n                }\n                \n        }\nGROUP BY ?pseudoClass ?pseudoClassLabel\nORDER BY DESC(?n)\nLIMIT 10\n",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Award taxonomy (property P166 subclass of) ",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Taxonomy: subclass of\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?pseudoClass ?pseudoClassLabel (COUNT(*) as ?n)\nWHERE\n   {\n        {\n        SELECT DISTINCT ?award\n        WHERE {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n                ?s wdt:P166 ?award.\n            }\n      }\n    }\n    SERVICE <https://query.wikidata.org/sparql>\n        {\n            ### subclass of\n            ?award wdt:P279 ?pseudoClass.\n            BIND (?pseudoClassLabel as ?pseudoClassLabel)\n            SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n        }\n   }\n   GROUP BY ?pseudoClass ?pseudoClassLabel\n   ORDER BY DESC(?n)\n   LIMIT 30",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Award country",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "## Group and count\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?country ?countryLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item rdf:type wd:Q618779}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 5000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # country\n                ?item wdt:P17 ?country.\n                BIND (?countryLabel as ?countryLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?country ?countryLabel\nORDER BY DESC(?n)\nLIMIT 10\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {?award wdt:P17 ?country.\n            ?country rdfs:label ?countryLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # country\n                ?award wdt:P17 ?country.\n                BIND (?countryLabel as ?countryLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?award wdt:P17 ?country.\n            ?country rdfs:label ?countryLabel}\nWHERE\n    {\n        \n        ## Find the awards in the imported graph\n        {SELECT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        #LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # country\n                ?award wdt:P17 ?country.\n                BIND (?countryLabel as ?countryLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Explore countries with awards",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Add missing country pseudoClass\n\nThis allows to identity all countries without the class Country",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "## Find countries without the pseudoClass : Country\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT DISTINCT ?country ?countryLabel ?type \nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        {?award rdf:type wd:Q618779;\n                   wdt:P17 ?country.\n                   FILTER NOT EXISTS {?country a ?type}\n                   # internationality, in fact no country\n                   FILTER (?country != wd:Q1072012) \n                 ?country rdfs:label ?countryLabel \n                 \n                  \n        }         \n              \n                \n    }\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Add the pseudoClass\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?country a wd:Q6256}\nWHERE\n    {\n        ?award rdf:type wd:Q618779;\n                   wdt:P17 ?country.\n        FILTER NOT EXISTS {?country a ?type}\n        # internationality, in fact no country\n        FILTER (?country != wd:Q1072012)\n    }",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "### Award conferred by organisation (property P1027 conferred by)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "## Group and count\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nSELECT ?organisation ?organisationLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item rdf:type wd:Q618779}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 5000\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # conferred by\n                ?item wdt:P1027 ?organisation.\n                BIND (?organisationLabel as ?organisationLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }\nGROUP BY ?organisation ?organisationLabel\nORDER BY DESC(?n)\nLIMIT 10\n",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nCONSTRUCT {?item wdt:P1027 ?organisation.\n            ?organisation rdfs:label ?organisationLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?item\n        WHERE \n                {?item rdf:type wd:Q618779}\n        ORDER BY ?item      \n        OFFSET 0\n        #OFFSET 10000\n        #OFFSET 20000\n       LIMIT 10\n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # conferred by\n                ?item wdt:P1027 ?organisation.\n                BIND (?organisationLabel as ?organisationLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Prepare the data to be imported\n# With LIMIT clause \n## Apparently labels are not repeated if already available\n# We therefore car integrate them directly in the INSERT below\n\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\n\nWITH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\nINSERT {?award wdt:P1027 ?organisation.\n            ?organisation rdfs:label ?organisationLabel}\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n\n        ## Find the awards in the imported graph\n        {SELECT ?award\n        WHERE \n                {?award rdf:type wd:Q618779}\n        ORDER BY ?award      \n        \n\n        }\n        ## \n        SERVICE <https://query.wikidata.org/sparql>\n            {\n                # conferred by\n                ?award wdt:P1027 ?organisation.\n                BIND (?organisationLabel as ?organisationLabel)\n                SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } \n            }\n                \n        }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Taxonomy: subclass of\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?organisation ?organisationLabel (COUNT(*) as ?n)\nWHERE\n    {\n        GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n            {\n               ?award rdf:type wd:Q618779;\n                # conferred by\n                wdt:P1027 ?organisation.\n                ?organisation rdfs:label ?organisationLabel\n            }\n      \n    }\n   GROUP BY ?organisation ?organisationLabel\n   ORDER BY DESC(?n)\n   LIMIT 30",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Insert the label of the property\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\n\nINSERT DATA {\n  GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n  {wdt:P1027 rdfs:label 'conferred by'.}\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 1,
+    "language": "markdown",
+    "value": "## Prepare queries for analysis",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "### Propriétés des personnes\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?p ?label (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {?award a wd:Q618779.\n          ?award  ?p ?o.\n        OPTIONAL {?p rdfs:label ?label}    \n          }\n}\nGROUP BY ?p ?label\nORDER BY DESC(?n)",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "###  \n\nPREFIX wikibase: <http://wikiba.se/ontology#>\nPREFIX bd: <http://www.bigdata.com/rdf#>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\n\nSELECT ?person ?personLabel ?award ?awardLabel (COUNT(*) as ?n)\nWHERE {\n      GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n         {\n            ?person wdt:P166 ?award;\n                    rdfs:label ?personLabel.\n            ?award rdf:type wd:Q618779;\n                  rdfs:label ?awardLabel.\n            OPTIONAL {?award wd:P31 ?pseudoClass.\n                ?pseudoClass rdfs:label ?pseudoClassLabel    \n             }\n            OPTIONAL {?award wd:P31 ?pseudoClass.\n                ?pseudoClass rdfs:label ?pseudoClassLabel    \n             }\n             # conferred by\n            OPTIONAL {?award wdt:P1027 ?pseudoClass.\n                ?pseudoClass rdfs:label ?pseudoClassLabel    \n             }  \n\n         }\n   }\nGROUP BY ?award ?awardLabel\nORDER BY DESC(?n)\nLIMIT 20",
     "metadata": {}
   }
 ]

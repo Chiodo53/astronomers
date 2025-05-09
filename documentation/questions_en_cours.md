@@ -8,6 +8,14 @@
 
 ----
 
+* y a-t-il un lien entre co-publication, ou autres aspects structuraux du réseau (être dans de grandes universités, etc.) et les prix reçus, notamment les prix Nobel ou autres prix scientifiques ?
+* y a-t-il un lien entre les prix reçus et la position dans le réseau? 
+  * ainsi que la nationalité, etc.
+* correlation entre organisation d'appartenance et prix (et organisation des prix) ?
+
+* Awarads: analyse factorielle epoque (dates dans Wikidata), classes, pays
+structure graph -> receive prices ? 
+
 * créer une visualisation sous forme de graphe de prix en relation avec universités (de formation / de travail)
   * relation prix-universités:  diamètre proportionnel aux effectifs de prix par université et liens en fonction du nombre de relations
   * personnes, prix, universités ?
