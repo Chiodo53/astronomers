@@ -3,13 +3,16 @@ This is a collection of useful functions
 to be used for graph analysis
 """
 
-### [2 mai 2025] Master version — this file must be always up to date until I have a pip/conda repo
+### [10 mai 2025] This file is derived from the Master version to be found in the methodology project:
+### sciences_historiques_numeriques/histoire_numerique_methodes/analyse_reseaux/network_analysis_functions.py
+## Any change must be reported to that Master file
 
 
 import pprint as pprint
 import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 ### Basic properties of a graph
@@ -42,9 +45,21 @@ def remove_node_attributes(G, attrs_to_remove):
 
 
 
+def describe_violinplot(il, plot_title, figsize=(20, 6)):
+
+    sl_id = pd.Series(il)
+    print(sl_id.describe())
+
+    plt.figure(figsize=figsize)
+    p = sns.violinplot(data=sl_id, orient='h', cut=0)
+    plt.title(plot_title)
+    plt.show()
+
+   
+
 ###  Describe and plot distribution of integers' list
 
-def describe_plot_integers_distribution(il, plot_width, plot_heigth, plot_title):
+def describe_plot_integers_distribution(il, plot_title, figsize=(20, 6)):
 
     sl_id = pd.Series(il)
     print(sl_id.describe())
@@ -53,7 +68,7 @@ def describe_plot_integers_distribution(il, plot_width, plot_heigth, plot_title)
     df_l = pd.DataFrame(sl_id.groupby(by=sl_id).size().items())
     df_l.columns=['value', 'number']
 
-    fig, ax = plt.subplots(1,1, figsize=(plot_width,plot_heigth))
+    fig, ax = plt.subplots(1,1, figsize=figsize)
 
     plt.bar(df_l.value, df_l.number)
 
@@ -71,4 +86,4 @@ def describe_plot_integers_distribution(il, plot_width, plot_heigth, plot_title)
 
     plt.tight_layout()
 
-    plt.show()           
+    plt.show()            
