@@ -5,15 +5,19 @@
   * ajouter ces catégories comme propriétés des sommets dans un réseau
 
 
+Pour mobiliser les régions il est nécessaire d'avoir les lieux de naissance et donc de vérifier pour qui ils sont renseignés
+
+
+
 
 ----
 
 * y a-t-il un lien entre co-publication, ou autres aspects structuraux du réseau (être dans de grandes universités, etc.) et les prix reçus, notamment les prix Nobel ou autres prix scientifiques ?
-* y a-t-il un lien entre les prix reçus et la position dans le réseau? 
+* y a-t-il un lien entre les **prix reçus** et la position dans le réseau? 
   * ainsi que la nationalité, etc.
 * correlation entre organisation d'appartenance et prix (et organisation des prix) ?
 
-* Awarads: analyse factorielle epoque (dates dans Wikidata), classes, pays
+* Awards: analyse factorielle epoque (dates dans Wikidata), classes, pays
 structure graph -> receive prices ? 
 
 * créer une visualisation sous forme de graphe de prix en relation avec universités (de formation / de travail)

@@ -290,7 +290,7 @@
   {
     "kind": 2,
     "language": "sparql",
-    "value": "### Propriétés des awards\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?awardType (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n        ?award wdt:P31 ?awardType.\n        }\n}\nGROUP BY ?awardType \nORDER BY DESC(?n)",
+    "value": "### Propriétés des awards\n\nPREFIX franzOption_defaultDatasetBehavior: <franz:rdf>\nPREFIX wd: <http://www.wikidata.org/entity/>\nPREFIX wdt: <http://www.wikidata.org/prop/direct/>\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT ?awardType ?awardTypeLabel (COUNT(*) as ?n)\nWHERE {\n    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>\n        {\n        ?award wdt:P31 ?awardType;\n            a wd:Q618779.\n        ?awardType rdfs:label ?awardTypeLabel.\n        }\n}\nGROUP BY ?awardType ?awardTypeLabel\nORDER BY DESC(?n)",
     "metadata": {}
   }
 ]
