@@ -1,6 +1,6 @@
-# Import citizenships
+# Import Birth Places
 
-In this notebook we add to the imported Wikidata population properties regarding citizenship in countries
+In this notebook we add to the imported Wikidata population properties regarding their birth place and geographical origin
 
 ```sparql
 ### Number of persons in our population
@@ -530,4 +530,51 @@ INSERT DATA {
   GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
   {wdt:P625 rdfs:label 'coordinate location'.}
 }
+```
+## Explore collected data
+
+```sparql
+### Nombre de personnes
+
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?person ?personLabel ?birthDate ?birthPlace
+WHERE {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+        {?person a wd:Q5;
+            rdfs:label ?personLabel;
+            wdt:P569 ?birthDate;
+            wdt:P19 ?birthPlace.
+          }
+}
+LIMIT 10
+```
+
+```sparql
+PREFIX franzOption_defaultDatasetBehavior: <franz:rdf>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?person 
+        (MIN(?personLabel) AS ?persLabel) 
+        ?birthDate ?geoPlace 
+        (MIN(?placeLabel) AS ?geoPlaceLabel)
+        (MIN(?location) AS ?minLocation)
+WHERE {
+    GRAPH <https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/graphs/wikidata-imported-data.md>
+        {
+            ?person a wd:Q5;
+                rdfs:label ?personLabel;
+                wdt:P569 ?birthDate;
+                wdt:P19 ?geoPlace.
+            ?geoPlace wdt:P625 ?location;
+                rdfs:label ?placeLabel.   
+          }
+}
+GROUP BY ?person ?birthDate ?geoPlace 
+limit 10
 ```

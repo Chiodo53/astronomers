@@ -38,3 +38,7 @@ This project aims to study the evolution of doctrines and methods in astronomy a
 * [Occupations: production et codage des données](https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/notebooks_jupyter/wikidata_exploration/wdt_occupations_production.ipynb)
 * [Occupations: analyse des données](https://github.com/Sciences-historiques-numeriques/astronomers/blob/main/notebooks_jupyter/wikidata_exploration/wdt_occupations_analyse.ipynb)
  
+
+### Résultats
+
+* [Analyse de la distribution dans le temps et l'espace des naissances](results/birth_places_spatiotemporal_distribution.md)
