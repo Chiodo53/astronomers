@@ -5,3 +5,5 @@ WHERE {
 }
 GROUP BY ?occupation
 ORDER BY DESC(?n)
+
+
