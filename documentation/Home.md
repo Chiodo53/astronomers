@@ -1,15 +1,10 @@
-# The scientific fields of astronomy and physics (15th-20th centuries)
+# The scientific field of astronomy (15th-20th centuries)
 
 
-This project aims to study the evolution of doctrines and methods in astronomy and physics, as scientific disciplines that evolve in different geographical and social contexts, in relation to the position of actors within this disciplinary field and in relation to the rest of society, while observing the structure and dynamics of the disciplinary field concerned.
+This project aims to study the evolution of doctrines and methods in astronomy, as a scientific discipline that evolves in different geographical and social contexts, in relation to the position of actors within this disciplinary field and in relation to the rest of society, while observing the structure and dynamics of the disciplinary field concerned.
 
 [Back to the repository README](../README.md)
     
-
-## Système d'information
-
-[Table des matières](Table_des_pages.md) qui liste toutes les pages du wiki
-
 
 ###  Phase exploratoire
 
@@ -28,6 +23,12 @@ This project aims to study the evolution of doctrines and methods in astronomy a
 * [Explorer DBpedia](DBpedia/DBpedia_explorer.md)
 * [Importer les données de DBpedia](DBpedia/DBpedia_importer_dans_base_personnelle.md)
 * [Visualiser les données de DBpedia](DBpedia/DBpedia_analyser_donnees_importees.md)
+
+
+
+### Système d'information
+
+[Table des matières](Table_des_pages.md) qui liste toutes les pages du wiki
 
 
 ### Analyse des données de Wikidata (notebooks Python)

@@ -8,5 +8,6 @@ ou lire sur [jupyter nbviewer](https://nbviewer.org/github/Sciences-historiques-
 
 <br/>
 
-See the __[table of contents](documentation/Home.md)__ an the (not yet available!)  __[website](https://historian.digital/astronomers)__
+* __[table of contents](documentation/Home.md)__ 
+* __[website](https://historian.digital/astronomers)__ (under development)
 
