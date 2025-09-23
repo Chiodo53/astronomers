@@ -9,7 +9,7 @@ This project aims to study the evolution of doctrines and methods in astronomy, 
 ###  Phase exploratoire
 
 
-* [Problématique et questionnement](Problematique-Questionnement.md) 
+* [Problématique et questionnement](Problematique-Questionnement.md) ([English version](en_research_questions.md))
 * [Listes d'astronomes](Listes-d'astronomes.md)
 * [Catalogue des informations](Catalogue-des-informations.md)
 
