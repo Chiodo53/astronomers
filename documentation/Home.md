@@ -15,7 +15,8 @@ This project aims to study the evolution of doctrines and methods in astronomy, 
 
 ### Création de la base de données
 
-*  [Commentaire du modèle conceptuel](Modèle-conceptuel-(MCD):-commentaire.md)
+*  [Modèle conceptuel](../MCD_to_database_example.png)
+*  [Commentaire du modèle conceptuel](Modèle-conceptuel-commentaire.md)
 *  [Modèle logique ou relationnel](Modèle-logique-ou-relationnel.md)
 
 ### Récupération et analyse de données existantes
